@@ -84,10 +84,12 @@
       </steps>
     </phase>
 
+
     <phase name="packaging">
-      <description>Run the packaging workflow</description>
+      <description>Run the packaging workflow with selected template version</description>
       <steps>
-        <step>Execute package_baw.py to generate the TWX artifact</step>
+        <step>Execute package_baw.py with the selected template version</step>
+        <step>Use: python3 package_baw.py</step>
         <step>The packager automatically includes all artifacts:</step>
         <step>  - Custom widgets from widgets/</step>
         <step>  - Standalone business objects from business-objects/generated/</step>

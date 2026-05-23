@@ -11,6 +11,7 @@ The TWXBuilder automatically discovers and includes all artifacts.
 """
 
 import logging
+import argparse
 from pathlib import Path
 from toolkit_packager import (
     load_config,
@@ -39,7 +40,6 @@ WIDGET_NAMES = [
     "Timeline"
 ]
 WIDGETS_DIR = Path("widgets")
-TEMPLATE_DIR = Path("templates/BaseTWX/25.0.1")
 OUTPUT_DIR = Path("output")
 CONFIG_FILE = Path("toolkit.config.json")
 
@@ -49,7 +49,10 @@ logger = get_logger(__name__)
 
 
 def main():
-    """Main packaging function for BAW artifacts (widgets, business objects, coaches)."""
+    """
+    Main packaging function for BAW artifacts (widgets, business objects, coaches).
+    Template version is read from toolkit.config.json.
+    """
     try:
         logger.info(f"📦 Packaging BAW Toolkit with {len(WIDGET_NAMES)} widgets")
         logger.info(f"   Widgets: {', '.join(WIDGET_NAMES)}")
@@ -66,6 +69,15 @@ def main():
         logger.info("📄 Loading configuration...")
         config = load_config(CONFIG_FILE)
         logger.info(f"✓ Config loaded: {config.name} v{config.version}")
+        logger.info(f"✓ BAW Template Version: {config.baw_version}")
+        
+        # Validate template directory exists
+        template_dir = Path(f"templates/BaseTWX/{config.baw_version}")
+        if not template_dir.exists():
+            logger.error(f"❌ Template directory not found: {template_dir}")
+            logger.error(f"   Available versions: {', '.join([d.name for d in Path('templates/BaseTWX').iterdir() if d.is_dir()])}")
+            logger.error(f"   Update 'bawVersion' in {CONFIG_FILE} to use a valid template version")
+            return None
         
         # Scan for widgets
         logger.info(f"🔍 Scanning widgets directory: {WIDGETS_DIR}")
@@ -92,11 +104,10 @@ def main():
         
         logger.info(f"\n📝 Packaging {len(target_widgets)} widget(s)...")
         
-        # Create TWX builder
+        # Create TWX builder (template_dir is now determined from config.baw_version)
         logger.info("🔨 Creating TWX builder...")
         builder = TWXBuilder(
             config=config,
-            template_dir=TEMPLATE_DIR,
             output_dir=OUTPUT_DIR
         )
         
@@ -135,8 +146,25 @@ def main():
 if __name__ == "__main__":
     import sys
     
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(
+        description="Package BAW artifacts (widgets, business objects, coaches) into a TWX toolkit. Template version is configured in toolkit.config.json.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Package with settings from toolkit.config.json
+  python package_baw.py
+  
+Note:
+  To change the BAW template version, edit the 'bawVersion' field in toolkit.config.json
+        """
+    )
+    
+    args = parser.parse_args()
+    
     print("\n" + "=" * 70)
     print("BAW Toolkit Packager - Complete Artifact Package")
+    print(f"Configuration: toolkit.config.json")
     print(f"Widgets: {len(WIDGET_NAMES)} custom widgets")
     print(f"Business Objects: From business-objects/generated/")
     print(f"Coaches: From coaches/")
