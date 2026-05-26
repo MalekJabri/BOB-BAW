@@ -133,7 +133,7 @@ class TWXBuilder:
             for bo in ordered_bos:
                 # Create minimal object_ids for standalone business objects
                 object_ids = {'coach_view': 'standalone'}
-                bo_gen = BusinessObjectGenerator(None, object_ids, bo.data)
+                bo_gen = BusinessObjectGenerator(None, object_ids, bo.data, self.template_dir)
                 bo_obj = bo_gen.generate()
                 self.twx_objects.append(bo_obj)
                 logger.info(f"  ✓ Added standalone BO: {bo.name}")
@@ -154,7 +154,7 @@ class TWXBuilder:
             business_objects = widget.get_business_objects()
             bo_id_map = {}  # Map business object names to their IDs
             for bo_definition in business_objects:
-                bo_gen = BusinessObjectGenerator(widget, object_ids, bo_definition)
+                bo_gen = BusinessObjectGenerator(widget, object_ids, bo_definition, self.template_dir)
                 bo_obj = bo_gen.generate()
                 self.twx_objects.append(bo_obj)
                 
@@ -168,7 +168,7 @@ class TWXBuilder:
                 object_ids = {**object_ids, 'business_objects': bo_id_map}
             
             # Generate coach view
-            coach_view_gen = CoachViewGenerator(widget, object_ids, config_schema)
+            coach_view_gen = CoachViewGenerator(widget, object_ids, config_schema, self.template_dir)
             coach_view_obj = coach_view_gen.generate()
             self.twx_objects.append(coach_view_obj)
             

@@ -1,27 +1,25 @@
 <!--
- #BEGIN COPYRIGHT
-
+ #BEGIN COPYRIGHT 
  Licensed Materials - Property of IBM
  5725-C95
- (C) Copyright IBM Corporation 2022. All Rights Reserved.
- US Government Users Restricted Rights - Use, duplication or disclosure
- restricted by GSA ADP Schedule Contract with IBM Corp.
-
- #END COPYRIGHT
+ (C) Copyright IBM Corporation 2026. All Rights Reserved.
+ #END COPYRIGHT 
 -->
 
 <style>
-/* ── Preview root ─────────────────────────────────────────── */
+/* FileNetImport Widget Preview Styles */
+/* Scoped to widget preview - integrates with BAW Designer */
+
 .fnimport-preview-wrap {
-  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 14px;
-  color: #161616;
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; /* @bpm-font-family-sans-serif */
+  font-size: 14px; /* @bpm-font-size-base */
+  color: #161616; /* @bpm-text-color */
   width: 100%;
   box-sizing: border-box;
   padding: 0;
 }
 
-/* ── Drop Zone ──────────────────────────────────────────── */
+/* Drop Zone */
 .fnimport-preview-dropzone {
   display: flex;
   flex-direction: column;
@@ -29,9 +27,9 @@
   justify-content: center;
   gap: 8px;
   min-height: 180px;
-  border: 2px dashed #a8a8a8;
+  border: 2px dashed #a8a8a8; /* Gray 40 */
   border-radius: 4px;
-  background-color: #f4f4f4;
+  background-color: #f4f4f4; /* Gray 10 */
   padding: 32px 24px;
   cursor: default;
 }
@@ -46,15 +44,15 @@
 
 .fnimport-preview-dropzone-title {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #161616;
+  font-size: 16px; /* @bpm-font-size-large */
+  font-weight: 600; /* @bpm-font-weight-semibold */
+  color: #161616; /* @bpm-text-color */
 }
 
 .fnimport-preview-dropzone-subtitle {
   margin: 0;
-  font-size: 12px;
-  color: #6f6f6f;
+  font-size: 12px; /* @bpm-font-size-small */
+  color: #6f6f6f; /* Gray 60 */
   text-align: center;
   max-width: 360px;
 }
@@ -62,16 +60,16 @@
 .fnimport-preview-browse-btn {
   margin-top: 8px;
   padding: 8px 20px;
-  background-color: #0f62fe;
-  color: #ffffff;
+  background-color: #0f62fe; /* @bpm-color-primary */
+  color: #ffffff; /* @bpm-body-bg */
   border: none;
   border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 14px; /* @bpm-font-size-base */
+  font-weight: 600; /* @bpm-font-weight-semibold */
   cursor: default;
 }
 
-/* ── Queue ──────────────────────────────────────────────── */
+/* Queue */
 .fnimport-preview-queue {
   margin-top: 16px;
   display: flex;
@@ -84,12 +82,12 @@
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
-  background-color: #f4f4f4;
-  border-left: 3px solid #f1620a;
+  background-color: #f4f4f4; /* Gray 10 */
+  border-left: 3px solid #f1620a; /* Orange */
   border-radius: 0 4px 4px 0;
-  font-size: 12px;
-  font-weight: 600;
-  color: #393939;
+  font-size: 12px; /* @bpm-font-size-small */
+  font-weight: 600; /* @bpm-font-weight-semibold */
+  color: #393939; /* Gray 80 */
   margin-top: 8px;
 }
 
@@ -98,10 +96,10 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
+  background-color: #ffffff; /* @bpm-body-bg */
+  border: 1px solid #e0e0e0; /* Gray 20 */
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 13px; /* @bpm-font-size-small */
 }
 
 .fnimport-preview-item-icon {
@@ -127,46 +125,46 @@
 }
 
 .fnimport-preview-item-folder-prefix {
-  font-size: 11px;
-  color: #6f6f6f;
+  font-size: 11px; /* @bpm-font-size-xsmall */
+  color: #6f6f6f; /* Gray 60 */
   display: block;
 }
 
 .fnimport-preview-item-name {
   font-weight: 500;
-  color: #393939;
+  color: #393939; /* Gray 80 */
 }
 
 .fnimport-preview-item-size {
-  font-size: 11px;
-  color: #6f6f6f;
+  font-size: 11px; /* @bpm-font-size-xsmall */
+  color: #6f6f6f; /* Gray 60 */
   flex-shrink: 0;
 }
 
 .fnimport-preview-badge {
   flex-shrink: 0;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 11px; /* @bpm-font-size-xsmall */
+  font-weight: 600; /* @bpm-font-weight-semibold */
   padding: 2px 8px;
   border-radius: 10px;
 }
 
 .fnimport-preview-badge-pending {
-  background-color: #e0e0e0;
-  color: #6f6f6f;
+  background-color: #e0e0e0; /* Gray 20 */
+  color: #6f6f6f; /* Gray 60 */
 }
 
 .fnimport-preview-badge-success {
-  background-color: #defbe6;
-  color: #24a148;
+  background-color: #defbe6; /* Success light */
+  color: #24a148; /* @bpm-color-success */
 }
 
 .fnimport-preview-badge-error {
-  background-color: #fff1f1;
-  color: #da1e28;
+  background-color: #fff1f1; /* Error light */
+  color: #da1e28; /* @bpm-color-alert */
 }
 
-/* ── Actions ────────────────────────────────────────────── */
+/* Actions */
 .fnimport-preview-actions {
   display: flex;
   gap: 12px;
@@ -179,26 +177,26 @@
   align-items: center;
   gap: 8px;
   padding: 10px 24px;
-  background-color: #0f62fe;
-  color: #ffffff;
+  background-color: #0f62fe; /* @bpm-color-primary */
+  color: #ffffff; /* @bpm-body-bg */
   border: none;
   border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 14px; /* @bpm-font-size-base */
+  font-weight: 600; /* @bpm-font-weight-semibold */
   cursor: default;
 }
 
 .fnimport-preview-btn-clear {
   padding: 10px 20px;
   background-color: transparent;
-  color: #393939;
-  border: 1px solid #a8a8a8;
+  color: #393939; /* Gray 80 */
+  border: 1px solid #a8a8a8; /* Gray 40 */
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 14px; /* @bpm-font-size-base */
   cursor: default;
 }
 
-/* ── Log ────────────────────────────────────────────────── */
+/* Log */
 .fnimport-preview-log {
   margin-top: 16px;
   display: flex;
@@ -212,71 +210,42 @@
   gap: 8px;
   padding: 6px 10px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 12px; /* @bpm-font-size-small */
   line-height: 1.4;
 }
 
 .fnimport-preview-log-success {
-  background-color: #defbe6;
-  color: #0e6027;
+  background-color: #defbe6; /* Success light */
+  color: #0e6027; /* Success dark */
 }
 
 .fnimport-preview-log-info {
-  background-color: #edf5ff;
-  color: #0043ce;
+  background-color: #edf5ff; /* Info light */
+  color: #0043ce; /* @bpm-link-text-color-hover */
 }
 
 .fnimport-preview-log-error {
-  background-color: #fff1f1;
-  color: #a2191f;
+  background-color: #fff1f1; /* Error light */
+  color: #a2191f; /* Error dark */
 }
 
-/* ── Config hint ────────────────────────────────────────── */
+/* Config hint */
 .fnimport-preview-config-hint {
   margin-top: 12px;
   padding: 8px 12px;
-  background-color: #fdf6dd;
-  border-left: 3px solid #f1c21b;
+  background-color: #fdf6dd; /* Warning light */
+  border-left: 3px solid #f1c21b; /* @bpm-color-warning */
   border-radius: 0 4px 4px 0;
-  font-size: 12px;
-  color: #8a3800;
+  font-size: 12px; /* @bpm-font-size-small */
+  color: #8a3800; /* Warning dark */
 }
 </style>
 
-<!-- Preview markup — rendered in BAW designer -->
-<div class="fnimport-preview-wrap">
-
-  <!-- Drop Zone -->
-  <div class="fnimport-preview-dropzone">
-    <div class="fnimport-preview-dropzone-icon"></div>
-    <p class="fnimport-preview-dropzone-title">Drop files or folders here</p>
-    <p class="fnimport-preview-dropzone-subtitle">
-      Drag and drop documents or entire folder structures. Subfolders will be preserved.
-    </p>
-    <button class="fnimport-preview-browse-btn" type="button">Browse files</button>
-  </div>
-
-  <!-- Sample queue (static preview) -->
-  <div class="fnimport-preview-queue" id="fnimport-preview-queue">
-    <!-- Populated by FileNetImport.js -->
-  </div>
-
-  <!-- Action bar -->
-  <div class="fnimport-preview-actions">
-    <button class="fnimport-preview-btn-import" type="button">
-      ↑ Import to FileNet
-    </button>
-    <button class="fnimport-preview-btn-clear" type="button">Clear all</button>
-  </div>
-
-  <!-- Sample log (static preview) -->
-  <div class="fnimport-preview-log" id="fnimport-preview-log">
-    <!-- Populated by FileNetImport.js -->
-  </div>
-
-  <!-- Config hint -->
-  <div class="fnimport-preview-config-hint" id="fnimport-preview-hint">
-    ⚙ Configure <strong>graphqlEndpoint</strong> and <strong>parentFolderId</strong> in the widget properties panel.
-  </div>
-
+<div class="SPARKPanel panel">
+    <div class="widget-heading">
+        <span class="widget-title">FileNet Import Preview</span>
+    </div>
+    <div class="widget-body">
+        <!-- Preview content generated by FileNetImportSnippet.js -->
+    </div>
 </div>

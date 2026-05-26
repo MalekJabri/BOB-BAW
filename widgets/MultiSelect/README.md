@@ -47,6 +47,22 @@ The MultiSelect widget provides an intuitive way to select multiple items from a
 - **Selection Limits**: Optional maximum selection limit
 - **Real-time Search**: Instant filtering of options
 - **Bulk Operations**: Select or clear all items at once
+
+## 🎨 Recent Updates
+
+### UI Modernization (2026-05-26)
+Updated to Carbon Design System v11 with modern, clean flat design:
+- ✅ Replaced gradient backgrounds with flat colors (Gray 10, Gray 20)
+- ✅ Changed from rounded borders to flat design with bottom borders
+- ✅ Updated tags from gradient pills to minimal gray pills
+- ✅ Simplified hover states with subtle background changes
+- ✅ Reduced shadows and removed decorative elements
+- ✅ Updated transitions to Carbon motion (70-110ms cubic-bezier)
+- ✅ Improved focus states with outline instead of box-shadow
+- ✅ Aligned all colors with Carbon Design tokens
+- ✅ Updated preview styles to match widget implementation
+
+The widget now features a cleaner, more professional appearance that aligns with modern IBM Carbon Design System standards.
 - **Tag Removal**: Click X on any tag to deselect
 - **Keyboard Support**: Full keyboard navigation and selection
 - **Disabled State**: Disable widget when needed

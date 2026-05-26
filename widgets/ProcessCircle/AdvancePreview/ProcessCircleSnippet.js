@@ -3,7 +3,7 @@
  *
  * Licensed Materials - Property of IBM
  * 5725-C95
- * (C) Copyright IBM Corporation
+ * (C) Copyright IBM Corporation 2026
  *
  * #END COPYRIGHT
  */
@@ -47,7 +47,7 @@ var mixObject = {
                 this.context.coachViewData.inputDiv = inputDiv;
 
                 // Generate preview progress circle
-                this.generateSampleData(domConstruct, domAttr);
+                this.generateSampleData(domConstruct, domAttr, domClass);
 
                 callback();
             }));
@@ -58,30 +58,76 @@ var mixObject = {
         return this.context.coachViewData.label;
     },
 
-    generateSampleData: function (domConstruct, domAttr) {
-
-        // Example progress value
+    generateSampleData: function (domConstruct, domAttr, domClass) {
+        // Example progress value (65%)
         var value = 65;
+        var minValue = 0;
+        var maxValue = 100;
+        var postParameter = "%";
 
-        var progress = domConstruct.create("div", null, this.context.coachViewData.inputDiv);
+        // Create container
+        var container = domConstruct.create("div", null, this.context.coachViewData.inputDiv);
+        domClass.add(container, "process-circle-container");
+        this.context.coachViewData.container = container;
 
-        domAttr.set(progress, {
-            "role": "progressbar1",
-            "aria-valuemin": "0",
-            "aria-valuemax": "100",
+        // Create progress circle
+        var progressCircle = domConstruct.create("div", null, container);
+        domClass.add(progressCircle, "process-circle");
+        this.context.coachViewData.progressCircle = progressCircle;
+
+        // Set ARIA attributes
+        domAttr.set(progressCircle, {
+            "role": "progressbar",
+            "aria-label": "Progress indicator",
+            "aria-valuemin": minValue,
+            "aria-valuemax": maxValue,
             "aria-valuenow": value,
-            "data-post": "%"
+            "data-post": postParameter
         });
 
-        // Set CSS custom property for progress
-        progress.style.setProperty("--value", value);
+        // Set CSS custom properties
+        progressCircle.style.setProperty("--value", value);
+        progressCircle.style.setProperty("--min", minValue);
+        progressCircle.style.setProperty("--max", maxValue);
     },
 
     propertyChanged: function (propertyName, propertyValue) {
-        // No dynamic preview properties yet
+        // Handle configuration option changes
+        if (!this.context.coachViewData.progressCircle) {
+            return;
+        }
+
+        var progressCircle = this.context.coachViewData.progressCircle;
+
+        switch (propertyName) {
+            case "MinValue":
+                progressCircle.setAttribute("aria-valuemin", propertyValue);
+                progressCircle.style.setProperty("--min", propertyValue);
+                break;
+            case "MaxValue":
+                progressCircle.setAttribute("aria-valuemax", propertyValue);
+                progressCircle.style.setProperty("--max", propertyValue);
+                break;
+            case "postParameter":
+                progressCircle.setAttribute("data-post", propertyValue);
+                break;
+            case "CircleSize":
+                progressCircle.style.setProperty("--circle-size", propertyValue);
+                break;
+            case "RingThickness":
+                progressCircle.style.setProperty("--size", propertyValue);
+                break;
+        }
     },
 
     modelChanged: function (propertyName, propertyValue) {
-        // Not required for preview
+        // Handle data binding changes
+        if (propertyName === "ProgressValue" && this.context.coachViewData.progressCircle) {
+            var progressCircle = this.context.coachViewData.progressCircle;
+            progressCircle.setAttribute("aria-valuenow", propertyValue);
+            progressCircle.style.setProperty("--value", propertyValue);
+        }
     }
 };
+
+// Made with Bob

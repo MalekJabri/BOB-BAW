@@ -19,12 +19,15 @@ var folderClassId      = this.getOption("folderClassIdentifier") || "";
 var root        = this.context.element.querySelector(".fnimport-widget");
 var dropzone    = root.querySelector(".fnimport-dropzone");
 var fileInput   = root.querySelector(".fnimport-file-input");
-var browseBtn   = root.querySelector(".fnimport-browse-btn");
+var folderInput = root.querySelector(".fnimport-folder-input");
+var browseFilesBtn  = root.querySelector(".fnimport-browse-files-btn");
+var browseFolderBtn = root.querySelector(".fnimport-browse-folder-btn");
 var statusBar   = root.querySelector(".fnimport-statusbar");
 var statusText  = root.querySelector(".fnimport-status-text");
 var progressBar = root.querySelector(".fnimport-progress-bar");
 var progressFill= root.querySelector(".fnimport-progress-fill");
 var queueEl     = root.querySelector(".fnimport-queue");
+var actionsBar  = root.querySelector(".fnimport-actions");
 var importBtn   = root.querySelector(".fnimport-btn-import");
 var clearBtn    = root.querySelector(".fnimport-btn-clear");
 var logEl       = root.querySelector(".fnimport-log");
@@ -99,9 +102,15 @@ function updateProgress(done, total, message) {
   statusBar.classList.add("fnimport-visible");
 }
 
-// ── Utility: set import button state ────────────────────────
+// ── Utility: set import button state and action bar visibility ──
 function refreshImportButton() {
   importBtn.disabled = fileQueue.length === 0 || isImporting;
+  // Show/hide action bar based on queue state
+  if (fileQueue.length > 0) {
+    actionsBar.style.display = "flex";
+  } else {
+    actionsBar.style.display = "none";
+  }
 }
 
 // ── Build queue item DOM ─────────────────────────────────────
@@ -277,18 +286,58 @@ function processDataTransferItems(items) {
 
 // ── Add a file to the queue (with validation) ────────────────
 var self = this;
+
+function isMimeTypeAllowed(file) {
+  if (!allowedMimeTypes) {
+    return true;
+  }
+
+  var acceptedTypes = allowedMimeTypes.split(",").map(function(type) {
+    return type.replace(/^\s+|\s+$/g, "").toLowerCase();
+  }).filter(function(type) {
+    return type.length > 0;
+  });
+
+  if (acceptedTypes.length === 0) {
+    return true;
+  }
+
+  var fileType = (file.type || "").toLowerCase();
+  if (fileType && acceptedTypes.indexOf(fileType) !== -1) {
+    return true;
+  }
+
+  var extension = getExtension(file.name);
+  return acceptedTypes.some(function(type) {
+    if (type.indexOf(".") === 0) {
+      return extension === type.substring(1);
+    }
+    if (type.indexOf("/*") !== -1 && fileType) {
+      return fileType.indexOf(type.replace("/*", "/")) === 0;
+    }
+    return false;
+  });
+}
+
 function addFileToQueue(file, relativePath) {
-  // Size check
+  var normalizedPath = relativePath || file.name;
+
   if (file.size > maxFileSizeMB * 1024 * 1024) {
-    addLog("Skipped (too large): " + relativePath + " (" + formatBytes(file.size) + ")", "warning");
+    addLog("Skipped (too large): " + normalizedPath + " (" + formatBytes(file.size) + ")", "warning");
     return;
   }
-  // Duplicate check
-  for (var i = 0; i < fileQueue.length; i++) {
-    if (fileQueue[i].relativePath === relativePath) return;
+
+  if (!isMimeTypeAllowed(file)) {
+    addLog("Skipped (type not allowed): " + normalizedPath, "warning");
+    return;
   }
-  fileQueue.push({ file: file, relativePath: relativePath, type: "file" });
-  self.executeEventHandlingFunction(self, "onFileAdded", { path: relativePath, size: file.size });
+
+  for (var i = 0; i < fileQueue.length; i++) {
+    if (fileQueue[i].relativePath === normalizedPath) return;
+  }
+
+  fileQueue.push({ file: file, relativePath: normalizedPath, type: "file" });
+  self.executeEventHandlingFunction(self, "onFileAdded", { path: normalizedPath, size: file.size });
 }
 
 // ── GraphQL: create a folder under a parent path ─────────────
@@ -510,6 +559,7 @@ function startImport() {
   chain.then(function() {
     isImporting = false;
     clearBtn.disabled = false;
+    refreshImportButton();
     var summary = "Import complete: " + (total - errors) + " succeeded, " + errors + " failed.";
     statusText.textContent = summary;
     addLog(summary, errors > 0 ? "warning" : "success");
@@ -580,22 +630,48 @@ dropzone.addEventListener("keydown", function(e) {
   }
 });
 
-// ── Browse button ────────────────────────────────────────────
-browseBtn.addEventListener("click", function(e) {
+// ── Browse buttons ───────────────────────────────────────────
+// Browse documents button - opens file picker for single or multiple files
+browseFilesBtn.addEventListener("click", function(e) {
   e.stopPropagation();
   fileInput.click();
 });
 
+// Browse folder button - opens folder picker
+browseFolderBtn.addEventListener("click", function(e) {
+  e.stopPropagation();
+  folderInput.click();
+});
+
+// File input change handler (for single/multiple document selection)
 fileInput.addEventListener("change", function() {
   if (!fileInput.files || fileInput.files.length === 0) return;
   Array.prototype.forEach.call(fileInput.files, function(file) {
-    // Use webkitRelativePath if available (folder selection), otherwise just file name
+    // For direct file selection, use just the file name (no folder structure)
+    addFileToQueue(file, file.name);
+  });
+  renderQueue();
+  refreshImportButton();
+  if (fileInput.files.length > 0) {
+    addLog(fileInput.files.length + " document(s) added to queue.", "info");
+  }
+  fileInput.value = ""; // Reset so same file can be re-added
+});
+
+// Folder input change handler (for folder selection with structure preservation)
+folderInput.addEventListener("change", function() {
+  if (!folderInput.files || folderInput.files.length === 0) return;
+  Array.prototype.forEach.call(folderInput.files, function(file) {
+    // Use webkitRelativePath to preserve folder structure
     var relativePath = file.webkitRelativePath || file.name;
     addFileToQueue(file, relativePath);
   });
   renderQueue();
   refreshImportButton();
-  fileInput.value = ""; // Reset so same file can be re-added
+  if (folderInput.files.length > 0) {
+    addLog("Folder with " + folderInput.files.length + " file(s) added to queue.", "info");
+  }
+  folderInput.value = ""; // Reset so same folder can be re-added
 });
 
 // ── Import button ────────────────────────────────────────────

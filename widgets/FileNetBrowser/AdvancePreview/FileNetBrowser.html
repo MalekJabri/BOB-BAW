@@ -1,61 +1,373 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FileNetBrowser Widget - Preview</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<!--
+ #BEGIN COPYRIGHT 
+ Licensed Materials - Property of IBM
+ 5725-C95
+ (C) Copyright IBM Corporation 2026. All Rights Reserved.
+ #END COPYRIGHT 
+-->
 
-    body {
-      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-    }
+<style>
+/* FileNetBrowser Widget Preview Styles */
+/* Scoped to widget preview - integrates with BAW Designer */
 
-    .preview-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      padding: 24px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+.fnbrowser-widget {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; /* @bpm-font-family-sans-serif */
+  font-size: 13px; /* @bpm-font-size-small */
+  color: #161616; /* @bpm-text-color */
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-    .preview-header {
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid #e0e0e0;
-    }
+.fnbrowser-widget *,
+.fnbrowser-widget *::before,
+.fnbrowser-widget *::after {
+  box-sizing: border-box;
+}
 
-    .preview-header h1 {
-      font-size: 24px;
-      font-weight: 400;
-      color: #161616;
-      margin-bottom: 8px;
-    }
+/* Breadcrumb Navigation */
+.fnbrowser-breadcrumb {
+  background-color: #ffffff; /* @bpm-body-bg */
+  border: 1px solid #e0e0e0; /* Gray 20 */
+  border-radius: 4px;
+  padding: 6px 12px;
+}
 
-    .preview-header p {
-      font-size: 14px;
-      color: #6f6f6f;
-    }
-  </style>
-</head>
-<body>
-  <div class="preview-container">
-    <div class="preview-header">
-      <h1>FileNetBrowser Widget - Preview</h1>
-      <p>Preview of the FileNetBrowser widget with mock FileNet data</p>
+.fnbrowser-breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.fnbrowser-breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px; /* @bpm-font-size-small */
+}
+
+.fnbrowser-breadcrumb-item:not(:last-child)::after {
+  content: "›";
+  color: #a8a8a8; /* Gray 40 */
+  margin-left: 4px;
+}
+
+.fnbrowser-breadcrumb-item.active {
+  color: #525252; /* Gray 70 */
+  font-weight: 600; /* @bpm-font-weight-semibold */
+}
+
+/* Main Container */
+.fnbrowser-container {
+  display: flex;
+  gap: 0;
+  min-height: 400px;
+  max-height: 600px;
+  background-color: #ffffff; /* @bpm-body-bg */
+  border: 1px solid #e0e0e0; /* Gray 20 */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Tree Panel */
+.fnbrowser-tree-panel {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e0e0e0; /* Gray 20 */
+  background-color: #f4f4f4; /* Gray 10 */
+}
+
+.fnbrowser-tree-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0; /* Gray 20 */
+  background-color: #ffffff; /* @bpm-body-bg */
+}
+
+.fnbrowser-tree-title {
+  margin: 0;
+  font-size: 13px; /* @bpm-font-size-small */
+  font-weight: 600; /* @bpm-font-weight-semibold */
+  color: #161616; /* @bpm-text-color */
+}
+
+.fnbrowser-tree-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.fnbrowser-tree-node {
+  padding: 4px 6px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+.fnbrowser-tree-node:hover {
+  background-color: #e0e0e0; /* Gray 20 */
+}
+
+.fnbrowser-tree-node.active {
+  background-color: #edf5ff; /* Blue light */
+  color: #0f62fe; /* @bpm-color-primary */
+  font-weight: 600; /* @bpm-font-weight-semibold */
+}
+
+/* Content Panel */
+.fnbrowser-content-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Toolbar */
+.fnbrowser-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0; /* Gray 20 */
+  background-color: #ffffff; /* @bpm-body-bg */
+}
+
+.fnbrowser-toolbar-left,
+.fnbrowser-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fnbrowser-nav-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: 1px solid #c6c6c6; /* Gray 30 */
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px; /* @bpm-font-size-base */
+  transition: background-color 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+.fnbrowser-nav-btn:hover {
+  background-color: #f4f4f4; /* Gray 10 */
+}
+
+.fnbrowser-view-toggle {
+  display: flex;
+  border: 1px solid #c6c6c6; /* Gray 30 */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fnbrowser-view-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-right: 1px solid #c6c6c6; /* Gray 30 */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px; /* @bpm-font-size-base */
+  transition: background-color 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+.fnbrowser-view-btn:last-child {
+  border-right: none;
+}
+
+.fnbrowser-view-btn:hover {
+  background-color: #f4f4f4; /* Gray 10 */
+}
+
+.fnbrowser-view-btn.active {
+  background-color: #0f62fe; /* @bpm-color-primary */
+  color: #ffffff; /* @bpm-body-bg */
+}
+
+/* Current Path */
+.fnbrowser-current-path {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: #f4f4f4; /* Gray 10 */
+  border-bottom: 1px solid #e0e0e0; /* Gray 20 */
+  font-size: 12px; /* @bpm-font-size-small */
+  color: #393939; /* Gray 80 */
+}
+
+.fnbrowser-path-icon {
+  font-size: 14px; /* @bpm-font-size-base */
+}
+
+.fnbrowser-path-text {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Content List */
+.fnbrowser-content-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.fnbrowser-content-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  margin-bottom: 2px;
+}
+
+.fnbrowser-content-item:hover {
+  background-color: #f4f4f4; /* Gray 10 */
+  border-color: #e0e0e0; /* Gray 20 */
+}
+
+.fnbrowser-item-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.fnbrowser-item-name {
+  flex: 1;
+  font-size: 13px; /* @bpm-font-size-small */
+  font-weight: 500;
+  color: #161616; /* @bpm-text-color */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fnbrowser-item-meta {
+  font-size: 11px; /* @bpm-font-size-xsmall */
+  color: #6f6f6f; /* Gray 60 */
+}
+
+/* Pagination */
+.fnbrowser-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-top: 1px solid #e0e0e0; /* Gray 20 */
+  background-color: #ffffff; /* @bpm-body-bg */
+}
+
+.fnbrowser-pagination-info {
+  font-size: 12px; /* @bpm-font-size-small */
+  color: #393939; /* Gray 80 */
+}
+
+.fnbrowser-pagination-text strong {
+  font-weight: 600; /* @bpm-font-weight-semibold */
+  color: #161616; /* @bpm-text-color */
+}
+
+/* Properties Panel */
+.fnbrowser-properties-panel {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #e0e0e0; /* Gray 20 */
+  background-color: #ffffff; /* @bpm-body-bg */
+}
+
+.fnbrowser-properties-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0; /* Gray 20 */
+  background-color: #f4f4f4; /* Gray 10 */
+}
+
+.fnbrowser-properties-title {
+  margin: 0;
+  font-size: 13px; /* @bpm-font-size-small */
+  font-weight: 600; /* @bpm-font-weight-semibold */
+  color: #161616; /* @bpm-text-color */
+}
+
+.fnbrowser-properties-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.fnbrowser-properties-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px 16px;
+  color: #6f6f6f; /* Gray 60 */
+  text-align: center;
+}
+
+.fnbrowser-properties-empty-icon {
+  font-size: 40px;
+  opacity: 0.5;
+}
+
+.fnbrowser-properties-empty-text {
+  margin: 0;
+  font-size: 13px; /* @bpm-font-size-small */
+}
+
+/* Selection Bar */
+.fnbrowser-selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background-color: #edf5ff; /* Blue light */
+  border: 1px solid #0f62fe; /* @bpm-color-primary */
+  border-radius: 4px;
+}
+
+.fnbrowser-selection-text {
+  font-size: 12px; /* @bpm-font-size-small */
+  color: #0f62fe; /* @bpm-color-primary */
+  font-weight: 600; /* @bpm-font-weight-semibold */
+}
+</style>
+
+<div class="SPARKPanel panel">
+    <div class="widget-heading">
+        <span class="widget-title">FileNet Browser Preview</span>
     </div>
-
-    <!-- Widget Container -->
-    <div id="fnbrowser-widget-container"></div>
-  </div>
-
-  <script src="FileNetBrowser.js"></script>
-</body>
-</html>
+    <div class="widget-body">
+        <!-- Preview content generated by FileNetBrowserSnippet.js -->
+    </div>
+</div>
