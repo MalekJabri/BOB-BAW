@@ -1,6 +1,6 @@
 {
   "name": "ProcessCircle",
-  "description": "Circular progress indicator widget for displaying percentage or value progress in IBM Business Automation Workflow",
+  "description": "Circular progress indicator widget for displaying percentage or value progress in IBM Business Automation Workflow with Carbon Design System styling",
   "bindingType": {
     "name": "ProgressValue",
     "isList": false,
@@ -24,16 +24,23 @@
     {
       "name": "postParameter",
       "type": "String",
-      "label": "Post Parameter",
-      "description": "Parameter suffix to display after the value (e.g., '%', 'pts', 'items')",
+      "label": "Display Suffix",
+      "description": "Text suffix displayed after the value (e.g., '%', 'pts', 'items', 'tasks')",
       "default": "%"
     },
     {
-      "name": "defaultcolor",
+      "name": "CircleSize",
       "type": "String",
-      "label": "Default Color",
-      "description": "Default color for the progress circle (CSS color value)",
-      "default": "#0f62fe"
+      "label": "Circle Size",
+      "description": "Size of the progress circle (CSS value, e.g., '12rem', '200px')",
+      "default": "12rem"
+    },
+    {
+      "name": "RingThickness",
+      "type": "String",
+      "label": "Ring Thickness",
+      "description": "Thickness of the progress ring (CSS value, e.g., '0.5rem', '8px')",
+      "default": "0.5rem"
     }
   ],
   "businessObjects": [],

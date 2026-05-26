@@ -11,7 +11,7 @@ from datetime import datetime
 from .base_generator import BaseGenerator
 from ..models import Widget, TWXObject
 from ..core import generate_object_id, generate_version_id, escape_xml
-from ..utils import get_logger
+from ..utils import get_logger, get_system_data_dependency_id
 from ..utils.custom_type_registry import get_custom_type_registry
 
 logger = get_logger(__name__)
@@ -20,7 +20,7 @@ logger = get_logger(__name__)
 _TYPE_MAPPINGS = None
 
 def load_type_mappings() -> Dict[str, str]:
-    """Load BAW type mappings from JSON configuration file."""
+    """Load BAW type mappings from JSON configuration file (type IDs only, without dependency prefix)."""
     global _TYPE_MAPPINGS
     if _TYPE_MAPPINGS is None:
         mappings_file = Path(__file__).parent.parent / 'baw_type_mappings.json'
@@ -30,9 +30,9 @@ def load_type_mappings() -> Dict[str, str]:
                 # Combine mappings and aliases into a single lookup dict
                 _TYPE_MAPPINGS = {}
                 # Add direct mappings
-                for type_name, class_id in config['mappings'].items():
-                    _TYPE_MAPPINGS[type_name.lower()] = class_id
-                    _TYPE_MAPPINGS[type_name] = class_id
+                for type_name, type_id in config['mappings'].items():
+                    _TYPE_MAPPINGS[type_name.lower()] = type_id
+                    _TYPE_MAPPINGS[type_name] = type_id
                 # Add aliases
                 for alias, target in config['aliases'].items():
                     if target in config['mappings']:
@@ -50,7 +50,7 @@ class BusinessObjectGenerator(BaseGenerator):
     Creates business object definitions from JSON specifications.
     """
     
-    def __init__(self, widget: Optional[Widget], object_ids: Dict[str, str], bo_definition: dict):
+    def __init__(self, widget: Optional[Widget], object_ids: Dict[str, str], bo_definition: dict, template_path: Optional[Path] = None):
         """
         Initialize business object generator.
         
@@ -58,14 +58,23 @@ class BusinessObjectGenerator(BaseGenerator):
             widget: Widget containing the business object (None for standalone business objects)
             object_ids: Dictionary of object IDs
             bo_definition: Business object definition from JSON
+            template_path: Path to template directory for extracting dependency IDs
         """
         super().__init__(widget, object_ids)
         self.bo_definition = bo_definition
+        self.template_path = template_path
         # Get business object name:
         # 1. First try 'name' field (used by standalone BOs and some widget BOs)
         # 2. Then try 'type' field (used by widget BOs like ProgressData, TaskItem)
         # 3. Fall back to 'BusinessObject' if neither exists
         self.bo_name = bo_definition.get('name') or bo_definition.get('type', 'BusinessObject')
+        
+        # Extract System Data dependency ID from template
+        self.system_data_dep_id = None
+        if template_path:
+            self.system_data_dep_id = get_system_data_dependency_id(template_path)
+            if self.system_data_dep_id:
+                logger.debug(f"Using System Data dependency ID: {self.system_data_dep_id}")
     
     def generate(self) -> TWXObject:
         """
@@ -321,7 +330,7 @@ class BusinessObjectGenerator(BaseGenerator):
             prop_type: Property type (String, Integer, Boolean, Date, Decimal, CustomType, CustomType[], etc.)
             
         Returns:
-            Class reference string
+            Class reference string with dependency prefix (e.g., "dep-id/12.type-id")
         """
         type_mappings = load_type_mappings()
         registry = get_custom_type_registry()
@@ -330,11 +339,19 @@ class BusinessObjectGenerator(BaseGenerator):
         is_array = prop_type.endswith('[]')
         base_type = prop_type[:-2] if is_array else prop_type
         
-        # Try to find in primitive type mappings first
-        class_id = type_mappings.get(base_type) or type_mappings.get(base_type.lower())
+        # Try to find in primitive type mappings first (returns type ID only)
+        type_id = type_mappings.get(base_type) or type_mappings.get(base_type.lower())
         
-        # If not found in primitives, check if it's a custom business object
-        if not class_id:
+        if type_id:
+            # Primitive type found - prepend with System Data dependency ID
+            if self.system_data_dep_id:
+                class_id = f"{self.system_data_dep_id}/{type_id}"
+            else:
+                # Fallback if dependency ID not available
+                logger.warning(f"System Data dependency ID not available, using type ID only: {type_id}")
+                class_id = type_id
+        else:
+            # Check if it's a custom business object
             custom_type_id = registry.get_type(base_type)
             if custom_type_id:
                 # Custom business object reference - use the registered class ID
@@ -343,7 +360,11 @@ class BusinessObjectGenerator(BaseGenerator):
             else:
                 # Unknown type - default to String
                 logger.warning(f"Unknown type '{prop_type}' for business object property, defaulting to String")
-                class_id = type_mappings.get('String', '0594de47-b0cd-452b-a221-95dc16247e72/12.db884a3c-c533-44b7-bb2d-47bec8ad4022')
+                string_type_id = type_mappings.get('String', '12.db884a3c-c533-44b7-bb2d-47bec8ad4022')
+                if self.system_data_dep_id:
+                    class_id = f"{self.system_data_dep_id}/{string_type_id}"
+                else:
+                    class_id = string_type_id
         
         return class_id
 

@@ -104,9 +104,17 @@
   max-width: 360px;
 }
 
-/* Browse button */
-.fnimport-browse-btn {
+/* Browse actions group */
+.fnimport-browse-actions {
+  display: flex;
+  gap: 8px;
   margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Browse buttons */
+.fnimport-browse-btn {
   padding: 8px 20px;
   background-color: var(--fnimport-blue);
   color: #ffffff;
@@ -128,8 +136,9 @@
   outline-offset: 2px;
 }
 
-/* Hidden file input */
-.fnimport-file-input {
+/* Hidden file inputs */
+.fnimport-file-input,
+.fnimport-folder-input {
   display: none !important;
   position: absolute;
   left: -9999px;
@@ -326,10 +335,14 @@
 
 /* ── Action Bar ─────────────────────────────────────────── */
 .fnimport-actions {
-  display: flex;
+  display: none; /* Hidden by default, shown when files are added */
   gap: 12px;
   margin-top: 16px;
   align-items: center;
+}
+
+.fnimport-actions[style*="display: flex"] {
+  display: flex !important;
 }
 
 /* Primary import button */

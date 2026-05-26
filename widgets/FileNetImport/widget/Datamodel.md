@@ -1,6 +1,9 @@
 ## Business Data
 
-This widget does **not** require bound business data to operate. All file handling is done interactively via drag-and-drop or the browse dialog.
+This widget does **not** require bound business data to operate. All file handling is done interactively via:
+- **Drag-and-drop** — Drop files or folders directly onto the widget
+- **Browse documents** — Select single or multiple documents (flat import)
+- **Browse folder** — Select an entire folder with structure preservation
 
 However, the widget **outputs** structured result data through its event handlers. The data shapes below describe what is passed to each event.
 
@@ -199,9 +202,34 @@ fetch(graphqlEndpoint, {
 
 ---
 
-## Folder Structure Preservation
+## Selection Modes and Folder Structure Preservation
 
-When a folder is dropped onto the widget, the widget recursively traverses the folder tree using the `webkitGetAsEntry()` / `FileSystemDirectoryEntry` API. The relative path of each file is preserved and used to recreate the folder hierarchy under the configured `parentFolderPath`.
+The widget supports three selection modes:
+
+### 1. Browse Documents (Flat Import)
+When using the "Browse documents" button:
+- Users can select **single or multiple documents**
+- Files are imported **without folder structure** (flat import)
+- All files are placed directly under the configured `parentFolderPath`
+- Useful for importing individual documents or multiple unrelated files
+
+### 2. Browse Folder (Structure Preservation)
+When using the "Browse folder" button:
+- Users select an **entire folder**
+- The widget uses the browser's folder picker with `webkitdirectory` attribute
+- **Folder structure is preserved** — subfolders are recreated in FileNet
+- The `webkitRelativePath` property provides the full path for each file
+
+### 3. Drag-and-Drop (Auto-Detection)
+When dragging and dropping:
+- The widget uses `webkitGetAsEntry()` / `FileSystemDirectoryEntry` API
+- **Individual files** → Flat import (no folder structure)
+- **Folders** → Structure preservation (subfolders recreated)
+- The widget automatically detects whether dropped items are files or folders
+
+### Folder Structure Recreation
+
+When folder structure is preserved (modes 2 and 3), the relative path of each file is used to recreate the folder hierarchy under the configured `parentFolderPath`.
 
 **Example:** Dropping a folder `ProjectA` containing:
 ```

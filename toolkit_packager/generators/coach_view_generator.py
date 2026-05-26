@@ -11,7 +11,7 @@ from datetime import datetime
 from .base_generator import BaseGenerator
 from ..models import Widget, TWXObject
 from ..core import generate_object_id, generate_version_id, escape_xml
-from ..utils import get_logger
+from ..utils import get_logger, get_system_data_dependency_id
 from ..utils.coach_view_registry import get_coach_view_registry
 
 logger = get_logger(__name__)
@@ -20,7 +20,7 @@ logger = get_logger(__name__)
 _TYPE_MAPPINGS = None
 
 def load_type_mappings() -> Dict[str, str]:
-    """Load BAW type mappings from JSON configuration file."""
+    """Load BAW type mappings from JSON configuration file (type IDs only, without dependency prefix)."""
     global _TYPE_MAPPINGS
     if _TYPE_MAPPINGS is None:
         mappings_file = Path(__file__).parent.parent / 'baw_type_mappings.json'
@@ -30,9 +30,9 @@ def load_type_mappings() -> Dict[str, str]:
                 # Combine mappings and aliases into a single lookup dict
                 _TYPE_MAPPINGS = {}
                 # Add direct mappings
-                for type_name, class_id in config['mappings'].items():
-                    _TYPE_MAPPINGS[type_name.lower()] = class_id
-                    _TYPE_MAPPINGS[type_name] = class_id
+                for type_name, type_id in config['mappings'].items():
+                    _TYPE_MAPPINGS[type_name.lower()] = type_id
+                    _TYPE_MAPPINGS[type_name] = type_id
                 # Add aliases
                 for alias, target in config['aliases'].items():
                     if target in config['mappings']:
@@ -50,7 +50,7 @@ class CoachViewGenerator(BaseGenerator):
     Creates the main widget definition with layout, bindings, and scripts.
     """
     
-    def __init__(self, widget: Widget, object_ids: Dict[str, str], config_schema: Optional[dict] = None):
+    def __init__(self, widget: Widget, object_ids: Dict[str, str], config_schema: Optional[dict] = None, template_path: Optional[Path] = None):
         """
         Initialize coach view generator.
         
@@ -58,9 +58,18 @@ class CoachViewGenerator(BaseGenerator):
             widget: Widget to generate coach view for
             object_ids: Dictionary of object IDs
             config_schema: Optional config.json schema for configuration
+            template_path: Path to template directory for extracting dependency IDs
         """
         super().__init__(widget, object_ids)
         self.config_schema = config_schema or {}
+        self.template_path = template_path
+        
+        # Extract System Data dependency ID from template
+        self.system_data_dep_id = None
+        if template_path:
+            self.system_data_dep_id = get_system_data_dependency_id(template_path)
+            if self.system_data_dep_id:
+                logger.debug(f"Using System Data dependency ID: {self.system_data_dep_id}")
     
     def generate(self) -> TWXObject:
         """
@@ -297,14 +306,19 @@ class CoachViewGenerator(BaseGenerator):
             
             guid = generate_object_id(f"{binding_name}_binding_guid", '65').split('.', 1)[1]
             
+            # Get class_id with fallback to Decimal type
+            class_id = binding.get('class_id')
+            if not class_id:
+                class_id = self._add_dependency_prefix('12.68474ab0-d56f-47ee-b7e9-510b45a2a8be')  # Decimal
+            
             binding_xml = f'''        <bindingType name="{binding_name}">
             <lastModified isNull="true" />
             <lastModifiedBy isNull="true" />
             <tenantId isNull="true" />
-            <coachViewBindingTypeId>{binding_id}</coachViewBindingTypeId>
+            <coachViewBindingTypeId>{binding_id}</coachViewId>
             <coachViewId>{coach_view_id}</coachViewId>
             <isList>{str(binding.get('is_list', False)).lower()}</isList>
-            <classId>{binding.get('class_id', '0594de47-b0cd-452b-a221-95dc16247e72/12.68474ab0-d56f-47ee-b7e9-510b45a2a8be')}</classId>
+            <classId>{class_id}</classId>
             <seq>{seq}</seq>
             <description isNull="true" />
             <guid>guid:{guid}</guid>
@@ -333,10 +347,12 @@ class CoachViewGenerator(BaseGenerator):
         class_id_raw = binding_config.get('type') or binding_config.get('classId', 'String')
         
         # Map simple type names to BAW class IDs
-        if class_id_raw and not class_id_raw.startswith('0594de47') and not class_id_raw.startswith('/'):
+        if class_id_raw and not class_id_raw.startswith('/') and '/' not in class_id_raw:
+            # Simple type name - resolve it
             class_id = self.get_default_class_id(class_id_raw.lower())
         else:
-            class_id = class_id_raw if class_id_raw else '0594de47-b0cd-452b-a221-95dc16247e72/12.db884a3c-c533-44b7-bb2d-47bec8ad4022'
+            # Already a full class ID or fallback to String
+            class_id = class_id_raw if class_id_raw else self._add_dependency_prefix('12.db884a3c-c533-44b7-bb2d-47bec8ad4022')
         
         # Check if there's a matching business object for this binding
         business_objects = self.object_ids.get('business_objects', {})
@@ -417,6 +433,11 @@ class CoachViewGenerator(BaseGenerator):
             else:
                 logger.debug(f"Reusing existing config option ID for '{self.widget.name}.{option_name}': {option_id}")
             
+            # Get class_id with fallback to String type
+            class_id = option.get('class_id')
+            if not class_id:
+                class_id = self._add_dependency_prefix('12.db884a3c-c533-44b7-bb2d-47bec8ad4022')  # String
+            
             option_xml = f'''        <configOption name="{option_name}">
             <lastModified isNull="true" />
             <lastModifiedBy isNull="true" />
@@ -426,7 +447,7 @@ class CoachViewGenerator(BaseGenerator):
             <isList>{str(option.get('is_list', False)).lower()}</isList>
             <propertyType>{option.get('property_type', 'OBJECT')}</propertyType>
             <label>{escape_xml(option.get('label', option_name))}</label>
-            <classId>{option.get('class_id', '0594de47-b0cd-452b-a221-95dc16247e72/12.db884a3c-c533-44b7-bb2d-47bec8ad4022')}</classId>
+            <classId>{class_id}</classId>
             <processId isNull="true" />
             <actionflowId isNull="true" />
             <isAdaptive>false</isAdaptive>
@@ -658,32 +679,51 @@ class CoachViewGenerator(BaseGenerator):
     
     def get_default_class_id(self, json_type: str, json_format: Optional[str] = None) -> str:
         """
-        Get default BAW class ID for a JSON type.
+        Get default BAW class ID for a JSON type with dynamic dependency prefix.
         
         Args:
             json_type: JSON schema type (e.g., 'string', 'String', 'NameValuePair')
             json_format: JSON schema format (e.g., 'date-time', 'date')
             
         Returns:
-            BAW class ID
+            BAW class ID with dependency prefix (e.g., "dep-id/12.type-id")
         """
-        # Load type mappings from configuration
+        # Load type mappings from configuration (returns type IDs only)
         type_mappings = load_type_mappings()
         
         # Check for date/time formats first
         if json_format in ('date-time', 'date'):
-            return type_mappings.get('date', '0594de47-b0cd-452b-a221-95dc16247e72/12.68474ab0-d56f-47ee-b7e9-510b45a2a8be')
+            type_id = type_mappings.get('date', '12.68474ab0-d56f-47ee-b7e9-510b45a2a8be')
+            return self._add_dependency_prefix(type_id)
         elif json_format == 'time':
-            return type_mappings.get('time', '0594de47-b0cd-452b-a221-95dc16247e72/12.20fdb1a2-f6ec-462e-8627-d49859ba42ae')
+            type_id = type_mappings.get('time', '12.20fdb1a2-f6ec-462e-8627-d49859ba42ae')
+            return self._add_dependency_prefix(type_id)
         
         # Try to find mapping (case-insensitive)
         if json_type:
-            class_id = type_mappings.get(json_type) or type_mappings.get(json_type.lower())
-            if class_id:
-                return class_id
+            type_id = type_mappings.get(json_type) or type_mappings.get(json_type.lower())
+            if type_id:
+                return self._add_dependency_prefix(type_id)
         
         # Default to String if no mapping found
-        return type_mappings.get('string', '0594de47-b0cd-452b-a221-95dc16247e72/12.db884a3c-c533-44b7-bb2d-47bec8ad4022')
+        type_id = type_mappings.get('string', '12.db884a3c-c533-44b7-bb2d-47bec8ad4022')
+        return self._add_dependency_prefix(type_id)
+    
+    def _add_dependency_prefix(self, type_id: str) -> str:
+        """
+        Add System Data dependency prefix to a type ID.
+        
+        Args:
+            type_id: Type ID (e.g., "12.db884a3c-c533-44b7-bb2d-47bec8ad4022")
+            
+        Returns:
+            Full class reference with dependency prefix
+        """
+        if self.system_data_dep_id:
+            return f"{self.system_data_dep_id}/{type_id}"
+        else:
+            logger.warning(f"System Data dependency ID not available, using type ID only: {type_id}")
+            return type_id
     
     def _infer_class_id_from_schema(self, binding_name: str) -> Optional[str]:
         """
@@ -710,14 +750,16 @@ class CoachViewGenerator(BaseGenerator):
             json_format = schema['format']
             if json_format in ('date-time', 'date', 'time'):
                 logger.debug(f"Detected date/time format '{json_format}' for binding '{binding_name}'")
-                return '0594de47-b0cd-452b-a221-95dc16247e72/12.68474ab0-d56f-47ee-b7e9-510b45a2a8be'  # Decimal
+                type_id = '12.68474ab0-d56f-47ee-b7e9-510b45a2a8be'  # Decimal
+                return self._add_dependency_prefix(type_id)
         
         # Check oneOf for date formats (like DateValue schema)
         if 'oneOf' in schema:
             for option in schema['oneOf']:
                 if option.get('format') in ('date-time', 'date', 'time'):
                     logger.debug(f"Detected date/time in oneOf for binding '{binding_name}'")
-                    return '0594de47-b0cd-452b-a221-95dc16247e72/12.68474ab0-d56f-47ee-b7e9-510b45a2a8be'  # Decimal
+                    type_id = '12.68474ab0-d56f-47ee-b7e9-510b45a2a8be'  # Decimal
+                    return self._add_dependency_prefix(type_id)
         
         # Check type
         json_type = schema.get('type')

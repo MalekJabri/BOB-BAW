@@ -9,14 +9,24 @@
     <div class="fnimport-dropzone-icon" aria-hidden="true">
       <div class="fnimport-icon-upload"></div>
     </div>
-    <p class="fnimport-dropzone-title">Drop files or folders here</p>
+    <p class="fnimport-dropzone-title">Drop documents or folders here</p>
     <p class="fnimport-dropzone-subtitle" id="fnimport-dropzone-hint">
-      Drag and drop documents or entire folder structures. Subfolders will be preserved.
+      Drag and drop a single document, multiple documents, or entire folder structures. Subfolders are preserved for folder imports.
     </p>
-    <button class="fnimport-browse-btn" type="button" aria-label="Browse files to upload">
-      Browse files
-    </button>
+    <div class="fnimport-browse-actions" role="group" aria-label="Browse import sources">
+      <button class="fnimport-browse-btn fnimport-browse-files-btn" type="button" aria-label="Browse documents to upload">
+        Browse documents
+      </button>
+      <button class="fnimport-browse-btn fnimport-browse-folder-btn" type="button" aria-label="Browse a folder to upload">
+        Browse folder
+      </button>
+    </div>
     <input class="fnimport-file-input"
+           type="file"
+           multiple
+           aria-hidden="true"
+           tabindex="-1" />
+    <input class="fnimport-folder-input"
            type="file"
            multiple
            webkitdirectory
@@ -39,10 +49,10 @@
   </div>
 
   <!-- Action Bar -->
-  <div class="fnimport-actions">
-    <button class="fnimport-btn-import" type="button" aria-label="Import all queued files to FileNet" disabled>
+  <div class="fnimport-actions" style="display: none;">
+    <button class="fnimport-btn-import" type="button" aria-label="Import all queued files" disabled>
       <span class="fnimport-btn-icon fnimport-icon-cloud-upload" aria-hidden="true"></span>
-      Import to FileNet
+      Import
     </button>
     <button class="fnimport-btn-clear" type="button" aria-label="Clear all queued files">
       Clear all

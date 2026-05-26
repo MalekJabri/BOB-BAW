@@ -40,60 +40,110 @@ var PREVIEW_LOG = [
 var mixObject = {
 
   createPreview: function(containingDiv, labelText, callback) {
-    var bpmextUri = this.context.getManagedAssetUrl(
-      "BPMExt-Core-Designer.js",
+    var previewLayerUri = this.context.getManagedAssetUrl(
+      "BPMExt-Controls.preview.js",
       this.context.assetType_WEB,
       "SYSBPMUI"
     );
 
-    require(
-      ["dojo/dom-construct", "dojo/dom-class", "dojo/dom-attr", bpmextUri],
-      this.lang.hitch(this, function(domConstruct, domClass, domAttr, bpmext) {
+    require([previewLayerUri], this.lang.hitch(this, function () {
+      require([
+        "dojo/dom-construct",
+        "dojo/dom-class",
+        "dojo/dom-attr",
+        "bpmui/preview/BPMExt-Core-Designer"
+      ], this.lang.hitch(this, function(domConstruct, domClass, domAttr, bpmext) {
 
-        bpmext.uidesign.css.ensureSparkUIClass(containingDiv);
         bpmext.uidesign.css.ensureGlyphsLoaded(this);
+        bpmext.uidesign.css.ensureSparkUIClass(containingDiv);
 
         this.context.coachViewData.containingDiv = containingDiv;
 
-        // Generate unique temp ID
-        var tempID;
-        while (true) {
-          tempID = dojox.uuid.generateRandomUuid();
-          if (containingDiv.querySelector("div[data-temp-id='" + tempID + "']") == null) break;
-        }
-        containingDiv.setAttribute("data-temp-id", encodeURIComponent(tempID));
-        domClass.add(containingDiv, "WYSIWYGContentList");
+        // Form group
+        var formGroupDiv = domConstruct.create("div", null, containingDiv);
+        domClass.add(formGroupDiv, "form-group");
+        this.context.coachViewData.formGroupDiv = formGroupDiv;
 
-        // Default width
-        this.context.coachViewData.defaultWidth = "100%";
+        // Label
+        var label = domConstruct.create("span", null, formGroupDiv);
+        domClass.add(label, "control-label");
+        label.appendChild(document.createTextNode(labelText));
+        this.context.coachViewData.label = label;
 
-        // ── Build preview queue ──────────────────────────────
-        var queueEl = containingDiv.querySelector("#fnimport-preview-queue");
-        if (queueEl) {
-          this._buildPreviewQueue(domConstruct, queueEl);
-        }
+        // Input container
+        var inputDiv = domConstruct.create("div", null, formGroupDiv);
+        domClass.add(inputDiv, "input");
+        this.context.coachViewData.inputDiv = inputDiv;
 
-        // ── Build preview log ────────────────────────────────
-        var logEl = containingDiv.querySelector("#fnimport-preview-log");
-        if (logEl) {
-          this._buildPreviewLog(domConstruct, logEl);
-        }
-
-        // ── Label handler ────────────────────────────────────
-        var labelDom = containingDiv.querySelector(".fnimport-preview-wrap");
-        this.context.coachViewData.label = labelDom;
-        this.context.coachViewData.labelTextDom = document.createTextNode(labelText || "FileNet Import");
-        this.context.coachViewData.labelHandler = bpmext.uidesign.createLabelHandler(
-          this.context.coachViewData.labelTextDom,
-          undefined,
-          containingDiv,
-          false,
-          true
-        );
+        // Generate preview content
+        this.generateSampleData(domConstruct, domClass, domAttr);
 
         callback();
-      })
-    );
+      }));
+    }));
+  },
+
+  getLabelDomElement: function() {
+    return this.context.coachViewData.label;
+  },
+
+  generateSampleData: function(domConstruct, domClass, domAttr) {
+    // Create main widget container
+    var widgetDiv = domConstruct.create("div", null, this.context.coachViewData.inputDiv);
+    domClass.add(widgetDiv, "fnimport-preview-wrap");
+
+    // Drop Zone
+    var dropzone = domConstruct.create("div", null, widgetDiv);
+    domClass.add(dropzone, "fnimport-preview-dropzone");
+
+    var dropzoneIcon = domConstruct.create("div", null, dropzone);
+    domClass.add(dropzoneIcon, "fnimport-preview-dropzone-icon");
+
+    var dropzoneTitle = domConstruct.create("p", null, dropzone);
+    domClass.add(dropzoneTitle, "fnimport-preview-dropzone-title");
+    dropzoneTitle.textContent = "Drop files or folders here";
+
+    var dropzoneSubtitle = domConstruct.create("p", null, dropzone);
+    domClass.add(dropzoneSubtitle, "fnimport-preview-dropzone-subtitle");
+    dropzoneSubtitle.textContent = "Drag and drop documents or entire folder structures. Subfolders will be preserved.";
+
+    var browseBtn = domConstruct.create("button", { type: "button" }, dropzone);
+    domClass.add(browseBtn, "fnimport-preview-browse-btn");
+    browseBtn.textContent = "Browse files";
+
+    // Queue container
+    var queueDiv = domConstruct.create("div", null, widgetDiv);
+    domClass.add(queueDiv, "fnimport-preview-queue");
+    this.context.coachViewData.queueDiv = queueDiv;
+
+    // Build preview queue
+    this._buildPreviewQueue(domConstruct, queueDiv);
+
+    // Action bar
+    var actionsDiv = domConstruct.create("div", null, widgetDiv);
+    domClass.add(actionsDiv, "fnimport-preview-actions");
+
+    var importBtn = domConstruct.create("button", { type: "button" }, actionsDiv);
+    domClass.add(importBtn, "fnimport-preview-btn-import");
+    importBtn.textContent = "↑ Import to FileNet";
+
+    var clearBtn = domConstruct.create("button", { type: "button" }, actionsDiv);
+    domClass.add(clearBtn, "fnimport-preview-btn-clear");
+    clearBtn.textContent = "Clear all";
+
+    // Log container
+    var logDiv = domConstruct.create("div", null, widgetDiv);
+    domClass.add(logDiv, "fnimport-preview-log");
+    this.context.coachViewData.logDiv = logDiv;
+
+    // Build preview log
+    this._buildPreviewLog(domConstruct, logDiv);
+
+    // Config hint
+    var hintDiv = domConstruct.create("div", null, widgetDiv);
+    domClass.add(hintDiv, "fnimport-preview-config-hint");
+    hintDiv.innerHTML = "⚙ Configure <strong>graphqlEndpoint</strong> and <strong>parentFolderId</strong> in the widget properties panel.";
+    this.context.coachViewData.hintDiv = hintDiv;
   },
 
   // ── Build sample queue items ─────────────────────────────
@@ -184,49 +234,17 @@ var mixObject = {
   },
 
   propertyChanged: function(propertyName, propertyValue) {
-    var configHelperUri = this.context.getManagedAssetUrl(
-      "BPMExt-Core-ConfigHelper.js",
-      this.context.assetType_WEB,
-      "SYSBPMUI"
-    );
-
-    require(
-      ["dojo/dom-style", "dojo/dom-class", "dojo/dom-construct", configHelperUri],
-      this.lang.hitch(this, function(domStyle, domClass, domConstruct, configHelper) {
-
-        if (this.context.coachViewData.labelHandler) {
-          this.context.coachViewData.labelHandler.propertyChanged(propertyName, propertyValue);
-        }
-
-        if (propertyName === "@style") {
-          var width    = configHelper.getResponsiveConfigOptionValue(this, "width");
-          var minWidth = configHelper.getResponsiveConfigOptionValue(this, "@minWidth");
-          var finalWidth = width || minWidth || this.context.coachViewData.defaultWidth;
-          if (finalWidth) {
-            this.context.coachViewData.containingDiv.style.width =
-              isNaN(finalWidth) ? finalWidth : (finalWidth + "px");
-          } else {
-            this.context.coachViewData.containingDiv.style.width = "";
-          }
-        }
-
-        // Show/hide config hint based on whether endpoint is set
-        if (propertyName === "graphqlEndpoint" || propertyName === "parentFolderId") {
-          var hint = this.context.coachViewData.containingDiv.querySelector("#fnimport-preview-hint");
-          if (hint) {
-            var endpointSet = this.context.coachViewData.containingDiv
-              .querySelector("[data-option='graphqlEndpoint']");
-            hint.style.display = (propertyValue && propertyValue.length > 0) ? "none" : "block";
-          }
-        }
-      })
-    );
+    // Handle config option changes in preview
+    if (propertyName === "graphqlEndpoint" || propertyName === "parentFolderId") {
+      var hint = this.context.coachViewData.hintDiv;
+      if (hint) {
+        hint.style.display = (propertyValue && propertyValue.length > 0) ? "none" : "block";
+      }
+    }
   },
 
   modelChanged: function(propertyName, propertyValue) {
-    if (this.context.coachViewData.labelHandler) {
-      this.context.coachViewData.labelHandler.modelChanged(propertyName, propertyValue);
-    }
+    // Not required for preview
   }
 };
 

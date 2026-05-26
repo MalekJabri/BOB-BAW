@@ -7,8 +7,10 @@ A drag-and-drop document and folder import widget for IBM Business Automation Wo
 ## Features
 
 - **Drag-and-drop** files and folders directly onto the widget
+- **Multiple selection modes**:
+  - **Browse documents** — Select single or multiple documents (flat import, no folder structure)
+  - **Browse folder** — Select an entire folder with structure preservation
 - **Folder structure preservation** — subfolders are recursively traversed and recreated in FileNet
-- **Browse dialog** fallback for selecting files manually
 - **Real-time progress** with per-file status badges and a progress bar
 - **Import log** showing success, failure, and folder creation events
 - **GraphQL API** integration with FileNet Content Engine (no extra auth needed — uses browser session)
@@ -232,9 +234,30 @@ fetch(graphqlEndpoint, {
 
 ---
 
+## Selection Modes
+
+The widget supports three ways to add files to the import queue:
+
+### 1. Drag-and-Drop
+Drag files or folders directly onto the drop zone. The widget automatically detects whether you're dropping:
+- **Individual files** — Added as flat files (no folder structure)
+- **Multiple files** — Added as flat files (no folder structure)
+- **Folders** — Folder structure is preserved using the `FileSystemDirectoryEntry` API
+
+### 2. Browse Documents Button
+Click "Browse documents" to open a file picker that allows you to:
+- Select a **single document**
+- Select **multiple documents** (using Ctrl/Cmd+Click or Shift+Click)
+- Files are imported as flat files without folder structure
+
+### 3. Browse Folder Button
+Click "Browse folder" to open a folder picker that allows you to:
+- Select an **entire folder** with all its contents
+- Folder structure is **preserved** — subfolders are recreated in FileNet
+
 ## Folder Structure Preservation
 
-When a folder is dropped, the widget uses the `FileSystemDirectoryEntry` API (`webkitGetAsEntry()`) to recursively traverse the entire tree. Each file's relative path is preserved and used to recreate the folder hierarchy under `parentFolderPath`.
+When a folder is selected (via drag-and-drop or the "Browse folder" button), the widget uses the `FileSystemDirectoryEntry` API (`webkitGetAsEntry()`) to recursively traverse the entire tree. Each file's relative path is preserved and used to recreate the folder hierarchy under `parentFolderPath`.
 
 **Example:** Dropping `ProjectA/` containing:
 ```
