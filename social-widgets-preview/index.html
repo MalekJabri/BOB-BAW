@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAW Social API Widgets - Preview Showcase</title>
+  <link rel="stylesheet" href="assets/common-styles.css">
+  <style>
+    .option-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--cds-spacing-06);
+      margin-top: var(--cds-spacing-07);
+    }
+
+    .option-card {
+      background: var(--cds-ui-02);
+      border-radius: 8px;
+      padding: var(--cds-spacing-06);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .option-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .option-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: var(--cds-spacing-04);
+      color: var(--cds-interactive-01);
+    }
+
+    .option-card .subtitle {
+      font-size: 0.875rem;
+      color: var(--cds-text-02);
+      margin-bottom: var(--cds-spacing-05);
+      font-style: italic;
+    }
+
+    .option-card .stats {
+      display: flex;
+      gap: var(--cds-spacing-05);
+      margin-bottom: var(--cds-spacing-05);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+    }
+
+    .stat {
+      flex: 1;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cds-interactive-01);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--cds-text-02);
+      display: block;
+      margin-top: var(--cds-spacing-02);
+    }
+
+    .features-list {
+      list-style: none;
+      margin-bottom: var(--cds-spacing-05);
+    }
+
+    .features-list li {
+      padding: var(--cds-spacing-02) 0;
+      font-size: 0.875rem;
+      color: var(--cds-text-02);
+    }
+
+    .features-list li:before {
+      content: "✓";
+      color: var(--cds-success);
+      font-weight: bold;
+      margin-right: var(--cds-spacing-03);
+    }
+
+    .best-for {
+      background: #d0e2ff;
+      padding: var(--cds-spacing-04);
+      border-radius: 4px;
+      margin-top: var(--cds-spacing-05);
+    }
+
+    .best-for strong {
+      color: #0043ce;
+      display: block;
+      margin-bottom: var(--cds-spacing-02);
+    }
+
+    .best-for p {
+      font-size: 0.875rem;
+      color: var(--cds-text-01);
+      margin: 0;
+    }
+
+    .comparison-table {
+      background: var(--cds-ui-02);
+      border-radius: 8px;
+      padding: var(--cds-spacing-06);
+      margin-top: var(--cds-spacing-07);
+      overflow-x: auto;
+    }
+
+    .comparison-table h2 {
+      margin-bottom: var(--cds-spacing-05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: var(--cds-spacing-04);
+      text-align: left;
+      border-bottom: 1px solid var(--cds-ui-03);
+    }
+
+    th {
+      background: var(--cds-ui-01);
+      font-weight: 600;
+      color: var(--cds-text-01);
+    }
+
+    td {
+      font-size: 0.875rem;
+      color: var(--cds-text-02);
+    }
+
+    .rating {
+      color: var(--cds-success);
+      font-weight: 600;
+    }
+
+    .rating.medium {
+      color: var(--cds-warning);
+    }
+
+    .rating.low {
+      color: var(--cds-text-03);
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-container">
+    <div class="preview-header">
+      <h1>🔗 BAW Social API Widgets - Preview Showcase</h1>
+      <p>Explore three strategic approaches for creating modern BAW widgets that leverage the Social API</p>
+    </div>
+
+    <div class="option-cards">
+      <!-- Option A -->
+      <a href="option-a/index.html" class="option-card">
+        <h2>Option A: Complete Widget Suite</h2>
+        <p class="subtitle">Specialized Approach</p>
+        
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">6-8</span>
+            <span class="stat-label">Widgets</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">8-12</span>
+            <span class="stat-label">Weeks</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">90%</span>
+            <span class="stat-label">API Coverage</span>
+          </div>
+        </div>
+
+        <ul class="features-list">
+          <li>ExpertFinder Widget</li>
+          <li>ActivityStream Widget</li>
+          <li>UserProfileCard Widget</li>
+          <li>CommentsThread Widget</li>
+          <li>FollowingManager Widget</li>
+          <li>TeamCollaboration Widget</li>
+          <li>NotificationCenter Widget</li>
+          <li>SocialSearch Widget</li>
+        </ul>
+
+        <div class="best-for">
+          <strong>Best For:</strong>
+          <p>Organizations wanting maximum customization and flexibility with dedicated development resources</p>
+        </div>
+      </a>
+
+      <!-- Option B -->
+      <a href="option-b/index.html" class="option-card">
+        <h2>Option B: Modular Approach</h2>
+        <p class="subtitle">Configurable Widgets</p>
+        
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">3-4</span>
+            <span class="stat-label">Widgets</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">6-8</span>
+            <span class="stat-label">Weeks</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">75%</span>
+            <span class="stat-label">API Coverage</span>
+          </div>
+        </div>
+
+        <ul class="features-list">
+          <li>SocialFeed Widget (multi-mode)</li>
+          <li>PeopleFinder Widget (multi-mode)</li>
+          <li>CollaborationPanel Widget (multi-mode)</li>
+          <li>SocialActions Widget (quick actions)</li>
+        </ul>
+
+        <div class="best-for">
+          <strong>Best For:</strong>
+          <p>Teams wanting balance of flexibility and efficiency with moderate development resources</p>
+        </div>
+      </a>
+
+      <!-- Option C -->
+      <a href="option-c/index.html" class="option-card">
+        <h2>Option C: Integration Widgets</h2>
+        <p class="subtitle">Workflow-Focused</p>
+        
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">2-3</span>
+            <span class="stat-label">Widgets</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">4-6</span>
+            <span class="stat-label">Weeks</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">45%</span>
+            <span class="stat-label">API Coverage</span>
+          </div>
+        </div>
+
+        <ul class="features-list">
+          <li>SmartAssignment Widget</li>
+          <li>ProcessActivityTimeline Widget</li>
+          <li>CollaborativeDecision Widget</li>
+        </ul>
+
+        <div class="best-for">
+          <strong>Best For:</strong>
+          <p>Organizations wanting quick wins and immediate business value with limited resources</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="comparison-table">
+      <h2>Quick Comparison</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Criteria</th>
+            <th>Option A</th>
+            <th>Option B</th>
+            <th>Option C</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Development Time</strong></td>
+            <td>8-12 weeks</td>
+            <td>6-8 weeks</td>
+            <td class="rating">4-6 weeks</td>
+          </tr>
+          <tr>
+            <td><strong>Flexibility</strong></td>
+            <td class="rating">Very High</td>
+            <td class="rating">High</td>
+            <td class="rating medium">Medium</td>
+          </tr>
+          <tr>
+            <td><strong>Maintenance Effort</strong></td>
+            <td class="rating medium">High</td>
+            <td class="rating">Medium</td>
+            <td class="rating">Low</td>
+          </tr>
+          <tr>
+            <td><strong>Business Value</strong></td>
+            <td>High (long-term)</td>
+            <td class="rating">High</td>
+            <td class="rating">Very High (immediate)</td>
+          </tr>
+          <tr>
+            <td><strong>User Adoption</strong></td>
+            <td class="rating medium">Medium</td>
+            <td class="rating">High</td>
+            <td class="rating">Very High</td>
+          </tr>
+          <tr>
+            <td><strong>ROI Timeline</strong></td>
+            <td>6-12 months</td>
+            <td>3-6 months</td>
+            <td class="rating">1-3 months</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: var(--cds-spacing-07); padding: var(--cds-spacing-06); background: var(--cds-ui-02); border-radius: 8px;">
+      <h2 style="margin-bottom: var(--cds-spacing-04);">📋 Recommended Hybrid Approach</h2>
+      <p style="color: var(--cds-text-02); margin-bottom: var(--cds-spacing-05);">
+        For optimal results, consider a phased implementation:
+      </p>
+      <ol style="color: var(--cds-text-02); padding-left: var(--cds-spacing-06);">
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Phase 1 (Weeks 1-6):</strong> Start with Option C high-impact widgets for quick wins</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Phase 2 (Weeks 7-12):</strong> Add Option B modular widgets for broader coverage</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Phase 3 (Weeks 13-20):</strong> Expand with Option A specialized widgets as needed</li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>

@@ -6,7 +6,7 @@
       "coachViewId": "64.2563bbd0-609b-47e7-8dd6-cffc53ace388",
       "description": "Date display widget with customizable formatting for IBM Business Automation Workflow",
       "created": "2026-05-01T10:14:32.484925Z",
-      "last_packaged": "2026-05-26T21:34:06.653413Z",
+      "last_packaged": "2026-06-04T14:23:24.324373Z",
       "bindingIds": {
         "DateValue": "65.06179e74-40a0-4bb0-801d-e0f2495cb82b"
       },
@@ -24,7 +24,7 @@
       "coachViewId": "64.f1a8d46e-c4a2-4a93-ad08-5037f9683fe5",
       "description": "Vertical multi-step process indicator widget for IBM Business Automation Workflow",
       "created": "2026-05-01T10:15:12.755100Z",
-      "last_packaged": "2026-05-26T21:34:06.754247Z",
+      "last_packaged": "2026-06-04T14:23:24.353703Z",
       "bindingIds": {
         "StepperData": "65.66db65de-cafa-41e9-ba95-ab7683bb5d71"
       },
@@ -43,7 +43,7 @@
       "coachViewId": "64.85fc6053-ab02-4cbe-b327-e895ba2b4e0e",
       "description": "Horizontal breadcrumb navigation widget for IBM Business Automation Workflow",
       "created": "2026-05-01T10:18:44.482912Z",
-      "last_packaged": "2026-05-26T21:34:06.637303Z",
+      "last_packaged": "2026-06-04T14:23:24.316346Z",
       "bindingIds": {
         "BreadcrumbData": "65.3052f0ab-ded6-43d8-a9da-42fe0fa88b42"
       },
@@ -60,7 +60,7 @@
       "coachViewId": "64.394ead55-4ecf-4817-8364-eb192f89aeaa",
       "description": "Folder and document browser widget for IBM FileNet Content Engine via GraphQL, used in IBM Business Automation Workflow",
       "created": "2026-05-01T10:18:44.491295Z",
-      "last_packaged": "2026-05-26T21:34:06.658229Z",
+      "last_packaged": "2026-06-04T14:23:24.325832Z",
       "bindingIds": {
         "SelectedItem": "65.d939504d-14fd-49c9-9fed-52bbe91a67cd"
       },
@@ -85,7 +85,7 @@
       "coachViewId": "64.56d91787-704f-477b-80be-206750ff0f08",
       "description": "Drag-and-drop document and folder import widget for IBM FileNet Content Engine via GraphQL, used in IBM Business Automation Workflow",
       "created": "2026-05-01T10:18:44.496554Z",
-      "last_packaged": "2026-05-26T21:34:06.696171Z",
+      "last_packaged": "2026-06-04T14:23:24.329123Z",
       "bindingIds": {
         "ImportResult": "65.180968fe-1ffc-4db1-bb29-f5b041365df8"
       },
@@ -109,7 +109,7 @@
       "coachViewId": "64.dfe90acc-501f-47c5-a638-fa566723c375",
       "description": "File and folder manager widget with hierarchical structure and bulk metadata editing for IBM Business Automation Workflow",
       "created": "2026-05-01T10:18:44.501057Z",
-      "last_packaged": "2026-05-26T21:34:06.710922Z",
+      "last_packaged": "2026-06-04T14:23:24.331782Z",
       "bindingIds": {
         "FilesData": "65.f37ca5ae-df1f-4a68-995e-c7e8fc551d62"
       },
@@ -143,7 +143,7 @@
       "coachViewId": "64.311518a4-3d13-4ec7-929f-892065639ac5",
       "description": "A widget for rendering markdown-formatted text into styled HTML content with support for headers, lists, code blocks, tables, and more",
       "created": "2026-05-01T10:18:44.505396Z",
-      "last_packaged": "2026-05-26T21:34:06.721232Z",
+      "last_packaged": "2026-06-04T14:23:24.334706Z",
       "bindingIds": {
         "MarkdownText": "65.8e9ccc30-6ad2-4adc-8019-473b6a6a1695"
       },
@@ -161,7 +161,7 @@
       "coachViewId": "64.3221b79a-3e25-4a2b-a427-b4c98b78f329",
       "description": "Multi-select dropdown widget with search and bulk selection capabilities for IBM Business Automation Workflow",
       "created": "2026-05-01T10:18:44.509876Z",
-      "last_packaged": "2026-05-26T21:34:06.734864Z",
+      "last_packaged": "2026-06-04T14:23:24.343255Z",
       "bindingIds": {
         "SelectedItems": "65.419fe1d4-3fd6-4760-9858-f7b71dd03baf"
       },
@@ -182,7 +182,7 @@
       "coachViewId": "64.9736c878-28d7-4557-9188-ac43d87c34f0",
       "description": "Circular progress indicator widget for displaying percentage or value progress in IBM Business Automation Workflow with Carbon Design System styling",
       "created": "2026-05-01T10:18:44.514079Z",
-      "last_packaged": "2026-05-26T21:34:06.741281Z",
+      "last_packaged": "2026-06-04T14:23:24.347983Z",
       "bindingIds": {
         "ProgressValue": "65.cfdb9767-d62d-4911-9d02-3ae38f757970"
       },
@@ -202,7 +202,7 @@
       "coachViewId": "64.69d392d7-3ff6-4004-8ddc-86bca454437a",
       "description": "A widget to display a list of tasks with status indicators for IBM Business Automation Workflow",
       "created": "2026-05-01T10:18:44.521820Z",
-      "last_packaged": "2026-05-26T21:34:06.760850Z",
+      "last_packaged": "2026-06-04T14:23:24.355471Z",
       "bindingIds": {
         "TasksListData": "65.bc728ccf-4aee-4545-b2fc-2065d1136c4f"
       },
@@ -215,7 +215,7 @@
       "coachViewId": "64.db824ed3-93e7-4eb6-a583-56a0a2bf25c0",
       "description": "Animated horizontal progress bar with color-coded states and real-time percentage display for IBM Business Automation Workflow",
       "created": "2026-05-01T21:21:03.839681Z",
-      "last_packaged": "2026-05-26T21:34:06.746667Z",
+      "last_packaged": "2026-06-04T14:23:24.349765Z",
       "bindingIds": {
         "ProgressData": "65.45b6f4be-bafc-4434-803a-0c21dbdddff9"
       },
@@ -234,7 +234,7 @@
       "coachViewId": "64.cb0da67d-4681-4d0e-aba1-df847619fe10",
       "description": "Vertical timeline widget for displaying chronological events in IBM Business Automation Workflow",
       "created": "2026-05-05T22:03:43.799655Z",
-      "last_packaged": "2026-05-26T21:34:06.765839Z",
+      "last_packaged": "2026-06-04T14:23:24.357073Z",
       "bindingIds": {
         "TimelineData": "65.e9f5c1ec-e91c-41f3-b565-eec238a2bac1"
       },
@@ -254,7 +254,7 @@
       "coachViewId": "64.ba950d9b-e8e3-4b71-a419-6b6501751103",
       "description": "Interactive carousel widget with flip cards displaying icons, titles, and descriptions",
       "created": "2026-05-06T11:52:27.415359Z",
-      "last_packaged": "2026-05-26T21:34:06.646243Z",
+      "last_packaged": "2026-06-04T14:23:24.319817Z",
       "bindingIds": {
         "CarouselData": "65.c3b6f525-407b-4508-964c-69e158f2e51a"
       },
@@ -274,7 +274,7 @@
       "coachViewId": "64.ef755491-8def-4211-a6f6-f12ff50b2db6",
       "description": "Widget za upload više dokumenata sa tabelom, selekcijom tipa dokumenta i mogućnošću brisanja pre upload-a u LocalStore",
       "created": "2026-05-06T15:03:49.313071Z",
-      "last_packaged": "2026-05-26T21:34:06.729636Z",
+      "last_packaged": "2026-06-04T14:23:24.339797Z",
       "bindingIds": {
         "Documents": "65.cade153c-3984-4f83-903e-d58e18a0457a"
       },
@@ -287,6 +287,67 @@
       "previewHtmlId": "61.da3a1bd2-80dc-452a-a18c-cb47311aed6a",
       "previewJsId": "61.2376480b-5879-40e9-9164-577b400410be",
       "iconId": "61.47125a39-d0d4-41de-a4af-d15608edbc55"
+    },
+    "RiskFactor": {
+      "coachViewId": "64.8fe984e8-553e-4751-a371-297dfe47403f",
+      "description": "Displays risk level with color-coded icons and badges based on integer risk score thresholds",
+      "created": "2026-05-26T22:18:38.627070Z",
+      "last_packaged": "2026-06-04T14:23:24.351818Z",
+      "bindingIds": {
+        "RiskScore": "65.78345a1e-2cc3-42f9-996e-9f19249634c7"
+      },
+      "configOptionIds": {
+        "lowThreshold": "66.587033be-7dc2-4ba7-857f-f131b852e198",
+        "highThreshold": "66.bb528f94-41ce-4b7e-9452-3f5c04bba85f",
+        "showLabel": "66.aa341102-0317-4b55-af41-fbe4980d68d6",
+        "showScore": "66.838246ab-ec4f-4434-9914-6b47ed7f01ae",
+        "iconSize": "66.db6afdad-427b-4e83-9e14-af5c087a2b6f"
+      },
+      "previewHtmlId": "61.f53e2dd0-aca1-41b5-9388-834f9a9d43b2",
+      "previewJsId": "61.21ad01a5-7a8a-47ce-98c0-6a49a7c1c0c4",
+      "iconId": "61.39cde311-1acc-4228-8771-bcbefb699bee"
+    },
+    "ProcessActivityTimeline": {
+      "coachViewId": "64.ab7916c9-d9ac-41f0-aa4a-824ed75ae2f7",
+      "description": "Timeline widget for displaying BAW process activities with status tracking, assignee information, and duration metrics",
+      "created": "2026-05-29T08:44:11.480745Z",
+      "last_packaged": "2026-06-04T14:23:24.345857Z",
+      "bindingIds": {
+        "ProcessActivityData": "65.9c9aa134-050b-4243-b275-f23e1703b1d7"
+      },
+      "configOptionIds": {
+        "showTimestamps": "66.683420d4-765a-4187-ae56-e753d1f00207",
+        "showIcons": "66.43e36fa5-292f-4883-9f67-bf95732a18dd",
+        "showDetails": "66.8089fb19-7001-41d4-870f-7b725cd7aa1f",
+        "compact": "66.7d9eb2c0-384f-40a7-a30c-c75f78134270",
+        "clickable": "66.b2751be7-efb0-41aa-ae2e-0d358cc78775",
+        "activityClicked": "66.d0720b61-e645-49f7-bd51-c69add8767a0",
+        "processInstanceId": "66.ea9da4d0-1562-4c3e-977c-f454d8536ae6",
+        "baseUrl": "66.781a4fd7-d67b-4c13-b188-fff57ba9d9e5"
+      },
+      "previewHtmlId": "61.6d24807e-1059-4633-b415-21e28baf6509",
+      "previewJsId": "61.7a61bd0d-5853-46e8-8a8b-5c27980c13a2",
+      "iconId": "61.33d076f8-9077-4efd-b377-e90186439742"
+    },
+    "MultiCheckbox": {
+      "coachViewId": "64.b0544446-e26e-43ea-b3de-c05356b1c45e",
+      "description": "Multi-checkbox widget for selecting multiple values with direct checkbox display for IBM Business Automation Workflow",
+      "created": "2026-06-03T13:00:07.343080Z",
+      "last_packaged": "2026-06-04T14:23:24.336618Z",
+      "bindingIds": {
+        "SelectedItems": "65.eb6233d5-caee-4127-92a0-5fa8de990469"
+      },
+      "configOptionIds": {
+        "options": "66.bbcad2b4-2279-4cea-8e7a-a725c16418bc",
+        "label": "66.6c6bec84-a6bc-48c8-8e7c-d405bfeb5a90",
+        "layout": "66.74da39c3-94fb-4748-8bee-66f3003e00bd",
+        "disabled": "66.41e584d7-0937-4aa8-81c5-d213cea1368f",
+        "helperText": "66.c1c6ade2-e108-448e-b0a3-001e2cc477bd",
+        "showSelectAll": "66.d39027c8-abf7-4baa-9b2e-ec22fdb5121e"
+      },
+      "previewHtmlId": "61.50377173-9684-4f1b-abff-da0be44ca668",
+      "previewJsId": "61.94d8b29d-2246-494e-b1d2-8142e4172a13",
+      "iconId": "61.287ea3a8-c1f3-4848-9839-426774d93301"
     }
   },
   "notes": {

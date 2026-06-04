@@ -1,0 +1,243 @@
+<!--
+ #BEGIN COPYRIGHT 
+ Licensed Materials - Property of IBM
+ 5725-C95
+ (C) Copyright IBM Corporation 2026. All Rights Reserved.
+ #END COPYRIGHT 
+-->
+
+<style>
+.widget-heading {
+    padding-bottom: 4px;
+}
+
+.widget_maincontentbox {
+    width: 100%;
+    min-height: 120px;
+    padding: 1rem;
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.preview-timeline-container {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+.preview-timeline-line {
+    position: absolute;
+    left: 24px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #e0e0e0;
+    z-index: 0;
+}
+
+.preview-timeline-activities {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    gap: 0;
+}
+
+.preview-activity {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    position: relative;
+    width: 100%;
+    min-height: 70px;
+    padding-bottom: 1.5rem;
+}
+
+.preview-activity:last-child {
+    padding-bottom: 0;
+}
+
+.preview-activity-marker {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 3px solid #e0e0e0;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.preview-activity.completed .preview-activity-marker {
+    background: #198038;
+    border-color: #198038;
+}
+
+.preview-activity.active .preview-activity-marker {
+    background: #0f62fe;
+    border-color: #0f62fe;
+}
+
+.preview-activity.pending .preview-activity-marker {
+    background: #f4f4f4;
+    border-color: #c6c6c6;
+}
+
+.preview-activity-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-left: 1rem;
+    padding: 0.75rem 1rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    top: 4px;
+}
+
+.preview-activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.preview-activity-timestamp {
+    font-size: 11px;
+    color: #525252;
+}
+
+.preview-activity-status {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.preview-activity.completed .preview-activity-status {
+    background: #defbe6;
+    color: #0e6027;
+}
+
+.preview-activity.active .preview-activity-status {
+    background: #d0e2ff;
+    color: #0043ce;
+}
+
+.preview-activity.pending .preview-activity-status {
+    background: #f4f4f4;
+    color: #525252;
+}
+
+.preview-activity-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #161616;
+    margin-bottom: 0.25rem;
+}
+
+.preview-activity.active .preview-activity-name {
+    color: #0f62fe;
+}
+
+.preview-activity-description {
+    font-size: 12px;
+    color: #525252;
+    line-height: 1.4;
+}
+
+.preview-activity-icon {
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.preview-icon-completed {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M7%2013.17L3.83%2010l-1.42%201.41L7%2016%2017%206l-1.41-1.41z%22%2F%3E%3C%2Fsvg%3E");
+}
+
+.preview-icon-active {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.preview-icon-pending {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #c6c6c6;
+}
+
+/* Comments Section */
+.preview-comments {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.preview-comment {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+.preview-comment:last-child {
+    border-bottom: none;
+}
+
+.preview-comment-avatar {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #0f62fe;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.preview-comment-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.preview-comment-content > div:first-child {
+    font-size: 14px;
+    color: #161616;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.preview-comment-content strong {
+    font-weight: 600;
+    color: #161616;
+}
+
+.preview-comment-time {
+    font-size: 12px;
+    color: #525252;
+    margin-top: 0.25rem;
+}
+</style>
+
+<div class="SPARKPanel panel">
+    <div class="widget-heading">
+        <span class="widget-title">Process Activity Timeline Preview</span>
+    </div>
+    <div class="widget-body">
+        <!-- Preview content generated by ProcessActivityTimelineSnippet.js -->
+    </div>
+</div>

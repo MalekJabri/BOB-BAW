@@ -1,0 +1,79 @@
+{
+  "name": "ProcessActivityEvent",
+  "type": "businessObject",
+  "description": "Business object representing a single process activity in the ProcessActivityTimeline widget",
+  "properties": [
+    {
+      "name": "name",
+      "type": "String",
+      "required": true,
+      "description": "Name of the process activity"
+    },
+    {
+      "name": "activityName",
+      "type": "String",
+      "required": false,
+      "description": "Alternative property for activity name (alias for 'name')"
+    },
+    {
+      "name": "description",
+      "type": "String",
+      "required": false,
+      "description": "Detailed description of the activity"
+    },
+    {
+      "name": "startTime",
+      "type": "Date",
+      "required": false,
+      "description": "Start time of the activity as Date object"
+    },
+    {
+      "name": "timestamp",
+      "type": "Date",
+      "required": false,
+      "description": "Alternative timestamp property (alias for 'startTime')"
+    },
+    {
+      "name": "endTime",
+      "type": "Date",
+      "required": false,
+      "description": "End time of the activity as Date object"
+    },
+    {
+      "name": "status",
+      "type": "String",
+      "required": false,
+      "description": "Activity status: completed, active, pending, failed, skipped, waiting"
+    },
+    {
+      "name": "assignee",
+      "type": "String",
+      "required": false,
+      "description": "User or system assigned to the activity"
+    },
+    {
+      "name": "duration",
+      "type": "Integer",
+      "required": false,
+      "description": "Duration of the activity in milliseconds"
+    },
+    {
+      "name": "taskId",
+      "type": "String",
+      "required": false,
+      "description": "BAW task identifier"
+    },
+    {
+      "name": "instanceId",
+      "type": "String",
+      "required": false,
+      "description": "BAW process instance identifier"
+    },
+    {
+      "name": "activityId",
+      "type": "String",
+      "required": false,
+      "description": "BAW activity identifier"
+    }
+  ]
+}

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option C: Integration Widgets - Preview</title>
+  <link rel="stylesheet" href="../assets/common-styles.css">
+  <style>
+    .widget-content {
+      margin-top: var(--cds-spacing-05);
+    }
+
+    .recommendation-card {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      padding: var(--cds-spacing-05);
+      background: linear-gradient(135deg, #d0e2ff 0%, #ffffff 100%);
+      border-radius: 8px;
+      margin-bottom: var(--cds-spacing-04);
+      border: 2px solid var(--cds-interactive-01);
+      position: relative;
+    }
+
+    .recommendation-card::before {
+      content: "⭐ RECOMMENDED";
+      position: absolute;
+      top: -10px;
+      left: var(--cds-spacing-05);
+      background: var(--cds-interactive-01);
+      color: white;
+      padding: var(--cds-spacing-02) var(--cds-spacing-03);
+      border-radius: 4px;
+      font-size: 0.625rem;
+      font-weight: 600;
+    }
+
+    .recommendation-card .user-avatar {
+      width: 64px;
+      height: 64px;
+      font-size: 1.5rem;
+    }
+
+    .recommendation-details {
+      flex: 1;
+    }
+
+    .match-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--cds-spacing-04);
+      margin-top: var(--cds-spacing-04);
+      padding-top: var(--cds-spacing-04);
+      border-top: 1px solid var(--cds-ui-03);
+    }
+
+    .metric {
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cds-interactive-01);
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--cds-text-02);
+      margin-top: var(--cds-spacing-02);
+    }
+
+    .reasoning-box {
+      background: #f4f4f4;
+      padding: var(--cds-spacing-04);
+      border-radius: 4px;
+      margin-top: var(--cds-spacing-04);
+      border-left: 4px solid var(--cds-success);
+    }
+
+    .reasoning-box strong {
+      color: var(--cds-success);
+    }
+
+    .alternative-card {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+      align-items: center;
+    }
+
+    .alternative-card .user-avatar {
+      width: 48px;
+      height: 48px;
+      font-size: 1.125rem;
+    }
+
+    .timeline-container {
+      position: relative;
+      padding-left: var(--cds-spacing-06);
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--cds-ui-03);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: var(--cds-spacing-06);
+    }
+
+    .timeline-marker {
+      position: absolute;
+      left: -32px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--cds-interactive-01);
+      border: 3px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .timeline-marker.milestone {
+      background: var(--cds-success);
+    }
+
+    .timeline-marker.critical {
+      background: var(--cds-danger);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .timeline-content {
+      background: var(--cds-ui-01);
+      padding: var(--cds-spacing-04);
+      border-radius: 4px;
+      border-left: 3px solid var(--cds-interactive-01);
+    }
+
+    .timeline-content.milestone {
+      border-left-color: var(--cds-success);
+    }
+
+    .timeline-content.critical {
+      border-left-color: var(--cds-danger);
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .timeline-comments {
+      margin-top: var(--cds-spacing-04);
+      padding-top: var(--cds-spacing-04);
+      border-top: 1px solid var(--cds-ui-03);
+    }
+
+    .timeline-comment {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      margin-bottom: var(--cds-spacing-03);
+      font-size: 0.875rem;
+    }
+
+    .timeline-comment .user-avatar {
+      width: 24px;
+      height: 24px;
+      font-size: 0.625rem;
+    }
+
+    .decision-option {
+      background: var(--cds-ui-01);
+      padding: var(--cds-spacing-05);
+      border-radius: 8px;
+      margin-bottom: var(--cds-spacing-04);
+      border: 2px solid var(--cds-ui-03);
+      transition: all 0.2s;
+    }
+
+    .decision-option:hover {
+      border-color: var(--cds-interactive-01);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .decision-option.winning {
+      border-color: var(--cds-success);
+      background: linear-gradient(135deg, #d2f4ea 0%, #ffffff 100%);
+    }
+
+    .option-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: var(--cds-spacing-04);
+    }
+
+    .vote-bar {
+      display: flex;
+      gap: 2px;
+      height: 32px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: var(--cds-spacing-04) 0;
+    }
+
+    .vote-segment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .vote-segment.approve {
+      background: var(--cds-success);
+    }
+
+    .vote-segment.reject {
+      background: var(--cds-danger);
+    }
+
+    .vote-segment.abstain {
+      background: var(--cds-text-03);
+    }
+
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--cds-spacing-04);
+      margin: var(--cds-spacing-04) 0;
+    }
+
+    .pros, .cons {
+      padding: var(--cds-spacing-04);
+      border-radius: 4px;
+    }
+
+    .pros {
+      background: #d2f4ea;
+    }
+
+    .cons {
+      background: #ffd7d9;
+    }
+
+    .pros h4, .cons h4 {
+      font-size: 0.875rem;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .pros ul, .cons ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .pros li::before {
+      content: "✓";
+      color: var(--cds-success);
+      font-weight: bold;
+      margin-right: var(--cds-spacing-02);
+    }
+
+    .cons li::before {
+      content: "✗";
+      color: var(--cds-danger);
+      font-weight: bold;
+      margin-right: var(--cds-spacing-02);
+    }
+
+    .voter-list {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      flex-wrap: wrap;
+      margin-top: var(--cds-spacing-04);
+    }
+
+    .voter-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--cds-spacing-02);
+      padding: var(--cds-spacing-02) var(--cds-spacing-03);
+      background: white;
+      border-radius: 16px;
+      font-size: 0.75rem;
+      border: 1px solid var(--cds-ui-03);
+    }
+
+    .voter-badge .user-avatar {
+      width: 20px;
+      height: 20px;
+      font-size: 0.625rem;
+    }
+
+    .vote-icon {
+      font-size: 1rem;
+    }
+
+    .integration-badge {
+      display: inline-block;
+      padding: var(--cds-spacing-02) var(--cds-spacing-03);
+      background: #d0e2ff;
+      color: #0043ce;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: var(--cds-spacing-03);
+    }
+
+    .business-value {
+      background: linear-gradient(135deg, #fff1f1 0%, #ffffff 100%);
+      padding: var(--cds-spacing-05);
+      border-radius: 8px;
+      border-left: 4px solid var(--cds-danger);
+      margin-top: var(--cds-spacing-05);
+    }
+
+    .business-value h3 {
+      color: var(--cds-danger);
+      margin-bottom: var(--cds-spacing-04);
+    }
+
+    .value-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--cds-spacing-04);
+    }
+
+    .value-metric {
+      text-align: center;
+      padding: var(--cds-spacing-03);
+      background: white;
+      border-radius: 4px;
+    }
+
+    .value-metric-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cds-danger);
+    }
+
+    .value-metric-label {
+      font-size: 0.75rem;
+      color: var(--cds-text-02);
+      margin-top: var(--cds-spacing-02);
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-container">
+    <a href="../index.html" class="back-link">← Back to Options</a>
+    
+    <div class="preview-header">
+      <h1>Option C: Integration Widgets</h1>
+      <p>2-3 high-impact widgets that seamlessly integrate social features into existing workflows</p>
+    </div>
+
+    <div class="widget-grid">
+      <!-- SmartAssignment Widget -->
+      <div class="widget-preview" style="grid-column: 1 / -1;">
+        <h2 class="widget-title">1. SmartAssignment Widget <span class="integration-badge">🔗 Workflow Integration</span></h2>
+        <p class="widget-description">Intelligent task assignment with AI-powered expert recommendations and social intelligence</p>
+        
+        <div class="widget-content">
+          <div style="background: #d0e2ff; padding: var(--cds-spacing-04); border-radius: 4px; margin-bottom: var(--cds-spacing-05);">
+            <strong>📋 Task:</strong> Review Insurance Claim #12345 - High Value Policy<br>
+            <strong>🎯 Required Skills:</strong> Claims Processing, Risk Assessment, Underwriting
+          </div>
+
+          <!-- Top Recommendation -->
+          <div class="recommendation-card">
+            <div class="user-avatar">JD</div>
+            <div class="recommendation-details">
+              <div class="user-name" style="font-size: 1.25rem;">John Doe</div>
+              <div class="user-title">Senior Process Analyst</div>
+              <div style="margin-top: var(--cds-spacing-03);">
+                <span class="tag skill">Claims Processing</span>
+                <span class="tag skill">Risk Assessment</span>
+                <span class="tag skill">Underwriting</span>
+                <span class="tag skill">High Value Claims</span>
+              </div>
+              
+              <div class="match-metrics">
+                <div class="metric">
+                  <div class="metric-value">95%</div>
+                  <div class="metric-label">Skill Match</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-value">3.2h</div>
+                  <div class="metric-label">Avg Completion</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-value">98%</div>
+                  <div class="metric-label">Success Rate</div>
+                </div>
+              </div>
+
+              <div class="reasoning-box">
+                <strong>💡 Why Recommended:</strong>
+                <ul style="margin: var(--cds-spacing-03) 0 0 var(--cds-spacing-05); font-size: 0.875rem;">
+                  <li>Completed 45 similar high-value claims in last 6 months</li>
+                  <li>Currently available with light workload (2/8 tasks)</li>
+                  <li>Expert in risk assessment with 98% approval rate</li>
+                  <li>Strong collaboration history with underwriting team</li>
+                </ul>
+              </div>
+
+              <div style="margin-top: var(--cds-spacing-05); display: flex; gap: var(--cds-spacing-03);">
+                <button class="button">✓ Assign to John Doe</button>
+                <button class="button secondary">View Full Profile</button>
+                <button class="button secondary">@Mention</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alternative Recommendations -->
+          <div style="margin-top: var(--cds-spacing-05);">
+            <strong>Alternative Experts:</strong>
+            
+            <div class="alternative-card" style="margin-top: var(--cds-spacing-04);">
+              <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+              <div style="flex: 1;">
+                <div class="user-name">Sarah Miller</div>
+                <div class="user-title">Process Automation Lead</div>
+                <div style="margin-top: var(--cds-spacing-02);">
+                  <span class="tag skill">Claims Processing</span>
+                  <span class="tag skill">Workflow Design</span>
+                </div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 1.25rem; font-weight: 600; color: #0f62fe;">88%</div>
+                <div style="font-size: 0.75rem; color: var(--cds-text-02);">Match</div>
+              </div>
+              <button class="button secondary">Assign</button>
+            </div>
+
+            <div class="alternative-card">
+              <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+              <div style="flex: 1;">
+                <div class="user-name">Robert Johnson</div>
+                <div class="user-title">Business Analyst</div>
+                <div style="margin-top: var(--cds-spacing-02);">
+                  <span class="tag skill">Process Modeling</span>
+                  <span class="tag skill">Claims Processing</span>
+                </div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 1.25rem; font-weight: 600; color: #f1c21b; color: #8e6a00;">82%</div>
+                <div style="font-size: 0.75rem; color: var(--cds-text-02);">Match</div>
+              </div>
+              <button class="button secondary">Assign</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="business-value">
+          <h3>💰 Business Value</h3>
+          <div class="value-metrics">
+            <div class="value-metric">
+              <div class="value-metric-value">60%</div>
+              <div class="value-metric-label">Faster Assignment</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">35%</div>
+              <div class="value-metric-label">Better Completion Rate</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">45%</div>
+              <div class="value-metric-label">Reduced Resolution Time</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">25%</div>
+              <div class="value-metric-label">Better Workload Balance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ProcessActivityTimeline Widget -->
+      <div class="widget-preview" style="grid-column: 1 / -1;">
+        <h2 class="widget-title">2. ProcessActivityTimeline Widget <span class="integration-badge">🔗 Process Integration</span></h2>
+        <p class="widget-description">Rich, social-enabled timeline of process activities with contextual collaboration</p>
+        
+        <div class="widget-content">
+          <div style="background: #d0e2ff; padding: var(--cds-spacing-04); border-radius: 4px; margin-bottom: var(--cds-spacing-05); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong>📊 Process:</strong> Claims Processing - Claim #12345<br>
+              <strong>⏱️ Duration:</strong> 3 days, 4 hours
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 1.5rem; font-weight: 600; color: var(--cds-success);">85%</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02);">Complete</div>
+            </div>
+          </div>
+
+          <div class="timeline-container">
+            <div class="timeline-line"></div>
+
+            <!-- Timeline Item 1 - Completed Milestone -->
+            <div class="timeline-item">
+              <div class="timeline-marker milestone">✓</div>
+              <div class="timeline-content milestone">
+                <div class="timeline-header">
+                  <div>
+                    <div style="font-weight: 600; color: var(--cds-success);">Claim Submitted</div>
+                    <div class="user-info" style="margin-top: var(--cds-spacing-02);">
+                      <div class="user-avatar" style="width: 24px; height: 24px; font-size: 0.625rem;">AK</div>
+                      <div>
+                        <div style="font-size: 0.875rem;">Alice Kim</div>
+                        <div class="timestamp">3 days ago</div>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="tag" style="background: #d2f4ea; color: #0e6027;">Completed</span>
+                </div>
+                <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-03);">
+                  Initial claim documentation submitted and validated. All required documents present.
+                </div>
+                <div class="timeline-comments">
+                  <div class="timeline-comment">
+                    <div class="user-avatar">JD</div>
+                    <div>
+                      <strong>John Doe:</strong> Documentation looks complete. Moving to review.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline Item 2 - Completed -->
+            <div class="timeline-item">
+              <div class="timeline-marker milestone">✓</div>
+              <div class="timeline-content milestone">
+                <div class="timeline-header">
+                  <div>
+                    <div style="font-weight: 600; color: var(--cds-success);">Initial Review Completed</div>
+                    <div class="user-info" style="margin-top: var(--cds-spacing-02);">
+                      <div class="user-avatar" style="width: 24px; height: 24px; font-size: 0.625rem;">JD</div>
+                      <div>
+                        <div style="font-size: 0.875rem;">John Doe</div>
+                        <div class="timestamp">2 days ago</div>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="tag" style="background: #d2f4ea; color: #0e6027;">Completed</span>
+                </div>
+                <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-03);">
+                  Claim reviewed and approved for risk assessment. High value policy requires additional review.
+                </div>
+                <div class="timeline-comments">
+                  <div class="timeline-comment">
+                    <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+                    <div>
+                      <strong>Sarah Miller:</strong> <span style="color: var(--cds-interactive-01);">@RobertJohnson</span> Can you handle the risk assessment?
+                    </div>
+                  </div>
+                  <div class="timeline-comment">
+                    <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+                    <div>
+                      <strong>Robert Johnson:</strong> On it! Will have results by EOD.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline Item 3 - In Progress (Critical Path) -->
+            <div class="timeline-item">
+              <div class="timeline-marker critical">!</div>
+              <div class="timeline-content critical">
+                <div class="timeline-header">
+                  <div>
+                    <div style="font-weight: 600; color: var(--cds-danger);">Risk Assessment</div>
+                    <div class="user-info" style="margin-top: var(--cds-spacing-02);">
+                      <div class="user-avatar" style="width: 24px; height: 24px; font-size: 0.625rem; background: #fa4d56;">RJ</div>
+                      <div>
+                        <div style="font-size: 0.875rem;">Robert Johnson</div>
+                        <div class="timestamp">In Progress • 4 hours</div>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="tag" style="background: #ffd7d9; color: #750e13;">Critical Path</span>
+                </div>
+                <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-03);">
+                  Conducting comprehensive risk assessment for high-value policy. Analyzing historical data and market conditions.
+                </div>
+                <div style="margin-top: var(--cds-spacing-04); padding: var(--cds-spacing-03); background: #fff1f1; border-radius: 4px;">
+                  <strong style="color: var(--cds-danger);">⚠️ Attention:</strong> This is on the critical path. Any delay will impact final approval timeline.
+                </div>
+                <div class="timeline-comments">
+                  <div class="timeline-comment">
+                    <div class="user-avatar">JD</div>
+                    <div>
+                      <strong>John Doe:</strong> Let me know if you need any additional information from the initial review.
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: var(--cds-spacing-04);">
+                  <textarea placeholder="Add a comment... Use @mention to tag someone" style="width: 100%; padding: var(--cds-spacing-03); border: 1px solid var(--cds-ui-03); border-radius: 4px; font-family: var(--cds-font-family); resize: vertical; min-height: 60px;"></textarea>
+                  <button class="button" style="margin-top: var(--cds-spacing-03);">Post Comment</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline Item 4 - Pending -->
+            <div class="timeline-item">
+              <div class="timeline-marker" style="background: var(--cds-text-03);">4</div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <div>
+                    <div style="font-weight: 600;">Underwriting Approval</div>
+                    <div style="font-size: 0.875rem; color: var(--cds-text-03); margin-top: var(--cds-spacing-02);">
+                      Pending previous step
+                    </div>
+                  </div>
+                  <span class="tag" style="background: #fcf4d6; color: #8e6a00;">Pending</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline Item 5 - Pending -->
+            <div class="timeline-item">
+              <div class="timeline-marker" style="background: var(--cds-text-03);">5</div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <div>
+                    <div style="font-weight: 600;">Final Approval</div>
+                    <div style="font-size: 0.875rem; color: var(--cds-text-03); margin-top: var(--cds-spacing-02);">
+                      Pending previous steps
+                    </div>
+                  </div>
+                  <span class="tag" style="background: #fcf4d6; color: #8e6a00;">Pending</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="business-value">
+          <h3>💰 Business Value</h3>
+          <div class="value-metrics">
+            <div class="value-metric">
+              <div class="value-metric-value">100%</div>
+              <div class="value-metric-label">Process Visibility</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">40%</div>
+              <div class="value-metric-label">Faster Issue Resolution</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">50%</div>
+              <div class="value-metric-label">Better Coordination</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">30%</div>
+              <div class="value-metric-label">Reduced Delays</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CollaborativeDecision Widget -->
+      <div class="widget-preview" style="grid-column: 1 / -1;">
+        <h2 class="widget-title">3. CollaborativeDecision Widget <span class="integration-badge">🔗 Decision Gate Integration</span></h2>
+        <p class="widget-description">Enable team-based decision making with voting, discussion, and expert input</p>
+        
+        <div class="widget-content">
+          <div style="background: #d0e2ff; padding: var(--cds-spacing-04); border-radius: 4px; margin-bottom: var(--cds-spacing-05);">
+            <strong>🎯 Decision Required:</strong> Approve High-Value Insurance Policy<br>
+            <strong>⏰ Deadline:</strong> Tomorrow, 5:00 PM<br>
+            <strong>👥 Stakeholders:</strong> 5 team members • 3 votes required
+          </div>
+
+          <!-- Option 1 - Winning -->
+          <div class="decision-option winning">
+            <div class="option-header">
+              <div>
+                <h3 style="margin-bottom: var(--cds-spacing-02);">Option A: Approve with Standard Terms</h3>
+                <p style="font-size: 0.875rem; color: var(--cds-text-02);">
+                  Approve the policy with standard terms and conditions. Risk assessment shows acceptable levels.
+                </p>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 2rem; font-weight: 600; color: var(--cds-success);">60%</div>
+                <div style="font-size: 0.75rem; color: var(--cds-text-02);">Support</div>
+              </div>
+            </div>
+
+            <div class="vote-bar">
+              <div class="vote-segment approve" style="flex: 3;">
+                ✓ Approve (3)
+              </div>
+              <div class="vote-segment reject" style="flex: 1;">
+                ✗ Reject (1)
+              </div>
+              <div class="vote-segment abstain" style="flex: 1;">
+                − Abstain (1)
+              </div>
+            </div>
+
+            <div class="pros-cons">
+              <div class="pros">
+                <h4>✓ Pros</h4>
+                <ul>
+                  <li>Risk levels within acceptable range</li>
+                  <li>Customer has excellent credit history</li>
+                  <li>Standard terms minimize complexity</li>
+                  <li>Faster processing time</li>
+                </ul>
+              </div>
+              <div class="cons">
+                <h4>✗ Cons</h4>
+                <ul>
+                  <li>High policy value increases exposure</li>
+                  <li>Market conditions uncertain</li>
+                  <li>Limited historical data for this segment</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="margin-top: var(--cds-spacing-04);">
+              <strong style="font-size: 0.875rem;">Voters:</strong>
+              <div class="voter-list">
+                <div class="voter-badge">
+                  <div class="user-avatar">JD</div>
+                  <span>John Doe</span>
+                  <span class="vote-icon" style="color: var(--cds-success);">✓</span>
+                </div>
+                <div class="voter-badge">
+                  <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+                  <span>Sarah Miller</span>
+                  <span class="vote-icon" style="color: var(--cds-success);">✓</span>
+                </div>
+                <div class="voter-badge">
+                  <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+                  <span>Robert Johnson</span>
+                  <span class="vote-icon" style="color: var(--cds-danger);">✗</span>
+                </div>
+                <div class="voter-badge">
+                  <div class="user-avatar" style="background: #0f62fe;">AK</div>
+                  <span>Alice Kim</span>
+                  <span class="vote-icon" style="color: var(--cds-success);">✓</span>
+                </div>
+                <div class="voter-badge">
+                  <div class="user-avatar" style="background: #198038;">MB</div>
+                  <span>Mike Brown</span>
+                  <span class="vote-icon" style="color: var(--cds-text-03);">−</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: var(--cds-spacing-05); padding: var(--cds-spacing-04); background: white; border-radius: 4px;">
+              <strong style="font-size: 0.875rem;">Discussion (3 comments):</strong>
+              <div style="margin-top: var(--cds-spacing-03);">
+                <div class="timeline-comment">
+                  <div class="user-avatar">JD</div>
+                  <div>
+                    <strong>John Doe:</strong> Risk assessment looks solid. I support approval with standard terms.
+                    <div class="timestamp">2 hours ago</div>
+                  </div>
+                </div>
+                <div class="timeline-comment">
+                  <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+                  <div>
+                    <strong>Robert Johnson:</strong> I'm concerned about the market volatility. Maybe we should consider Option B?
+                    <div class="timestamp">1 hour ago</div>
+                  </div>
+                </div>
+                <div class="timeline-comment">
+                  <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+                  <div>
+                    <strong>Sarah Miller:</strong> <span style="color: var(--cds-interactive-01);">@RobertJohnson</span> Valid concern, but the customer's history mitigates that risk.
+                    <div class="timestamp">30 minutes ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Option 2 -->
+          <div class="decision-option">
+            <div class="option-header">
+              <div>
+                <h3 style="margin-bottom: var(--cds-spacing-02);">Option B: Approve with Enhanced Terms</h3>
+                <p style="font-size: 0.875rem; color: var(--cds-text-02);">
+                  Approve with additional risk mitigation clauses and higher premium to offset exposure.
+                </p>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 2rem; font-weight: 600; color: var(--cds-text-03);">20%</div>
+                <div style="font-size: 0.75rem; color: var(--cds-text-02);">Support</div>
+              </div>
+            </div>
+
+            <div class="vote-bar">
+              <div class="vote-segment approve" style="flex: 1;">
+                ✓ Approve (1)
+              </div>
+              <div class="vote-segment reject" style="flex: 2;">
+                ✗ Reject (2)
+              </div>
+              <div class="vote-segment abstain" style="flex: 2;">
+                − Abstain (2)
+              </div>
+            </div>
+
+            <div class="pros-cons">
+              <div class="pros">
+                <h4>✓ Pros</h4>
+                <ul>
+                  <li>Better risk mitigation</li>
+                  <li>Higher premium offsets exposure</li>
+                  <li>More conservative approach</li>
+                </ul>
+              </div>
+              <div class="cons">
+                <h4>✗ Cons</h4>
+                <ul>
+                  <li>May lose customer to competitors</li>
+                  <li>Longer processing time</li>
+                  <li>More complex terms to manage</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Option 3 -->
+          <div class="decision-option">
+            <div class="option-header">
+              <div>
+                <h3 style="margin-bottom: var(--cds-spacing-02);">Option C: Reject Application</h3>
+                <p style="font-size: 0.875rem; color: var(--cds-text-02);">
+                  Decline the policy due to high exposure and market uncertainty.
+                </p>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 2rem; font-weight: 600; color: var(--cds-text-03);">20%</div>
+                <div style="font-size: 0.75rem; color: var(--cds-text-02);">Support</div>
+              </div>
+            </div>
+
+            <div class="vote-bar">
+              <div class="vote-segment approve" style="flex: 1;">
+                ✓ Approve (1)
+              </div>
+              <div class="vote-segment reject" style="flex: 2;">
+                ✗ Reject (2)
+              </div>
+              <div class="vote-segment abstain" style="flex: 2;">
+                − Abstain (2)
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--cds-spacing-05); display: flex; gap: var(--cds-spacing-03);">
+            <button class="button">Cast Your Vote</button>
+            <button class="button secondary">Add Comment</button>
+            <button class="button secondary">Request Expert Opinion</button>
+          </div>
+        </div>
+
+        <div class="business-value">
+          <h3>💰 Business Value</h3>
+          <div class="value-metrics">
+            <div class="value-metric">
+              <div class="value-metric-value">50%</div>
+              <div class="value-metric-label">Faster Decisions</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">70%</div>
+              <div class="value-metric-label">Better Stakeholder Engagement</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">100%</div>
+              <div class="value-metric-label">Decision Transparency</div>
+            </div>
+            <div class="value-metric">
+              <div class="value-metric-value">40%</div>
+              <div class="value-metric-label">Reduced Bottlenecks</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: var(--cds-spacing-07); padding: var(--cds-spacing-06); background: var(--cds-ui-02); border-radius: 8px;">
+      <h2 style="margin-bottom: var(--cds-spacing-04);">🎯 Key Benefits of Integration Approach</h2>
+      <ul style="color: var(--cds-text-02); padding-left: var(--cds-spacing-06);">
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Immediate Business Value:</strong> Solves specific pain points with measurable ROI</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Seamless Workflow Integration:</strong> Social features embedded where they're needed most</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Fastest Time to Value:</strong> 4-6 weeks to deployment vs 8-12 weeks for complete suite</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Easy User Adoption:</strong> Natural integration into existing processes</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Clear ROI Metrics:</strong> Measurable improvements in assignment time, resolution speed, and decision quality</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Lower Maintenance:</strong> Only 2-3 widgets to maintain and support</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

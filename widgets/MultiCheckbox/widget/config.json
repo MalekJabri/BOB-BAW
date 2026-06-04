@@ -1,0 +1,57 @@
+{
+  "name": "MultiCheckbox",
+  "description": "Multi-checkbox widget for selecting multiple values with direct checkbox display for IBM Business Automation Workflow",
+  "bindingType": {
+    "name": "SelectedItems",
+    "isList": true,
+    "type": "String"
+  },
+  "configOptions": [
+    {
+      "name": "options",
+      "type": "NameValuePair",
+      "isList": true,
+      "label": "Options",
+      "description": "Array of available options with value and name properties",
+      "default": [],
+      "required": true
+    },
+    {
+      "name": "label",
+      "type": "String",
+      "label": "Label",
+      "description": "Label text displayed above the checkboxes",
+      "default": ""
+    },
+    {
+      "name": "layout",
+      "type": "String",
+      "label": "Layout",
+      "description": "Layout direction: 'vertical', 'horizontal', or 'compact'",
+      "default": "vertical"
+    },
+    {
+      "name": "showSelectAll",
+      "type": "Boolean",
+      "label": "Show Select All",
+      "description": "Show/hide the Select All checkbox",
+      "default": true
+    },
+    {
+      "name": "disabled",
+      "type": "Boolean",
+      "label": "Disabled",
+      "description": "Disable all checkboxes",
+      "default": false
+    },
+    {
+      "name": "helperText",
+      "type": "String",
+      "label": "Helper Text",
+      "description": "Helper text displayed below the checkboxes",
+      "default": ""
+    }
+  ],
+  "businessObjects": [],
+  "changeFunction": true
+}

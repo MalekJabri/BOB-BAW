@@ -1,0 +1,905 @@
+openapi: 3.0.3
+info:
+  title: IBM Business Automation Workflow - Social Collaboration API
+  description: |
+    REST API for IBM Business Automation Workflow (BAW) Social Collaboration features.
+    This API provides endpoints for managing social interactions around process instances and tasks,
+    including following instances, activity streams, mentions, comments, and expert identification.
+    
+    **Base Path**: `/rest/bpm/wle/v1`
+    
+    **Authentication**: Basic Authentication required for all endpoints.
+    
+    **Version**: IBM BAW 25.0.x
+    
+    ## Features
+    - Follow/unfollow process instances
+    - View activity streams for instances and tasks
+    - Manage mentions and notifications
+    - Post comments on tasks
+    - Identify expert users for tasks
+    - Retrieve user statistics
+    
+    ## Extensibility
+    This specification is modular and can be extended with additional IBM BAW REST API resources
+    such as process definitions, process instances, tasks, and other workflow-related endpoints.
+  version: 25.0.x
+  contact:
+    name: IBM Business Automation Workflow Documentation
+    url: https://www.ibm.com/docs/en/baw/25.0.x
+  license:
+    name: IBM License
+    url: https://www.ibm.com/legal
+
+tags:
+  - name: Experts
+    description: Operations for identifying and retrieving expert users for tasks
+  - name: Following
+    description: Operations for following/unfollowing process instances
+  - name: Mentions
+    description: Operations for managing user mentions and notifications
+  - name: Streams
+    description: Operations for retrieving activity streams
+  - name: Comments
+    description: Operations for posting and managing comments
+  - name: User Data
+    description: Operations for retrieving user statistics and data
+
+paths:
+  /social/task/{taskId}/experts:
+    get:
+      tags:
+        - Experts
+      summary: Get task experts
+      description: |
+        Retrieves information about the expert users that have been identified for a task
+        and defined to the IBM Business Automation Workflow installation.
+      operationId: getTaskExperts
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+        - name: parts
+          in: query
+          description: Specifies which parts of the expert information to return
+          required: false
+          schema:
+            type: string
+            example: "all"
+      responses:
+        '200':
+          description: Successfully retrieved task experts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpertsResponse'
+              example:
+                experts:
+                  - userId: "user1"
+                    userName: "John Doe"
+                    expertise: "Process Design"
+                    score: 95
+                  - userId: "user2"
+                    userName: "Jane Smith"
+                    expertise: "Integration"
+                    score: 88
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/instances/following:
+    get:
+      tags:
+        - Following
+      summary: Get followed instances
+      description: Retrieves the list of process instances currently followed by the logged-in user.
+      operationId: getFollowedInstances
+      responses:
+        '200':
+          description: Successfully retrieved followed instances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowedInstancesResponse'
+              example:
+                instances:
+                  - instanceId: "12345"
+                    processName: "Purchase Order Approval"
+                    startedAt: "2026-05-27T10:30:00Z"
+                    status: "Active"
+                  - instanceId: "12346"
+                    processName: "Employee Onboarding"
+                    startedAt: "2026-05-26T14:20:00Z"
+                    status: "Active"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/instances/mentions:
+    get:
+      tags:
+        - Mentions
+      summary: Get user mentions
+      description: Retrieves the list of items that mention the currently logged-in user.
+      operationId: getUserMentions
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: '#/components/parameters/SinceParam'
+        - $ref: '#/components/parameters/SortParam'
+      responses:
+        '200':
+          description: Successfully retrieved mentions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentionsResponse'
+              example:
+                mentions:
+                  - mentionId: "m001"
+                    instanceId: "12345"
+                    taskId: "t001"
+                    mentionedBy: "user2"
+                    message: "@user1 please review this task"
+                    timestamp: "2026-05-27T15:30:00Z"
+                page: 1
+                pageSize: 20
+                totalCount: 5
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/instance/{instanceId}/stream:
+    get:
+      tags:
+        - Streams
+      summary: Get instance activity stream
+      description: Retrieves an activity stream for the given process instance.
+      operationId: getInstanceStream
+      parameters:
+        - $ref: '#/components/parameters/InstanceIdParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: '#/components/parameters/SinceParam'
+        - $ref: '#/components/parameters/SortParam'
+      responses:
+        '200':
+          description: Successfully retrieved activity stream
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityStreamResponse'
+              example:
+                activities:
+                  - activityId: "a001"
+                    type: "comment"
+                    user: "user1"
+                    message: "Task completed successfully"
+                    timestamp: "2026-05-27T16:00:00Z"
+                  - activityId: "a002"
+                    type: "status_change"
+                    user: "system"
+                    message: "Process moved to next stage"
+                    timestamp: "2026-05-27T15:45:00Z"
+                page: 1
+                pageSize: 20
+                totalCount: 15
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/task/{taskId}/stream:
+    get:
+      tags:
+        - Streams
+      summary: Get task activity stream
+      description: Retrieves an activity stream for a process instance, as looked up by the given task identifier.
+      operationId: getTaskStream
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: '#/components/parameters/SinceParam'
+        - $ref: '#/components/parameters/SortParam'
+      responses:
+        '200':
+          description: Successfully retrieved activity stream
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityStreamResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/instance/{instanceId}/following:
+    get:
+      tags:
+        - Following
+      summary: Check if following instance
+      description: Finds whether the currently logged-in user is following the given process instance.
+      operationId: isFollowingInstance
+      parameters:
+        - $ref: '#/components/parameters/InstanceIdParam'
+      responses:
+        '200':
+          description: Successfully checked following status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowingStatusResponse'
+              example:
+                isFollowing: true
+                instanceId: "12345"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    post:
+      tags:
+        - Following
+      summary: Follow instance
+      description: Start following a specific process instance.
+      operationId: followInstance
+      parameters:
+        - $ref: '#/components/parameters/InstanceIdParam'
+      responses:
+        '201':
+          description: Successfully started following instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowingStatusResponse'
+              example:
+                isFollowing: true
+                instanceId: "12345"
+                message: "Successfully started following instance"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          description: Already following this instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    delete:
+      tags:
+        - Following
+      summary: Unfollow instance
+      description: Stop following a specific process instance.
+      operationId: unfollowInstance
+      parameters:
+        - $ref: '#/components/parameters/InstanceIdParam'
+      responses:
+        '200':
+          description: Successfully stopped following instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowingStatusResponse'
+              example:
+                isFollowing: false
+                instanceId: "12345"
+                message: "Successfully stopped following instance"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/task/{taskId}/following:
+    get:
+      tags:
+        - Following
+      summary: Check if following task's instance
+      description: Finds whether the currently logged-in user is following the process instance associated with the given task.
+      operationId: isFollowingTaskInstance
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+      responses:
+        '200':
+          description: Successfully checked following status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowingStatusResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    post:
+      tags:
+        - Following
+      summary: Follow task's instance
+      description: Start following the process instance associated with the given task.
+      operationId: followTaskInstance
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+      responses:
+        '201':
+          description: Successfully started following instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowingStatusResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          description: Already following this instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    
+    delete:
+      tags:
+        - Following
+      summary: Unfollow task's instance
+      description: Stop following the process instance associated with the given task.
+      operationId: unfollowTaskInstance
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+      responses:
+        '200':
+          description: Successfully stopped following instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowingStatusResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/task/{taskId}/comment:
+    post:
+      tags:
+        - Comments
+      summary: Post comment on task
+      description: |
+        Allows you to post a threaded comment to an existing comment.
+        Specify the task identifier of the comment for which the response is intended.
+      operationId: postTaskComment
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+        - name: message
+          in: query
+          description: The comment message text
+          required: false
+          schema:
+            type: string
+      requestBody:
+        description: Comment details
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+            example:
+              message: "This task has been reviewed and approved"
+              parentCommentId: "c001"
+      responses:
+        '201':
+          description: Comment posted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+              example:
+                commentId: "c002"
+                taskId: "t001"
+                message: "This task has been reviewed and approved"
+                author: "user1"
+                timestamp: "2026-05-27T16:30:00Z"
+                parentCommentId: "c001"
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/task/{taskId}/mentions:
+    delete:
+      tags:
+        - Mentions
+      summary: Delete task mention
+      description: Deletes the identified mentions item for the specified task.
+      operationId: deleteTaskMention
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+      responses:
+        '204':
+          description: Mention deleted successfully
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/task/mentions/all:
+    delete:
+      tags:
+        - Mentions
+      summary: Delete all user mentions
+      description: Deletes all the mentions items for the currently logged-in user.
+      operationId: deleteAllUserMentions
+      responses:
+        '204':
+          description: All mentions deleted successfully
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /social/task/{taskId}/userdata:
+    get:
+      tags:
+        - User Data
+      summary: Get user task statistics
+      description: Retrieves the statistical data for a single user on a given task.
+      operationId: getUserTaskData
+      parameters:
+        - $ref: '#/components/parameters/TaskIdParam'
+        - name: username
+          in: query
+          description: The username for which to retrieve statistics
+          required: true
+          schema:
+            type: string
+          example: "user1"
+      responses:
+        '200':
+          description: Successfully retrieved user task data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDataResponse'
+              example:
+                username: "user1"
+                taskId: "t001"
+                statistics:
+                  completedTasks: 45
+                  averageCompletionTime: "2h 30m"
+                  lastActivity: "2026-05-27T16:00:00Z"
+                  performanceScore: 92
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic Authentication using username and password
+
+  parameters:
+    TaskIdParam:
+      name: taskId
+      in: path
+      description: The unique identifier of the task
+      required: true
+      schema:
+        type: string
+      example: "t001"
+    
+    InstanceIdParam:
+      name: instanceId
+      in: path
+      description: The unique identifier of the process instance
+      required: true
+      schema:
+        type: string
+      example: "12345"
+    
+    PageParam:
+      name: page
+      in: query
+      description: The page number for pagination (1-based)
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: The number of items per page
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      example: 20
+    
+    SinceParam:
+      name: since
+      in: query
+      description: Return only items modified since this timestamp (ISO 8601 format)
+      required: false
+      schema:
+        type: string
+        format: date-time
+      example: "2026-05-27T00:00:00Z"
+    
+    SortParam:
+      name: sort
+      in: query
+      description: Sort order for results
+      required: false
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: desc
+      example: "desc"
+
+  schemas:
+    ExpertsResponse:
+      type: object
+      properties:
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Expert'
+      description: Response containing expert user information
+
+    Expert:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the expert user
+        userName:
+          type: string
+          description: Display name of the expert user
+        expertise:
+          type: string
+          description: Area of expertise
+        score:
+          type: integer
+          description: Expertise score (0-100)
+          minimum: 0
+          maximum: 100
+        email:
+          type: string
+          format: email
+          description: Email address of the expert
+      description: Expert user information
+
+    FollowedInstancesResponse:
+      type: object
+      properties:
+        instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/FollowedInstance'
+        totalCount:
+          type: integer
+          description: Total number of followed instances
+      description: Response containing followed process instances
+
+    FollowedInstance:
+      type: object
+      properties:
+        instanceId:
+          type: string
+          description: Unique identifier of the process instance
+        processName:
+          type: string
+          description: Name of the process
+        startedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the instance was started
+        status:
+          type: string
+          description: Current status of the instance
+          enum:
+            - Active
+            - Completed
+            - Failed
+            - Suspended
+      description: Followed process instance information
+
+    MentionsResponse:
+      type: object
+      properties:
+        mentions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mention'
+        page:
+          type: integer
+          description: Current page number
+        pageSize:
+          type: integer
+          description: Number of items per page
+        totalCount:
+          type: integer
+          description: Total number of mentions
+      description: Response containing user mentions
+
+    Mention:
+      type: object
+      properties:
+        mentionId:
+          type: string
+          description: Unique identifier of the mention
+        instanceId:
+          type: string
+          description: Process instance identifier
+        taskId:
+          type: string
+          description: Task identifier
+        mentionedBy:
+          type: string
+          description: User who created the mention
+        message:
+          type: string
+          description: Message containing the mention
+        timestamp:
+          type: string
+          format: date-time
+          description: When the mention was created
+        isRead:
+          type: boolean
+          description: Whether the mention has been read
+          default: false
+      description: Mention information
+
+    ActivityStreamResponse:
+      type: object
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+        page:
+          type: integer
+          description: Current page number
+        pageSize:
+          type: integer
+          description: Number of items per page
+        totalCount:
+          type: integer
+          description: Total number of activities
+      description: Response containing activity stream
+
+    Activity:
+      type: object
+      properties:
+        activityId:
+          type: string
+          description: Unique identifier of the activity
+        type:
+          type: string
+          description: Type of activity
+          enum:
+            - comment
+            - status_change
+            - assignment
+            - completion
+            - mention
+        user:
+          type: string
+          description: User who performed the activity
+        message:
+          type: string
+          description: Activity message or description
+        timestamp:
+          type: string
+          format: date-time
+          description: When the activity occurred
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional activity metadata
+      description: Activity stream item
+
+    FollowingStatusResponse:
+      type: object
+      properties:
+        isFollowing:
+          type: boolean
+          description: Whether the user is following the instance
+        instanceId:
+          type: string
+          description: Process instance identifier
+        taskId:
+          type: string
+          description: Task identifier (if applicable)
+        message:
+          type: string
+          description: Status message
+      description: Following status information
+
+    CommentRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The comment message text
+        parentCommentId:
+          type: string
+          description: ID of parent comment for threaded replies
+      required:
+        - message
+      description: Request body for posting a comment
+
+    CommentResponse:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier of the comment
+        taskId:
+          type: string
+          description: Task identifier
+        message:
+          type: string
+          description: Comment message text
+        author:
+          type: string
+          description: User who posted the comment
+        timestamp:
+          type: string
+          format: date-time
+          description: When the comment was posted
+        parentCommentId:
+          type: string
+          description: ID of parent comment (for threaded replies)
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentResponse'
+          description: Nested replies to this comment
+      description: Comment information
+
+    UserDataResponse:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username
+        taskId:
+          type: string
+          description: Task identifier
+        statistics:
+          type: object
+          properties:
+            completedTasks:
+              type: integer
+              description: Number of completed tasks
+            averageCompletionTime:
+              type: string
+              description: Average time to complete tasks
+            lastActivity:
+              type: string
+              format: date-time
+              description: Timestamp of last activity
+            performanceScore:
+              type: integer
+              description: Performance score (0-100)
+              minimum: 0
+              maximum: 100
+          description: User statistics for the task
+      description: User task statistics
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Error code
+            message:
+              type: string
+              description: Error message
+            details:
+              type: string
+              description: Detailed error information
+            timestamp:
+              type: string
+              format: date-time
+              description: When the error occurred
+      required:
+        - error
+      description: Standard error response
+
+  responses:
+    BadRequestError:
+      description: Bad request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: "BAD_REQUEST"
+              message: "Invalid request parameters"
+              details: "The 'username' parameter is required"
+              timestamp: "2026-05-27T16:30:00Z"
+
+    UnauthorizedError:
+      description: Unauthorized - Authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: "UNAUTHORIZED"
+              message: "Authentication required"
+              details: "Please provide valid credentials"
+              timestamp: "2026-05-27T16:30:00Z"
+
+    NotFoundError:
+      description: Not found - The requested resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: "NOT_FOUND"
+              message: "Resource not found"
+              details: "The specified task or instance does not exist"
+              timestamp: "2026-05-27T16:30:00Z"
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: "INTERNAL_SERVER_ERROR"
+              message: "An unexpected error occurred"
+              details: "Please contact system administrator"
+              timestamp: "2026-05-27T16:30:00Z"
+
+# Made with Bob

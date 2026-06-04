@@ -1,0 +1,48 @@
+{
+  "name": "RiskFactor",
+  "description": "Displays risk level with color-coded icons and badges based on integer risk score thresholds",
+  "bindingType": {
+    "name": "RiskScore",
+    "isList": false,
+    "type": "Integer"
+  },
+  "configOptions": [
+    {
+      "name": "lowThreshold",
+      "type": "Integer",
+      "defaultValue": 30,
+      "label": "Low Risk Threshold",
+      "description": "Maximum score for low risk (0 to this value)"
+    },
+    {
+      "name": "highThreshold",
+      "type": "Integer",
+      "defaultValue": 70,
+      "label": "High Risk Threshold",
+      "description": "Minimum score for high risk (this value to 100)"
+    },
+    {
+      "name": "showLabel",
+      "type": "Boolean",
+      "defaultValue": true,
+      "label": "Show Risk Label",
+      "description": "Display the risk level text label"
+    },
+    {
+      "name": "showScore",
+      "type": "Boolean",
+      "defaultValue": true,
+      "label": "Show Risk Score",
+      "description": "Display the numeric risk score"
+    },
+    {
+      "name": "iconSize",
+      "type": "String",
+      "defaultValue": "medium",
+      "label": "Icon Size",
+      "description": "Size of the risk icon (small, medium, large)"
+    }
+  ],
+  "businessObjects": [],
+  "changeFunction": true
+}

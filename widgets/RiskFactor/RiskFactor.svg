@@ -1,0 +1,33 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="120" height="120" fill="#f4f4f4"/>
+  
+  <!-- Risk meter background -->
+  <circle cx="60" cy="60" r="45" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- Risk segments -->
+  <!-- Low risk (green) -->
+  <path d="M 60 60 L 60 15 A 45 45 0 0 1 92 32 Z" fill="#d4edda" opacity="0.8"/>
+  
+  <!-- Normal risk (blue) -->
+  <path d="M 60 60 L 92 32 A 45 45 0 0 1 92 88 Z" fill="#d0e2ff" opacity="0.8"/>
+  
+  <!-- High risk (orange/red) -->
+  <path d="M 60 60 L 92 88 A 45 45 0 0 1 28 88 Z" fill="#ffd7d9" opacity="0.8"/>
+  
+  <!-- Critical risk (dark red) -->
+  <path d="M 60 60 L 28 88 A 45 45 0 0 1 28 32 Z" fill="#ffb3b8" opacity="0.8"/>
+  
+  <!-- Center circle -->
+  <circle cx="60" cy="60" r="25" fill="#ffffff" stroke="#525252" stroke-width="2"/>
+  
+  <!-- Warning triangle icon in center -->
+  <path d="M 60 45 L 70 65 L 50 65 Z" fill="#da1e28"/>
+  <line x1="60" y1="52" x2="60" y2="58" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="60" cy="62" r="1.5" fill="#ffffff"/>
+  
+  <!-- Risk level indicators -->
+  <text x="60" y="100" text-anchor="middle" font-family="IBM Plex Sans, Arial" font-size="10" fill="#525252" font-weight="600">RISK FACTOR</text>
+</svg>
+
+<!-- Made with Bob -->

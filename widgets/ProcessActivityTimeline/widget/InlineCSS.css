@@ -1,0 +1,482 @@
+/* ProcessActivityTimeline Widget Styles - Carbon Design System */
+/* Specialized for BAW process activity tracking */
+
+.processactivitytimeline_maincontentbox {
+	width: 100%;
+	min-height: 120px;
+	padding: 2rem 0;
+	font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* @bpm-font-family-sans-serif */
+	font-size: 14px; /* @bpm-font-size-base */
+	color: #161616; /* @bpm-text-color */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container {
+	position: relative;
+	padding-left: 40px; /* Space for timeline markers */
+}
+
+/* Central Timeline Line */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-line {
+	position: absolute;
+	left: 20px;
+	top: 0;
+	bottom: 0;
+	width: 2px;
+	background: #e0e0e0; /* Gray 20 - @cds-ui-03 */
+	z-index: 0;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	z-index: 1;
+	gap: 0;
+}
+
+/* Timeline Activity Item */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity {
+	position: relative;
+	margin-bottom: 48px; /* @cds-spacing-06 equivalent */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity:last-child {
+	margin-bottom: 0;
+}
+
+/* Activity Marker - Circular indicator on timeline */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-marker {
+	position: absolute;
+	left: -32px;
+	top: 0;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #0f62fe; /* @bpm-color-primary */
+	border: 3px solid #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: 600; /* @bpm-font-weight-semibold */
+	z-index: 2;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Activity Marker - Completed/Milestone State */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.completed .activity-marker,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.milestone .activity-marker {
+	background: #198038; /* @bpm-color-success */
+}
+
+/* Activity Marker - Active/Critical State with Pulse */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.active .activity-marker,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.critical .activity-marker {
+	background: #da1e28; /* @bpm-color-alert */
+	animation: activityPulse 2s infinite;
+}
+
+@keyframes activityPulse {
+	0%, 100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+}
+
+/* Activity Marker - Pending State */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.pending .activity-marker {
+	background: #8d8d8d; /* Gray 50 - @cds-text-03 */
+}
+
+/* Activity Marker - Failed State */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.failed .activity-marker {
+	background: #da1e28; /* @bpm-color-alert */
+}
+
+/* Activity Marker - Waiting State */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.waiting .activity-marker {
+	background: #f1c21b; /* Warning yellow */
+}
+
+/* Activity Content Container */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-content {
+	background: #f4f4f4; /* Gray 10 - @cds-ui-01 */
+	padding: 16px; /* @cds-spacing-04 equivalent */
+	border-radius: 4px;
+	border-left: 3px solid #0f62fe; /* @bpm-color-primary */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.completed .activity-content,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.milestone .activity-content {
+	border-left-color: #198038; /* @bpm-color-success */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.active .activity-content,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.critical .activity-content {
+	border-left-color: #da1e28; /* @bpm-color-alert */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.pending .activity-content {
+	border-left-color: #8d8d8d; /* Gray 50 */
+}
+
+/* Activity Header */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 12px; /* @cds-spacing-03 equivalent */
+}
+
+/* Activity Timestamp */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-timestamp {
+	font-size: 12px; /* @bpm-font-size-small */
+	font-weight: 400; /* @bpm-font-weight-normal */
+	color: #525252; /* Gray 70 */
+	margin-top: 4px;
+}
+
+/* Activity Status Badge */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-status {
+	font-size: 11px;
+	font-weight: 600; /* @bpm-font-weight-semibold */
+	padding: 4px 12px; /* @cds-spacing-02 @cds-spacing-03 */
+	border-radius: 4px;
+	white-space: nowrap;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.completed .activity-status,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.milestone .activity-status {
+	background: #d2f4ea; /* Light green */
+	color: #0e6027; /* Dark green */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.active .activity-status,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.critical .activity-status {
+	background: #ffd7d9; /* Light red */
+	color: #750e13; /* Dark red */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.pending .activity-status {
+	background: #fcf4d6; /* Light yellow */
+	color: #8e6a00; /* Dark yellow */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.failed .activity-status {
+	background: #ffd7d9; /* Light red */
+	color: #750e13; /* Dark red */
+}
+
+/* Activity Name */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-name {
+	font-size: 14px; /* @bpm-font-size-base */
+	font-weight: 600; /* @bpm-font-weight-semibold */
+	color: #161616; /* @bpm-text-color */
+	margin-bottom: 0;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.completed .activity-name,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.milestone .activity-name {
+	color: #198038; /* @bpm-color-success */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.active .activity-name,
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.critical .activity-name {
+	color: #da1e28; /* @bpm-color-alert */
+}
+
+/* Activity Description */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-description {
+	font-size: 14px; /* @bpm-font-size-base */
+	font-weight: 400; /* @bpm-font-weight-normal */
+	color: #525252; /* Gray 70 - @cds-text-02 */
+	line-height: 1.43;
+	margin-top: 12px; /* @cds-spacing-03 */
+}
+
+/* User Info Section */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .user-info {
+	display: flex;
+	align-items: center;
+	gap: 8px; /* @cds-spacing-02 */
+	margin-top: 8px;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .user-avatar {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #0f62fe; /* @bpm-color-primary */
+	color: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 10px; /* @bpm-font-size-xsmall */
+	font-weight: 600; /* @bpm-font-weight-semibold */
+	flex-shrink: 0;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .user-name {
+	font-size: 14px; /* @bpm-font-size-base */
+	font-weight: 400; /* @bpm-font-weight-normal */
+	color: #161616; /* @bpm-text-color */
+}
+
+/* Status Icons - Process-specific SVG Style */
+.activity_icon_completed {
+	background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M13%2021.17L6.83%2015l-1.42%201.41L13%2024%2027%2010l-1.41-1.41z%22%2F%3E%3C%2Fsvg%3E");
+	width: 32px;
+	height: 32px;
+	background-size: 32px 32px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.activity_icon_active {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #ffffff;
+	box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+}
+
+.activity_icon_pending {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #c6c6c6; /* @bpm-link-text-color-disabled */
+}
+
+.activity_icon_failed {
+	background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M24%209.4L22.6%208%2016%2014.6%209.4%208%208%209.4%2014.6%2016%208%2022.6%209.4%2024%2016%2017.4%2022.6%2024%2024%2022.6%2017.4%2016z%22%2F%3E%3C%2Fsvg%3E");
+	width: 32px;
+	height: 32px;
+	background-size: 32px 32px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.activity_icon_skipped {
+	background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%238d8d8d%22%20d%3D%22M16%204L6%2014h6v14h8V14h6z%22%20transform%3D%22rotate(90%2016%2016)%22%2F%3E%3C%2Fsvg%3E");
+	width: 32px;
+	height: 32px;
+	background-size: 32px 32px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.activity_icon_waiting {
+	background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23161616%22%20d%3D%22M16%202C8.3%202%202%208.3%202%2016s6.3%2014%2014%2014%2014-6.3%2014-14S23.7%202%2016%202zm0%2026C9.4%2028%204%2022.6%204%2016S9.4%204%2016%204s12%205.4%2012%2012-5.4%2012-12%2012z%22%2F%3E%3Cpath%20fill%3D%22%23161616%22%20d%3D%22M20.6%2016.6L17%2014V8h-2v7l4.4%203z%22%2F%3E%3C%2Fsvg%3E");
+	width: 32px;
+	height: 32px;
+	background-size: 32px 32px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* Clickable Activities */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.clickable {
+	cursor: pointer;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.clickable:hover .activity-content {
+	background: #ffffff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Drilldown Styles */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .drilldown-toggle {
+	margin-top: 12px; /* @cds-spacing-03 */
+	padding: 6px 12px;
+	background: #ffffff;
+	border: 1px solid #e0e0e0; /* Gray 20 */
+	border-radius: 4px;
+	font-size: 12px; /* @bpm-font-size-small */
+	font-weight: 400; /* @bpm-font-weight-normal */
+	color: #0f62fe; /* @bpm-color-primary */
+	cursor: pointer;
+	transition: all 0.2s;
+	font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* @bpm-font-family-sans-serif */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .drilldown-toggle:hover {
+	background: #e0e0e0; /* Gray 20 */
+	border-color: #0f62fe; /* @bpm-color-primary */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-drilldown {
+	margin-top: 12px; /* @cds-spacing-03 */
+	padding-top: 12px;
+	border-top: 1px solid #e0e0e0; /* Gray 20 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-sub-event {
+	padding: 8px 12px;
+	margin-bottom: 8px;
+	background: #ffffff;
+	border-left: 2px solid #e0e0e0; /* Gray 20 */
+	border-radius: 2px;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-sub-event:last-child {
+	margin-bottom: 0;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .sub-event-description {
+	font-size: 13px;
+	font-weight: 400; /* @bpm-font-weight-normal */
+	color: #525252; /* Gray 70 */
+	margin-bottom: 4px;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .sub-event-meta {
+	font-size: 11px;
+	color: #8d8d8d; /* Gray 50 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.has-drilldown .activity-content {
+	cursor: default;
+}
+
+/* Comments Section */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-comments {
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid #e0e0e0; /* Gray 20 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-comment {
+	display: flex;
+	gap: 12px;
+	padding: 12px 0;
+	border-bottom: 1px solid #f4f4f4; /* Gray 10 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-comment:last-child {
+	border-bottom: none;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-comment .user-avatar {
+	flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background-color: #0f62fe; /* @bpm-color-primary */
+	color: #ffffff; /* @bpm-body-bg */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px; /* @bpm-font-size-small */
+	font-weight: 600; /* @bpm-font-weight-semibold */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-content {
+	flex: 1;
+	min-width: 0;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-content > div:first-child {
+	font-size: 14px; /* @bpm-font-size-base */
+	color: #161616; /* @bpm-text-color */
+	line-height: 1.5;
+	word-wrap: break-word;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-content strong {
+	font-weight: 600; /* @bpm-font-weight-semibold */
+	color: #161616; /* @bpm-text-color */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-content .timestamp {
+	font-size: 12px; /* @bpm-font-size-small */
+	color: #525252; /* Gray 70 */
+	margin-top: 4px;
+}
+
+/* Comment Input Section */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input-section {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid #f4f4f4; /* Gray 10 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input-container {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input {
+	flex: 1;
+	padding: 8px 12px;
+	font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* @bpm-font-family-sans-serif */
+	font-size: 14px; /* @bpm-font-size-base */
+	color: #161616; /* @bpm-text-color */
+	background: #ffffff; /* @bpm-body-bg */
+	border: 1px solid #8d8d8d; /* Gray 50 */
+	border-radius: 0;
+	outline: none;
+	transition: border-color 0.2s;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input:focus {
+	border-color: #0f62fe; /* @bpm-color-primary */
+	border-width: 2px;
+	padding: 7px 11px; /* Adjust padding to maintain size */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input::placeholder {
+	color: #8d8d8d; /* Gray 50 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn {
+	padding: 8px 16px;
+	font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* @bpm-font-family-sans-serif */
+	font-size: 14px; /* @bpm-font-size-base */
+	font-weight: 400; /* @bpm-font-weight-normal */
+	color: #ffffff; /* @bpm-body-bg */
+	background: #0f62fe; /* @bpm-color-primary */
+	border: none;
+	border-radius: 0;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	white-space: nowrap;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn:hover {
+	background: #0353e9; /* @bpm-color-primary-dark */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn:active {
+	background: #0043ce; /* @bpm-link-text-color-hover */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn:disabled {
+	background: #c6c6c6; /* @bpm-link-text-color-disabled */
+	cursor: not-allowed;
+}
+
+/* Compact Mode */
+.processactivitytimeline_maincontentbox.compact .timeline-container .timeline-activities .timeline-activity {
+	margin-bottom: 32px; /* @cds-spacing-05 */
+}
+
+.processactivitytimeline_maincontentbox.compact .timeline-container .timeline-activities .timeline-activity .activity-content {
+	padding: 12px; /* @cds-spacing-03 */
+}
+
+/* Responsive Design */
+@media (max-width: 672px) {
+	.processactivitytimeline_maincontentbox .timeline-container {
+		padding-left: 32px;
+	}
+	
+	.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-content {
+		padding: 12px;
+	}
+}
+
+/* Made with Bob */

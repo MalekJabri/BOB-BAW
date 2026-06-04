@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option A: Complete Widget Suite - Preview</title>
+  <link rel="stylesheet" href="../assets/common-styles.css">
+  <style>
+    .widget-content {
+      margin-top: var(--cds-spacing-05);
+    }
+
+    .expert-card {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+      align-items: center;
+    }
+
+    .expert-card .user-avatar {
+      width: 48px;
+      height: 48px;
+      font-size: 1.125rem;
+    }
+
+    .expert-details {
+      flex: 1;
+    }
+
+    .match-score {
+      background: #24a148;
+      color: white;
+      padding: var(--cds-spacing-02) var(--cds-spacing-03);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      padding: var(--cds-spacing-04);
+      border-bottom: 1px solid var(--cds-ui-03);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-actions {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      margin-top: var(--cds-spacing-03);
+      font-size: 0.75rem;
+      color: var(--cds-text-03);
+    }
+
+    .activity-action {
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .activity-action:hover {
+      color: var(--cds-interactive-01);
+    }
+
+    .profile-header {
+      display: flex;
+      gap: var(--cds-spacing-05);
+      padding: var(--cds-spacing-05);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-05);
+    }
+
+    .profile-header .user-avatar {
+      width: 64px;
+      height: 64px;
+      font-size: 1.5rem;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: var(--cds-spacing-06);
+      margin-top: var(--cds-spacing-04);
+    }
+
+    .profile-stat {
+      text-align: center;
+    }
+
+    .profile-stat-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--cds-interactive-01);
+    }
+
+    .profile-stat-label {
+      font-size: 0.75rem;
+      color: var(--cds-text-02);
+    }
+
+    .comment-thread {
+      margin-left: var(--cds-spacing-06);
+      border-left: 2px solid var(--cds-ui-03);
+      padding-left: var(--cds-spacing-04);
+      margin-top: var(--cds-spacing-03);
+    }
+
+    .comment-item {
+      margin-bottom: var(--cds-spacing-04);
+    }
+
+    .comment-input {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      margin-top: var(--cds-spacing-04);
+    }
+
+    .comment-input textarea {
+      flex: 1;
+      padding: var(--cds-spacing-03);
+      border: 1px solid var(--cds-ui-03);
+      border-radius: 4px;
+      font-family: var(--cds-font-family);
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .following-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .following-info {
+      flex: 1;
+    }
+
+    .following-type {
+      font-size: 0.75rem;
+      color: var(--cds-text-03);
+      text-transform: uppercase;
+    }
+
+    .team-member {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .team-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--cds-spacing-03);
+      font-size: 0.75rem;
+    }
+
+    .notification-item {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .notification-item:hover {
+      background: #e8e8e8;
+    }
+
+    .notification-item.unread {
+      background: #d0e2ff;
+    }
+
+    .search-filters {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      margin-bottom: var(--cds-spacing-05);
+      flex-wrap: wrap;
+    }
+
+    .search-filter {
+      padding: var(--cds-spacing-02) var(--cds-spacing-04);
+      background: var(--cds-ui-03);
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+
+    .search-filter.active {
+      background: var(--cds-interactive-01);
+      color: white;
+    }
+
+    .search-result {
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .result-type {
+      font-size: 0.75rem;
+      color: var(--cds-text-03);
+      text-transform: uppercase;
+      margin-bottom: var(--cds-spacing-02);
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-container">
+    <a href="../index.html" class="back-link">← Back to Options</a>
+    
+    <div class="preview-header">
+      <h1>Option A: Complete Widget Suite</h1>
+      <p>6-8 specialized widgets, each focused on a specific Social API capability</p>
+    </div>
+
+    <div class="widget-grid">
+      <!-- ExpertFinder Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">1. ExpertFinder Widget</h2>
+        <p class="widget-description">Find and recommend subject matter experts based on skills and experience</p>
+        
+        <div class="widget-content">
+          <input type="text" placeholder="Search by skill or keyword..." style="width: 100%; padding: var(--cds-spacing-03); border: 1px solid var(--cds-ui-03); border-radius: 4px; margin-bottom: var(--cds-spacing-04);">
+          
+          <div class="expert-card">
+            <div class="user-avatar">JD</div>
+            <div class="expert-details">
+              <div class="user-name">John Doe</div>
+              <div class="user-title">Senior Process Analyst</div>
+              <div style="margin-top: var(--cds-spacing-02);">
+                <span class="tag skill">Claims Processing</span>
+                <span class="tag skill">Risk Assessment</span>
+                <span class="tag skill">Underwriting</span>
+              </div>
+            </div>
+            <div class="match-score">95% Match</div>
+          </div>
+
+          <div class="expert-card">
+            <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+            <div class="expert-details">
+              <div class="user-name">Sarah Miller</div>
+              <div class="user-title">Process Automation Lead</div>
+              <div style="margin-top: var(--cds-spacing-02);">
+                <span class="tag skill">Claims Processing</span>
+                <span class="tag skill">Workflow Design</span>
+              </div>
+            </div>
+            <div class="match-score" style="background: #0f62fe;">88% Match</div>
+          </div>
+
+          <div class="expert-card">
+            <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+            <div class="expert-details">
+              <div class="user-name">Robert Johnson</div>
+              <div class="user-title">Business Analyst</div>
+              <div style="margin-top: var(--cds-spacing-02);">
+                <span class="tag skill">Process Modeling</span>
+                <span class="tag skill">Claims Processing</span>
+              </div>
+            </div>
+            <div class="match-score" style="background: #f1c21b; color: #161616;">82% Match</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ActivityStream Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">2. ActivityStream Widget</h2>
+        <p class="widget-description">Display real-time activity feeds for processes, tasks, or users</p>
+        
+        <div class="widget-content">
+          <div class="nav-tabs">
+            <button class="nav-tab active">All Activity</button>
+            <button class="nav-tab">My Activity</button>
+            <button class="nav-tab">Following</button>
+          </div>
+
+          <div class="activity-item">
+            <div class="user-avatar">JD</div>
+            <div class="activity-content">
+              <div class="user-name">John Doe</div>
+              <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                Completed task "Review Insurance Claim #12345" in <strong>Claims Processing</strong>
+              </div>
+              <div class="timestamp">2 hours ago</div>
+              <div class="activity-actions">
+                <span class="activity-action">👍 Like (5)</span>
+                <span class="activity-action">💬 Comment (2)</span>
+                <span class="activity-action">🔗 Share</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-item">
+            <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+            <div class="activity-content">
+              <div class="user-name">Sarah Miller</div>
+              <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                Mentioned <span style="color: var(--cds-interactive-01);">@RobertJohnson</span> in a comment: "Can you review the updated workflow diagram?"
+              </div>
+              <div class="timestamp">4 hours ago</div>
+              <div class="activity-actions">
+                <span class="activity-action">👍 Like (3)</span>
+                <span class="activity-action">💬 Comment (1)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-item">
+            <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+            <div class="activity-content">
+              <div class="user-name">Robert Johnson</div>
+              <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                Started following process instance <strong>Claim-2024-0156</strong>
+              </div>
+              <div class="timestamp">Yesterday</div>
+              <div class="activity-actions">
+                <span class="activity-action">👍 Like (1)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UserProfileCard Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">3. UserProfileCard Widget</h2>
+        <p class="widget-description">Display rich user profile information with social connections</p>
+        
+        <div class="widget-content">
+          <div class="profile-header">
+            <div class="user-avatar">JD</div>
+            <div style="flex: 1;">
+              <div class="user-name" style="font-size: 1.25rem;">John Doe</div>
+              <div class="user-title">Senior Process Analyst</div>
+              <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                <span class="status-indicator online"></span>Online
+              </div>
+              <div style="margin-top: var(--cds-spacing-04);">
+                <span class="tag skill">Claims Processing</span>
+                <span class="tag skill">Risk Assessment</span>
+                <span class="tag skill">Underwriting</span>
+                <span class="tag skill">Process Design</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <div class="profile-stat-value">156</div>
+              <div class="profile-stat-label">Followers</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value">89</div>
+              <div class="profile-stat-label">Following</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value">234</div>
+              <div class="profile-stat-label">Activities</div>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--cds-spacing-05); display: flex; gap: var(--cds-spacing-03);">
+            <button class="button">Follow</button>
+            <button class="button secondary">Message</button>
+            <button class="button secondary">@Mention</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CommentsThread Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">4. CommentsThread Widget</h2>
+        <p class="widget-description">Enable threaded discussions on tasks and processes</p>
+        
+        <div class="widget-content">
+          <div class="comment-item">
+            <div class="user-info">
+              <div class="user-avatar">JD</div>
+              <div>
+                <div class="user-name">John Doe</div>
+                <div class="timestamp">2 hours ago</div>
+              </div>
+            </div>
+            <div style="margin-top: var(--cds-spacing-03); font-size: 0.875rem; color: var(--cds-text-02);">
+              I've reviewed the claim and everything looks good. <span style="color: var(--cds-interactive-01);">@SarahMiller</span> can you approve?
+            </div>
+            <div class="activity-actions">
+              <span class="activity-action">👍 Like (2)</span>
+              <span class="activity-action">💬 Reply</span>
+            </div>
+
+            <div class="comment-thread">
+              <div class="comment-item">
+                <div class="user-info">
+                  <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+                  <div>
+                    <div class="user-name">Sarah Miller</div>
+                    <div class="timestamp">1 hour ago</div>
+                  </div>
+                </div>
+                <div style="margin-top: var(--cds-spacing-03); font-size: 0.875rem; color: var(--cds-text-02);">
+                  Approved! Great work on this one.
+                </div>
+                <div class="activity-actions">
+                  <span class="activity-action">👍 Like (1)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="comment-input">
+            <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+            <textarea placeholder="Add a comment... Use @mention to tag someone"></textarea>
+            <button class="button">Post</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FollowingManager Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">5. FollowingManager Widget</h2>
+        <p class="widget-description">Manage following relationships for processes, tasks, and users</p>
+        
+        <div class="widget-content">
+          <div class="nav-tabs">
+            <button class="nav-tab active">All (12)</button>
+            <button class="nav-tab">Processes (5)</button>
+            <button class="nav-tab">Tasks (4)</button>
+            <button class="nav-tab">Users (3)</button>
+          </div>
+
+          <div class="following-item">
+            <div class="following-info">
+              <div class="following-type">Process</div>
+              <div class="user-name">Claims Processing - Claim #12345</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                <span class="badge">3</span> new activities
+              </div>
+            </div>
+            <button class="button secondary">Unfollow</button>
+          </div>
+
+          <div class="following-item">
+            <div class="following-info">
+              <div class="following-type">User</div>
+              <div class="user-name">Sarah Miller</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                Last activity: 2 hours ago
+              </div>
+            </div>
+            <button class="button secondary">Unfollow</button>
+          </div>
+
+          <div class="following-item">
+            <div class="following-info">
+              <div class="following-type">Task</div>
+              <div class="user-name">Review Insurance Application</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                <span class="badge">1</span> new comment
+              </div>
+            </div>
+            <button class="button secondary">Unfollow</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TeamCollaboration Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">6. TeamCollaboration Widget</h2>
+        <p class="widget-description">Facilitate team-based collaboration on process instances</p>
+        
+        <div class="widget-content">
+          <div style="background: var(--cds-ui-01); padding: var(--cds-spacing-04); border-radius: 4px; margin-bottom: var(--cds-spacing-05);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: var(--cds-spacing-03);">
+              <div>
+                <div style="font-size: 0.75rem; color: var(--cds-text-03);">TEAM PERFORMANCE</div>
+                <div style="font-size: 1.5rem; font-weight: 600; color: var(--cds-interactive-01);">85%</div>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--cds-text-03);">TASKS COMPLETED</div>
+                <div style="font-size: 1.5rem; font-weight: 600; color: var(--cds-success);">12/15</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="team-member">
+            <div class="user-info">
+              <div class="user-avatar">JD</div>
+              <div>
+                <div class="user-name">John Doe</div>
+                <div class="user-title">Team Lead</div>
+              </div>
+            </div>
+            <div class="team-metrics">
+              <div>Tasks: 5/6</div>
+              <div><span class="status-indicator online"></span>Online</div>
+            </div>
+          </div>
+
+          <div class="team-member">
+            <div class="user-info">
+              <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+              <div>
+                <div class="user-name">Sarah Miller</div>
+                <div class="user-title">Analyst</div>
+              </div>
+            </div>
+            <div class="team-metrics">
+              <div>Tasks: 4/5</div>
+              <div><span class="status-indicator online"></span>Online</div>
+            </div>
+          </div>
+
+          <div class="team-member">
+            <div class="user-info">
+              <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+              <div>
+                <div class="user-name">Robert Johnson</div>
+                <div class="user-title">Reviewer</div>
+              </div>
+            </div>
+            <div class="team-metrics">
+              <div>Tasks: 3/4</div>
+              <div><span class="status-indicator busy"></span>Busy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NotificationCenter Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">7. NotificationCenter Widget</h2>
+        <p class="widget-description">Centralized notification management for social interactions</p>
+        
+        <div class="widget-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--cds-spacing-04);">
+            <div style="font-weight: 600;">Notifications <span class="badge">5</span></div>
+            <button class="button secondary" style="padding: var(--cds-spacing-02) var(--cds-spacing-03); font-size: 0.75rem;">Mark all read</button>
+          </div>
+
+          <div class="notification-item unread">
+            <div class="user-avatar">JD</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; font-size: 0.875rem;">John Doe mentioned you</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                in "Claims Processing - Claim #12345"
+              </div>
+              <div class="timestamp">5 minutes ago</div>
+            </div>
+          </div>
+
+          <div class="notification-item unread">
+            <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; font-size: 0.875rem;">Sarah Miller commented</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                on your activity in "Review Insurance Application"
+              </div>
+              <div class="timestamp">1 hour ago</div>
+            </div>
+          </div>
+
+          <div class="notification-item">
+            <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; font-size: 0.875rem;">Robert Johnson started following you</div>
+              <div class="timestamp">Yesterday</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SocialSearch Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">8. SocialSearch Widget</h2>
+        <p class="widget-description">Unified search across social content (users, activities, comments)</p>
+        
+        <div class="widget-content">
+          <input type="text" placeholder="Search users, activities, comments..." style="width: 100%; padding: var(--cds-spacing-03); border: 1px solid var(--cds-ui-03); border-radius: 4px; margin-bottom: var(--cds-spacing-04);">
+          
+          <div class="search-filters">
+            <button class="search-filter active">All</button>
+            <button class="search-filter">Users</button>
+            <button class="search-filter">Activities</button>
+            <button class="search-filter">Comments</button>
+            <button class="search-filter">Processes</button>
+          </div>
+
+          <div class="search-result">
+            <div class="result-type">User</div>
+            <div class="user-info">
+              <div class="user-avatar">JD</div>
+              <div>
+                <div class="user-name">John Doe</div>
+                <div class="user-title">Senior Process Analyst</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-result">
+            <div class="result-type">Activity</div>
+            <div style="font-size: 0.875rem; color: var(--cds-text-02);">
+              <strong>Sarah Miller</strong> completed task "Review Insurance Claim #12345"
+            </div>
+            <div class="timestamp">2 hours ago</div>
+          </div>
+
+          <div class="search-result">
+            <div class="result-type">Comment</div>
+            <div style="font-size: 0.875rem; color: var(--cds-text-02);">
+              <strong>Robert Johnson:</strong> "I've reviewed the claim and everything looks good..."
+            </div>
+            <div class="timestamp">4 hours ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

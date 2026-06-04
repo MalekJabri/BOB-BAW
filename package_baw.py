@@ -31,10 +31,13 @@ WIDGET_NAMES = [
     "FileNetImport",
     "FolderTree",
     "MarkdownViewer",
+    "MultiCheckbox",
     "MultiDocumentUpload",
     "MultiSelect",
+    "ProcessActivityTimeline",
     "ProcessCircle",
     "ProgressBar",
+    "RiskFactor",
     "Stepper",
     "TasksList",
     "Timeline"

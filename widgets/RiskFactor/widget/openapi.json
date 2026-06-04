@@ -1,0 +1,25 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "RiskFactor Widget",
+    "version": "1.0.0",
+    "description": "Displays risk level with color-coded icons and badges based on integer risk score thresholds"
+  },
+  "components": {
+    "schemas": {
+      "RiskFactorData": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message to display in the widget",
+            "default": "Hello from RiskFactor"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      }
+    }
+  }
+}
