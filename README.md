@@ -32,23 +32,51 @@ A comprehensive toolkit for IBM Business Automation Workflow (BAW) development, 
 
 This toolkit aims to accelerate IBM BAW development by providing:
 
-1. **Custom Widget Library** - Reusable, accessible UI components built with Carbon Design System
-2. **Business Object Management** - Tools for extracting, normalizing, and managing business data models
-3. **BPMN Process Generation** - Config-driven approach to creating business process models
+1. **Process Discovery & BPMN Generation** - AI-powered Blueprint Parser mode that analyzes business documents to extract processes and automatically generate BPMN designs
+2. **Business Object Management** - Tools for extracting, normalizing, and managing business data models from requirements documents
+3. **Custom Widget Library** - Reusable, accessible UI components built with Carbon Design System
 4. **AI-Assisted Development** - Specialized Bob modes for different aspects of BAW development
 5. **Automated Packaging** - Tools for packaging and deploying BAW artifacts
 6. **Comprehensive Documentation** - Guides, examples, and hands-on labs
 
 ---
 
+## ⚡ Quick Start
+
+Get up and running in 5 minutes! Choose your path:
+
+### 📄 Path 1: Parse Business Documents (Recommended)
+Extract business objects with OpenAPI specs and BPMN processes from documents.
+
+**Time**: ~10 minutes | **Best for**: Complete solution from requirements
+
+**[→ Start with Parse Documents Guide](QUICKSTART_PARSE_DOCUMENTS.md)**
+
+### 🤖 Path 2: Create a Custom Widget with Bob AI
+Build custom widgets with AI assistance and deploy to BAW.
+
+**Time**: ~5 minutes | **Best for**: Learning widget development
+
+**[→ Start with Create Widget Guide](QUICKSTART_CREATE_WIDGET.md)**
+
+### 🎯 Path 3: Package & Deploy Existing Widgets (Fastest)
+Package 12+ pre-built widgets and import into BAW immediately.
+
+**Time**: ~2 minutes | **Best for**: Quick testing
+
+**[→ Start with Package & Deploy Guide](QUICKSTART_PACKAGE_DEPLOY.md)**
+
+---
+
 ## 📋 Table of Contents
+
+- [Quick Start](#-quick-start)
 
 - [Prerequisites](#-prerequisites)
 - [Project Structure](#-project-structure)
 - [Bob AI Modes](#-bob-ai-modes)
 - [Getting Started](#-getting-started)
 - [Available Widgets](#-available-widgets)
-- [BPMN Tools](#-bpmn-tools)
 - [Documentation](#-documentation)
 - [Hands-On Labs](#-hands-on-labs)
 - [Toolkit Configuration](#-toolkit-configuration)
@@ -66,7 +94,7 @@ This toolkit aims to accelerate IBM BAW development by providing:
 - **Purpose**: Target platform for deploying widgets and processes
 
 #### 2. **Python 3.7+**
-- **Purpose**: Widget packaging, BPMN generation, business object management
+- **Purpose**: Widget packaging and business object management
 - **Installation**: [python.org](https://www.python.org/downloads/)
 - **Verify**: `python3 --version`
 
@@ -124,14 +152,6 @@ BAWCoachMode/
 │   ├── bpmn/                          # Generated BPMN XML files
 │   ├── diagrams/                      # Mermaid process diagrams
 │   └── catalog/                       # Process catalogs
-│
-├── BPMN_tools/                        # Config-driven BPMN generation
-│   ├── generate_bpmn.py              # Main BPMN generator
-│   ├── bpmn_xml_builder.py           # BPMN XML builder
-│   ├── validator.py                   # Config validation
-│   ├── CONFIG_SCHEMA_DESIGN.md       # JSON schema specification
-│   ├── USER_GUIDE.md                 # Complete user guide
-│   └── README.md                      # Quick reference
 │
 ├── toolkit_packager/                   # Python packaging tools
 │   ├── core/                          # Core utilities
@@ -204,7 +224,7 @@ This project includes four specialized Bob modes for different aspects of BAW de
 - Reports: `business-objects/reports/`
 - Catalogs: `business-objects/catalog/` and `business-processes/catalog/`
 
-**Documentation**: [docs/BAW_BLUEPRINT_PARSER_MODE.md](docs/BAW_BLUEPRINT_PARSER_MODE.md)
+**📖 Detailed Documentation**: [`docs/BAW_BLUEPRINT_PARSER_MODE.md`](docs/BAW_BLUEPRINT_PARSER_MODE.md)
 
 ---
 
@@ -233,7 +253,7 @@ This project includes four specialized Bob modes for different aspects of BAW de
 - Configuration: `widget/config.json`
 - Preview: `AdvancePreview/`
 
-**Documentation**: [docs/BAW_COACHUI_VIEW_MODE.md](docs/BAW_COACHUI_VIEW_MODE.md)
+**📖 Detailed Documentation**: [`docs/BAW_COACHUI_VIEW_MODE.md`](docs/BAW_COACHUI_VIEW_MODE.md)
 
 ---
 
@@ -260,7 +280,7 @@ This project includes four specialized Bob modes for different aspects of BAW de
 - Coach definitions: `coaches/`
 - Service flows with sample data
 
-**Documentation**: [docs/BAW_COACH_COMPOSER_MODE.md](docs/BAW_COACH_COMPOSER_MODE.md)
+**📖 Detailed Documentation**: [`docs/BAW_COACH_COMPOSER_MODE.md`](docs/BAW_COACH_COMPOSER_MODE.md)
 
 ---
 
@@ -288,7 +308,7 @@ This project includes four specialized Bob modes for different aspects of BAW de
 - TWX packages: `output/`
 - Deployment status reports
 
-**Documentation**: [docs/BAW_PACKAGE_MANAGER_MODE.md](docs/BAW_PACKAGE_MANAGER_MODE.md)
+**📖 Detailed Documentation**: [`docs/BAW_PACKAGE_MANAGER_MODE.md`](docs/BAW_PACKAGE_MANAGER_MODE.md)
 
 ---
 
@@ -338,13 +358,6 @@ python3 package_baw.py
 5. Ask Bob: "Switch to BAW Package Manager mode" (when ready to package)
 ```
 
-**Option D: Generate BPMN Processes**
-```bash
-# Create a JSON config file (see BPMN_tools/CONFIG_SCHEMA_DESIGN.md)
-# Then generate BPMN XML:
-python3 BPMN_tools/generate_bpmn.py my_process.json output.bpmn
-```
-
 ---
 
 ## 📦 Available Widgets
@@ -384,61 +397,6 @@ Each widget includes:
 
 ---
 
-## 🔧 BPMN Tools
-
-### Config-Driven BPMN Generation
-
-The BPMN_tools module provides a **config-driven approach** to creating BPMN 2.0 workflows:
-
-```
-Business Document → AI Analysis → JSON Config → Python Tool → BPMN XML
-                    (Bob Mode)                   (generate_bpmn.py)
-```
-
-### Quick Example
-
-**1. Create Config** (`my_process.json`):
-```json
-{
-  "process": {
-    "id": "proc-001",
-    "name": "My Process",
-    "version": "1.0"
-  },
-  "roles": [
-    {"id": "role-analyst", "name": "Analyst"}
-  ],
-  "elements": [
-    {"id": "start-001", "type": "startEvent", "name": "Start"},
-    {"id": "task-001", "type": "userTask", "name": "Review", "assignee": "role-analyst"},
-    {"id": "end-001", "type": "endEvent", "name": "End"}
-  ],
-  "flows": [
-    {"id": "flow-001", "sourceRef": "start-001", "targetRef": "task-001"},
-    {"id": "flow-002", "sourceRef": "task-001", "targetRef": "end-001"}
-  ]
-}
-```
-
-**2. Generate BPMN**:
-```bash
-python3 BPMN_tools/generate_bpmn.py my_process.json my_process.bpmn
-```
-
-**3. Import to BAW**: Use the generated `.bpmn` file in BAW Process Designer
-
-### Features
-- ✅ BPMN 2.0 compliant
-- ✅ IBM BAW compatible
-- ✅ Supports all BPMN elements (tasks, gateways, events)
-- ✅ Swimlanes and milestones
-- ✅ Validation and error checking
-- ✅ AI/LLM friendly
-
-**Documentation**: [BPMN_tools/README.md](BPMN_tools/README.md) and [BPMN_tools/USER_GUIDE.md](BPMN_tools/USER_GUIDE.md)
-
----
-
 ## 📚 Documentation
 
 ### Technical Documentation (`docs/`)
@@ -448,12 +406,6 @@ python3 BPMN_tools/generate_bpmn.py my_process.json my_process.bpmn
 - **[BAW_PACKAGE_MANAGER_MODE.md](docs/BAW_PACKAGE_MANAGER_MODE.md)** - Packaging and deployment
 - **[CARBON_THEME_INTEGRATION.md](docs/CARBON_THEME_INTEGRATION.md)** - Carbon Design System integration
 - **[API_REFERENCE.md](docs/API_REFERENCE.md)** - API documentation
-
-### BPMN Tools Documentation (`BPMN_tools/`)
-- **[README.md](BPMN_tools/README.md)** - Quick reference and examples
-- **[USER_GUIDE.md](BPMN_tools/USER_GUIDE.md)** - Complete user guide
-- **[CONFIG_SCHEMA_DESIGN.md](BPMN_tools/CONFIG_SCHEMA_DESIGN.md)** - JSON schema specification
-- **[LLM_USAGE_GUIDE.md](BPMN_tools/LLM_USAGE_GUIDE.md)** - Guide for AI/LLM integration
 
 ### Widget Documentation
 Each widget includes:
@@ -571,14 +523,6 @@ python3 package_baw.py
 8. You: "Package the business objects"
 ```
 
-### Workflow 3: Generate BPMN Process
-```
-1. Create JSON config or use Bob Blueprint Parser mode
-2. Run: python3 BPMN_tools/generate_bpmn.py config.json output.bpmn
-3. Import output.bpmn into BAW Process Designer
-4. Enhance with BAW-specific features
-5. Deploy to BAW server
-```
 
 ---
 
@@ -597,13 +541,6 @@ python3 package_baw.py
 3. Document assumptions in discovery reports
 4. Organize by business context
 5. Validate references and relationships
-
-### BPMN Process Design
-1. Use meaningful element names
-2. Follow ID naming conventions (proc-, role-, elem-, flow-)
-3. Validate configs before generating XML
-4. Create Mermaid diagrams for visualization
-5. Link processes to relevant business objects
 
 ### Packaging and Deployment
 1. Test in development environment first
@@ -680,4 +617,3 @@ limitations under the License.
 - 🎓 [Begin with the Labs](lab-docs/README.md)
 - 🤖 [Learn About Bob's Modes](lab-docs/BOB_BAW_MODES_GUIDE.md)
 - 📦 [Explore Available Widgets](widgets/)
-- 🔧 [Try BPMN Tools](BPMN_tools/README.md)
