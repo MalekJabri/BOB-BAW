@@ -227,13 +227,55 @@
     </step>
 
     <step number="12">
+      <title>Create BPMN Definition Packages (Optional)</title>
+      <description>Package validated BPMN definitions into ZIP files for review, testing, or standalone deployment</description>
+      <actions>
+        <action>Offer to create standalone BPMN definition packages for each generated process</action>
+        <action>Use execute_command to run: python3 BPMN_tools/package_bpmn_definition.py business-processes/configs/[context]/[ProcessName].bpmn-config.json</action>
+        <action>Tool creates ZIP package containing:</action>
+        <action>  1. [ProcessName].bpmn - IBM BAW BPMN XML (preview files excluded)</action>
+        <action>  2. [ProcessName].bpmn-config.json - Original JSON configuration</action>
+        <action>  3. README.md - Metadata and import instructions</action>
+        <action>Verify ZIP packages are created in business-processes/packages/[context]/</action>
+        <action>Confirm each package contains exactly 3 files (BPMN, config, README)</action>
+      </actions>
+      <important>
+        This creates standalone BPMN definition packages, NOT full TWX toolkits.
+        These packages are suitable for:
+        - Review and validation by business stakeholders
+        - Testing in BAW Process Designer
+        - Standalone import into BAW environments
+        - Documentation and archival purposes
+        
+        For complete toolkit packaging with business objects and dependencies,
+        use BAW Package Manager mode (next step).
+        
+        The packaging script is cross-platform compatible (Windows, Linux, macOS)
+        and uses Python's built-in zipfile module.
+      </important>
+      <example>
+        python3 BPMN_tools/package_bpmn_definition.py \
+          business-processes/configs/Insurance/SimpleClaimSubmission.bpmn-config.json
+        
+        # Creates: business-processes/packages/Insurance/SimpleClaimSubmission.zip
+      </example>
+      <when_to_skip>
+        Skip this step if:
+        - User wants to proceed directly to full toolkit packaging
+        - BPMN definitions don't need standalone distribution
+        - User prefers to package everything together in BAW Package Manager
+      </when_to_skip>
+    </step>
+
+    <step number="13">
       <title>Preserve Boundaries and Handoff Cleanly</title>
       <description>Finish at the artifact generation boundary and hand off packaging work to the packaging mode when requested</description>
       <actions>
         <action>Summarize what was generated (business objects, processes, and OpenAPI spec) and from which source documents</action>
         <action>State any assumptions that influenced the output models</action>
         <action>List generated business objects, business processes, and confirm OpenAPI spec creation</action>
-        <action>When the user wants packaging or deployment, hand off to baw-package-manager</action>
+        <action>Mention if BPMN definition packages were created (optional step 12)</action>
+        <action>When the user wants full toolkit packaging or deployment, hand off to baw-package-manager</action>
       </actions>
       <handoff_template>
         <switch_mode>
@@ -294,7 +336,8 @@
     <criterion>Context and master catalog files are produced for both business objects and processes</criterion>
     <criterion>Optional discovery reports are written under business-objects/reports/ when needed</criterion>
     <criterion>Processes are properly linked to business objects they use</criterion>
-    <criterion>Packaging and deployment work remains outside this mode</criterion>
+    <criterion>Optional BPMN definition packages created in business-processes/packages/[context]/ if requested</criterion>
+    <criterion>Full toolkit packaging and deployment work remains outside this mode (handled by BAW Package Manager)</criterion>
   </completion_criteria>
 </blueprint_parser_workflow>
 

@@ -88,10 +88,13 @@ graph TD
     K --> L[Register Business Objects with Class IDs]
     L --> M[Analyze Dependencies]
     M --> N[Validate Generation Readiness]
-    N --> O{Ready for Packaging?}
-    O -->|Yes| P[Switch to BAW Package Manager]
-    O -->|No| Q[Document Issues & Iterate]
-    Q --> D
+    N --> O{Create BPMN Package?}
+    O -->|Yes| P[Package BPMN Definition ZIP]
+    O -->|No| Q{Ready for Full Packaging?}
+    P --> Q
+    Q -->|Yes| R[Switch to BAW Package Manager]
+    Q -->|No| S[Document Issues & Iterate]
+    S --> D
     
     style A fill:#e1f5ff
     style D fill:#fff4e1
@@ -100,7 +103,8 @@ graph TD
     style H fill:#ffe1f5
     style I fill:#ffffe1
     style L fill:#e1ffe1
-    style P fill:#90EE90
+    style P fill:#d4edda
+    style R fill:#90EE90
 ```
 
 ## Detailed Workflow Steps
@@ -319,7 +323,45 @@ Blueprint Document → GenAI Analysis → JSON Config → Python Generator → B
 - Review discovery report completeness
 - Review assumptions or unresolved ambiguities
 
-### 14. Preserve Boundaries and Handoff Cleanly
+### 14. Create BPMN Definition Package (Optional)
+
+**Purpose:** Package validated BPMN definitions for review, testing, or standalone use.
+
+**Actions:**
+- Offer to create a ZIP package containing the BPMN definition
+- Use `python BPMN_tools/package_bpmn_definition.py <config-file.json>` to create the package
+- Package includes:
+  - BPMN XML file (IBM BAW version, excludes preview files)
+  - Original JSON configuration file
+  - README.md with metadata and usage instructions
+- Package is suitable for:
+  - Review and validation by business stakeholders
+  - Testing in BAW Process Designer
+  - Standalone import into BAW environments
+  - Documentation and archival purposes
+
+**Important Notes:**
+- This creates a **standalone BPMN definition package**, NOT a full TWX toolkit
+- The package contains only the process definition, not business objects or other artifacts
+- For complete toolkit packaging with business objects and dependencies, use BAW Package Manager mode
+- The script is cross-platform compatible (Windows, Linux, macOS)
+- Default output location: `business-processes/packages/<context>/<process-name>.zip`
+
+**Example:**
+```bash
+python BPMN_tools/package_bpmn_definition.py \
+  business-processes/configs/Insurance/SimpleClaimSubmission.bpmn-config.json
+```
+
+**Output:**
+```
+business-processes/packages/Insurance/SimpleClaimSubmission.zip
+├── SimpleClaimSubmission.bpmn (IBM BAW BPMN)
+├── SimpleClaimSubmission.bpmn-config.json (JSON config)
+└── README.md (metadata & instructions)
+```
+
+### 15. Preserve Boundaries and Handoff Cleanly
 
 **Purpose:** Complete artifact generation and hand off to packaging mode.
 
@@ -327,9 +369,10 @@ Blueprint Document → GenAI Analysis → JSON Config → Python Generator → B
 - Summarize what was generated (business objects and processes) and from which sources
 - List all generated business objects by context
 - List all generated business processes by context
+- Mention if BPMN definition packages were created
 - State any assumptions that influenced the output model
 - Reference the discovery report for detailed documentation
-- When packaging/deployment is needed, hand off to `baw-package-manager`
+- When full toolkit packaging/deployment is needed, hand off to `baw-package-manager`
 
 **Handoff Example:**
 ```xml
