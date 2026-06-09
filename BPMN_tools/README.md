@@ -92,10 +92,48 @@ loader.load_config("config.json")
 loader.save_bpmn("output.bpmn")
 ```
 
-### 2. **bpmn_xml_builder.py** - BPMN XML Builder
+### 2. **package_bpmn_definition.py** - BPMN Definition Packager ✨ NEW
+Creates ZIP packages of validated BPMN definitions for review, testing, or deployment.
+
+**Command Line Usage:**
+```bash
+python package_bpmn_definition.py <config.json> [output_dir]
+```
+
+**Features:**
+- ✅ Validates config before packaging
+- ✅ Generates IBM BAW BPMN XML (excludes preview files)
+- ✅ Includes original JSON config
+- ✅ Creates README with metadata and instructions
+- ✅ Cross-platform compatible (Windows, Linux, macOS)
+- ✅ Default output: `business-processes/packages/<context>/<process-name>.zip`
+
+**Example:**
+```bash
+python package_bpmn_definition.py \
+  ../business-processes/configs/Insurance/SimpleClaimSubmission.bpmn-config.json
+```
+
+**Output:**
+```
+business-processes/packages/Insurance/SimpleClaimSubmission.zip
+├── SimpleClaimSubmission.bpmn (IBM BAW BPMN)
+├── SimpleClaimSubmission.bpmn-config.json (JSON config)
+└── README.md (metadata & instructions)
+```
+
+**Use Cases:**
+- 📋 Review and validation by business stakeholders
+- 🧪 Testing in BAW Process Designer
+- 📦 Standalone import into BAW environments
+- 📚 Documentation and archival purposes
+
+**Note:** This creates a standalone BPMN definition package, NOT a full TWX toolkit. For complete toolkit packaging with business objects and dependencies, use the BAW Package Manager mode.
+
+### 3. **bpmn_xml_builder.py** - BPMN XML Builder
 Internal module that creates BPMN 2.0 XML structure. Used by generate_bpmn.py to build valid XML.
 
-### 3. **validator.py** - Config & BPMN Validation
+### 4. **validator.py** - Config & BPMN Validation
 Validates configuration structure and BPMN correctness.
 
 **Features:**
@@ -105,7 +143,7 @@ Validates configuration structure and BPMN correctness.
 - ✅ Gateway validation
 - ✅ Lane/Milestone validation
 
-### 4. **flow_builder.py** - Helper Utilities
+### 5. **flow_builder.py** - Helper Utilities
 Internal utilities used by the config loader.
 
 ## 📚 Config Examples
