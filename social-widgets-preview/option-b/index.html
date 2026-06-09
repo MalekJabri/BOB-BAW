@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option B: Modular Approach - Preview</title>
+  <link rel="stylesheet" href="../assets/common-styles.css">
+  <style>
+    .widget-content {
+      margin-top: var(--cds-spacing-05);
+    }
+
+    .mode-selector {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      margin-bottom: var(--cds-spacing-05);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+    }
+
+    .mode-button {
+      flex: 1;
+      padding: var(--cds-spacing-03);
+      background: white;
+      border: 1px solid var(--cds-ui-03);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .mode-button.active {
+      background: var(--cds-interactive-01);
+      color: white;
+      border-color: var(--cds-interactive-01);
+    }
+
+    .mode-button:hover:not(.active) {
+      background: var(--cds-ui-01);
+    }
+
+    .feed-item {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .feed-content {
+      flex: 1;
+    }
+
+    .feed-actions {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      margin-top: var(--cds-spacing-03);
+      font-size: 0.75rem;
+      color: var(--cds-text-03);
+    }
+
+    .feed-action {
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .feed-action:hover {
+      color: var(--cds-interactive-01);
+    }
+
+    .search-bar {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      margin-bottom: var(--cds-spacing-05);
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: var(--cds-spacing-03);
+      border: 1px solid var(--cds-ui-03);
+      border-radius: 4px;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      margin-bottom: var(--cds-spacing-04);
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      padding: var(--cds-spacing-02) var(--cds-spacing-03);
+      background: var(--cds-ui-03);
+      border-radius: 16px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .filter-chip.active {
+      background: var(--cds-interactive-01);
+      color: white;
+    }
+
+    .people-card {
+      display: flex;
+      gap: var(--cds-spacing-04);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+      align-items: center;
+    }
+
+    .people-card .user-avatar {
+      width: 48px;
+      height: 48px;
+      font-size: 1.125rem;
+    }
+
+    .people-details {
+      flex: 1;
+    }
+
+    .people-actions {
+      display: flex;
+      gap: var(--cds-spacing-02);
+    }
+
+    .collaboration-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--cds-ui-03);
+      margin-bottom: var(--cds-spacing-05);
+    }
+
+    .collaboration-tab {
+      padding: var(--cds-spacing-04) var(--cds-spacing-05);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--cds-text-02);
+      transition: all 0.2s;
+    }
+
+    .collaboration-tab.active {
+      color: var(--cds-interactive-01);
+      border-bottom-color: var(--cds-interactive-01);
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--cds-spacing-04);
+    }
+
+    .team-card {
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .team-card .user-avatar {
+      width: 56px;
+      height: 56px;
+      font-size: 1.25rem;
+      margin: 0 auto var(--cds-spacing-03);
+    }
+
+    .quick-actions-bar {
+      display: flex;
+      gap: var(--cds-spacing-03);
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      align-items: center;
+    }
+
+    .action-button {
+      display: flex;
+      align-items: center;
+      gap: var(--cds-spacing-02);
+      padding: var(--cds-spacing-03) var(--cds-spacing-04);
+      background: white;
+      border: 1px solid var(--cds-ui-03);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .action-button:hover {
+      background: var(--cds-ui-01);
+      border-color: var(--cds-interactive-01);
+    }
+
+    .action-button .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--cds-spacing-04);
+      margin-bottom: var(--cds-spacing-05);
+    }
+
+    .metric-card {
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--cds-interactive-01);
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--cds-text-02);
+      margin-top: var(--cds-spacing-02);
+    }
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--cds-spacing-04);
+      background: var(--cds-ui-01);
+      border-radius: 4px;
+      margin-bottom: var(--cds-spacing-03);
+    }
+
+    .task-info {
+      flex: 1;
+    }
+
+    .task-status {
+      padding: var(--cds-spacing-02) var(--cds-spacing-03);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .task-status.completed {
+      background: #d2f4ea;
+      color: #0e6027;
+    }
+
+    .task-status.in-progress {
+      background: #d0e2ff;
+      color: #0043ce;
+    }
+
+    .task-status.pending {
+      background: #fcf4d6;
+      color: #8e6a00;
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-container">
+    <a href="../index.html" class="back-link">← Back to Options</a>
+    
+    <div class="preview-header">
+      <h1>Option B: Modular Approach</h1>
+      <p>3-4 core widgets with configurable modes that handle multiple Social API functions</p>
+    </div>
+
+    <div class="widget-grid">
+      <!-- SocialFeed Widget -->
+      <div class="widget-preview" style="grid-column: 1 / -1;">
+        <h2 class="widget-title">1. SocialFeed Widget (Unified Activity & Communication)</h2>
+        <p class="widget-description">All-in-one widget for activity streams, comments, and notifications with mode switching</p>
+        
+        <div class="widget-content">
+          <div class="mode-selector">
+            <button class="mode-button active">📊 Activity Stream</button>
+            <button class="mode-button">💬 Comments</button>
+            <button class="mode-button">🔔 Notifications</button>
+            <button class="mode-button">📋 Combined</button>
+          </div>
+
+          <!-- Activity Stream Mode Content -->
+          <div class="filter-chips">
+            <span class="filter-chip active">All Activity</span>
+            <span class="filter-chip">My Activity</span>
+            <span class="filter-chip">Following</span>
+            <span class="filter-chip">Mentions</span>
+          </div>
+
+          <div class="feed-item">
+            <div class="user-avatar">JD</div>
+            <div class="feed-content">
+              <div class="user-name">John Doe</div>
+              <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                Completed task "Review Insurance Claim #12345" in <strong>Claims Processing</strong>
+              </div>
+              <div class="timestamp">2 hours ago</div>
+              <div class="feed-actions">
+                <span class="feed-action">👍 Like (5)</span>
+                <span class="feed-action">💬 Comment (2)</span>
+                <span class="feed-action">🔗 Share</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+            <div class="feed-content">
+              <div class="user-name">Sarah Miller</div>
+              <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                Mentioned <span style="color: var(--cds-interactive-01);">@RobertJohnson</span> in a comment: "Can you review the updated workflow diagram?"
+              </div>
+              <div class="timestamp">4 hours ago</div>
+              <div class="feed-actions">
+                <span class="feed-action">👍 Like (3)</span>
+                <span class="feed-action">💬 Comment (1)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+            <div class="feed-content">
+              <div class="user-name">Robert Johnson</div>
+              <div style="font-size: 0.875rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                Started following process instance <strong>Claim-2024-0156</strong>
+              </div>
+              <div class="timestamp">Yesterday</div>
+              <div class="feed-actions">
+                <span class="feed-action">👍 Like (1)</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--cds-spacing-05); padding: var(--cds-spacing-04); background: #f4f4f4; border-radius: 4px; border-left: 4px solid var(--cds-interactive-01);">
+            <strong>💡 Mode Switching:</strong> This widget can switch between Activity Stream, Comments, Notifications, or show all three in a combined tabbed view. Configuration determines which mode is active.
+          </div>
+        </div>
+      </div>
+
+      <!-- PeopleFinder Widget -->
+      <div class="widget-preview" style="grid-column: 1 / -1;">
+        <h2 class="widget-title">2. PeopleFinder Widget (Expert Discovery & Profiles)</h2>
+        <p class="widget-description">Find experts, view profiles, and manage social connections with multiple modes</p>
+        
+        <div class="widget-content">
+          <div class="mode-selector">
+            <button class="mode-button active">🔍 Search</button>
+            <button class="mode-button">👤 Profile</button>
+            <button class="mode-button">📖 Directory</button>
+            <button class="mode-button">🔗 Connections</button>
+          </div>
+
+          <!-- Search Mode Content -->
+          <div class="search-bar">
+            <input type="text" placeholder="Search by name, skill, or department...">
+            <button class="button">Search</button>
+          </div>
+
+          <div class="filter-chips">
+            <span class="filter-chip active">All</span>
+            <span class="filter-chip">Claims Processing</span>
+            <span class="filter-chip">Risk Assessment</span>
+            <span class="filter-chip">Underwriting</span>
+            <span class="filter-chip">Available Now</span>
+          </div>
+
+          <div class="people-card">
+            <div class="user-avatar">JD</div>
+            <div class="people-details">
+              <div class="user-name">John Doe</div>
+              <div class="user-title">Senior Process Analyst</div>
+              <div style="margin-top: var(--cds-spacing-02);">
+                <span class="tag skill">Claims Processing</span>
+                <span class="tag skill">Risk Assessment</span>
+                <span class="tag skill">Underwriting</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                <span class="status-indicator online"></span>Available • 95% Match
+              </div>
+            </div>
+            <div class="people-actions">
+              <button class="button">View Profile</button>
+              <button class="button secondary">@Mention</button>
+            </div>
+          </div>
+
+          <div class="people-card">
+            <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+            <div class="people-details">
+              <div class="user-name">Sarah Miller</div>
+              <div class="user-title">Process Automation Lead</div>
+              <div style="margin-top: var(--cds-spacing-02);">
+                <span class="tag skill">Claims Processing</span>
+                <span class="tag skill">Workflow Design</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                <span class="status-indicator online"></span>Available • 88% Match
+              </div>
+            </div>
+            <div class="people-actions">
+              <button class="button">View Profile</button>
+              <button class="button secondary">@Mention</button>
+            </div>
+          </div>
+
+          <div class="people-card">
+            <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+            <div class="people-details">
+              <div class="user-name">Robert Johnson</div>
+              <div class="user-title">Business Analyst</div>
+              <div style="margin-top: var(--cds-spacing-02);">
+                <span class="tag skill">Process Modeling</span>
+                <span class="tag skill">Claims Processing</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02); margin-top: var(--cds-spacing-02);">
+                <span class="status-indicator busy"></span>Busy • 82% Match
+              </div>
+            </div>
+            <div class="people-actions">
+              <button class="button">View Profile</button>
+              <button class="button secondary">@Mention</button>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--cds-spacing-05); padding: var(--cds-spacing-04); background: #f4f4f4; border-radius: 4px; border-left: 4px solid var(--cds-interactive-01);">
+            <strong>💡 Mode Switching:</strong> Switch to Profile mode to view detailed user profiles, Directory mode to browse organizational structure, or Connections mode to manage following relationships.
+          </div>
+        </div>
+      </div>
+
+      <!-- CollaborationPanel Widget -->
+      <div class="widget-preview" style="grid-column: 1 / -1;">
+        <h2 class="widget-title">3. CollaborationPanel Widget (Team Workspace)</h2>
+        <p class="widget-description">Comprehensive team collaboration hub with tabbed interface for different views</p>
+        
+        <div class="widget-content">
+          <div class="collaboration-tabs">
+            <button class="collaboration-tab active">👥 Team (5)</button>
+            <button class="collaboration-tab">📊 Activity (12)</button>
+            <button class="collaboration-tab">✅ Tasks (8)</button>
+            <button class="collaboration-tab">📈 Metrics</button>
+          </div>
+
+          <!-- Team Mode Content -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-value">5</div>
+              <div class="metric-label">Team Members</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value">8/12</div>
+              <div class="metric-label">Tasks Completed</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value">85%</div>
+              <div class="metric-label">Team Performance</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value">3.2h</div>
+              <div class="metric-label">Avg Response Time</div>
+            </div>
+          </div>
+
+          <div class="team-grid">
+            <div class="team-card">
+              <div class="user-avatar">JD</div>
+              <div class="user-name" style="margin-top: var(--cds-spacing-03);">John Doe</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02);">Team Lead</div>
+              <div style="margin-top: var(--cds-spacing-03); font-size: 0.75rem;">
+                <div><span class="status-indicator online"></span>Online</div>
+                <div style="margin-top: var(--cds-spacing-02);">Tasks: 3/4</div>
+              </div>
+            </div>
+
+            <div class="team-card">
+              <div class="user-avatar" style="background: #8a3ffc;">SM</div>
+              <div class="user-name" style="margin-top: var(--cds-spacing-03);">Sarah Miller</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02);">Analyst</div>
+              <div style="margin-top: var(--cds-spacing-03); font-size: 0.75rem;">
+                <div><span class="status-indicator online"></span>Online</div>
+                <div style="margin-top: var(--cds-spacing-02);">Tasks: 2/3</div>
+              </div>
+            </div>
+
+            <div class="team-card">
+              <div class="user-avatar" style="background: #fa4d56;">RJ</div>
+              <div class="user-name" style="margin-top: var(--cds-spacing-03);">Robert Johnson</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02);">Reviewer</div>
+              <div style="margin-top: var(--cds-spacing-03); font-size: 0.75rem;">
+                <div><span class="status-indicator busy"></span>Busy</div>
+                <div style="margin-top: var(--cds-spacing-02);">Tasks: 2/3</div>
+              </div>
+            </div>
+
+            <div class="team-card">
+              <div class="user-avatar" style="background: #0f62fe;">AK</div>
+              <div class="user-name" style="margin-top: var(--cds-spacing-03);">Alice Kim</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02);">Specialist</div>
+              <div style="margin-top: var(--cds-spacing-03); font-size: 0.75rem;">
+                <div><span class="status-indicator online"></span>Online</div>
+                <div style="margin-top: var(--cds-spacing-02);">Tasks: 1/2</div>
+              </div>
+            </div>
+
+            <div class="team-card">
+              <div class="user-avatar" style="background: #198038;">MB</div>
+              <div class="user-name" style="margin-top: var(--cds-spacing-03);">Mike Brown</div>
+              <div style="font-size: 0.75rem; color: var(--cds-text-02);">Coordinator</div>
+              <div style="margin-top: var(--cds-spacing-03); font-size: 0.75rem;">
+                <div><span class="status-indicator offline"></span>Offline</div>
+                <div style="margin-top: var(--cds-spacing-02);">Tasks: 0/0</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--cds-spacing-05); padding: var(--cds-spacing-04); background: #f4f4f4; border-radius: 4px; border-left: 4px solid var(--cds-interactive-01);">
+            <strong>💡 Tabbed Interface:</strong> Switch between Team view (members), Activity view (team timeline), Tasks view (task distribution), or Metrics view (performance dashboard).
+          </div>
+        </div>
+      </div>
+
+      <!-- SocialActions Widget -->
+      <div class="widget-preview">
+        <h2 class="widget-title">4. SocialActions Widget (Quick Actions Bar)</h2>
+        <p class="widget-description">Compact widget providing quick access to common social actions</p>
+        
+        <div class="widget-content">
+          <div style="margin-bottom: var(--cds-spacing-05);">
+            <strong>Compact Mode:</strong>
+            <div class="quick-actions-bar" style="margin-top: var(--cds-spacing-03);">
+              <button class="action-button" title="Follow">
+                ⭐
+              </button>
+              <button class="action-button" title="Comment">
+                💬
+              </button>
+              <button class="action-button" title="Share">
+                🔗
+              </button>
+              <button class="action-button" title="Notifications">
+                🔔
+                <span class="badge">3</span>
+              </button>
+              <button class="action-button" title="Search People">
+                🔍
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: var(--cds-spacing-05);">
+            <strong>Expanded Mode:</strong>
+            <div class="quick-actions-bar" style="margin-top: var(--cds-spacing-03); flex-wrap: wrap;">
+              <button class="action-button">
+                ⭐ Follow
+              </button>
+              <button class="action-button">
+                💬 Comment
+              </button>
+              <button class="action-button">
+                🔗 Share
+              </button>
+              <button class="action-button">
+                👥 Invite
+                <span class="badge">3</span>
+              </button>
+              <button class="action-button">
+                🔔 Notifications
+                <span class="badge">5</span>
+              </button>
+              <button class="action-button">
+                🔍 Find Expert
+              </button>
+            </div>
+          </div>
+
+          <div style="padding: var(--cds-spacing-04); background: #f4f4f4; border-radius: 4px; border-left: 4px solid var(--cds-interactive-01);">
+            <strong>💡 Configurable:</strong> Choose between Compact (icons only), Expanded (with labels), or Dropdown (menu-based) modes. Customize which actions are available.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: var(--cds-spacing-07); padding: var(--cds-spacing-06); background: var(--cds-ui-02); border-radius: 8px;">
+      <h2 style="margin-bottom: var(--cds-spacing-04);">✨ Key Benefits of Modular Approach</h2>
+      <ul style="color: var(--cds-text-02); padding-left: var(--cds-spacing-06);">
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Fewer Widgets:</strong> Only 3-4 widgets to develop and maintain instead of 6-8</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Consistent UX:</strong> Unified interface across all modes within each widget</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Flexible Configuration:</strong> Switch modes based on context without changing widgets</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Better Code Reuse:</strong> Shared components and logic across modes</li>
+        <li style="margin-bottom: var(--cds-spacing-03);"><strong>Easier Maintenance:</strong> Updates apply to all modes simultaneously</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

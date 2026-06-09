@@ -247,6 +247,86 @@
         "MultiDocumentUpload"
       ],
       "created": "2026-05-06T15:03:49.312505Z"
+    },
+    "ProcessActivityEvent": {
+      "classId": "/12.4a104796-f99a-4273-b7f8-5201b967af63",
+      "description": "Business object representing a single process activity in the ProcessActivityTimeline widget",
+      "widgets": [
+        "ProcessActivityTimeline"
+      ],
+      "created": "2026-05-29T08:44:11.479800Z"
+    },
+    "Advisor": {
+      "classId": "/12.ab7a4b73-8c36-41db-ad9d-04c49f3351c0",
+      "description": "Financial advisor (Rådgiver) who manages customer relationships",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.205036Z"
+    },
+    "PrivateCustomer": {
+      "classId": "/12.f6a650c5-2b31-400b-8900-e02f133fd853",
+      "description": "Private customer undergoing AML compliance check",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.208094Z"
+    },
+    "CustomerAddress": {
+      "classId": "/12.ff84cdd6-500f-4f27-b384-cbc8bc716a62",
+      "description": "Customer address information",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.209651Z"
+    },
+    "InformationCorrection": {
+      "classId": "/12.1d55e8d7-e4d5-425f-94a1-88e133da53b2",
+      "description": "Record of information correction made during AML check",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.210840Z"
+    },
+    "AMLFinding": {
+      "classId": "/12.8296a41c-7079-421d-87ff-df49f68b1ed5",
+      "description": "Individual finding or issue identified during AML check",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.212132Z"
+    },
+    "AMLCheckRequest": {
+      "classId": "/12.81ecb157-0c67-4cb0-85d6-b5ce907dd32a",
+      "description": "AML compliance check request for a customer",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.213115Z"
+    },
+    "AMLCheckResult": {
+      "classId": "/12.7febbcae-a88b-4f96-aae2-a7951bfde685",
+      "description": "Result of AML compliance check",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.214375Z"
+    },
+    "KYCSpecialist": {
+      "classId": "/12.5b2fe257-8a40-4de8-bf0a-9f066669fa50",
+      "description": "Know Your Customer specialist who performs AML compliance checks",
+      "context": "AMLCompliance",
+      "widgets": [
+        "standalone"
+      ],
+      "created": "2026-06-03T12:59:35.216929Z"
     }
   },
   "notes": {

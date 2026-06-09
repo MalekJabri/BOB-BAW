@@ -12,6 +12,7 @@ sample/
 widget_input
 business-objects/
 business-processes/
+business-processes-old/
 business-blueprints/
 business-process/*
 templates/Localisation

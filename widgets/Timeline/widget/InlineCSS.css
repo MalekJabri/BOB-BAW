@@ -1,4 +1,4 @@
-/* Timeline Widget Styles - Modern Carbon Design System */
+/* Timeline Widget Styles - Modern Gradient Design */
 /* Font sizes based on @bpm-font-size-base (14px) from Carbon theme */
 
 .timeline_maincontentbox {
@@ -7,6 +7,7 @@
 	padding: 2rem 0;
 	font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 14px; /* @bpm-font-size-base */
+	background: linear-gradient(135deg, #f4f4f4 0%, #ffffff 100%); /* Gray 10 to White */
 }
 
 .timeline_maincontentbox .timeline-container {
@@ -16,15 +17,26 @@
 	max-width: 100%;
 }
 
-/* Central Timeline Line - Carbon Neutral */
+/* Central Timeline Line - Gradient Style */
 .timeline_maincontentbox .timeline-container .timeline-line {
 	position: absolute;
 	left: 24px;
 	top: 0;
 	bottom: 0;
-	width: 2px;
-	background: #e0e0e0; /* Gray 20 - solid, no gradient */
+	width: 3px;
+	background: linear-gradient(180deg, #0f62fe 0%, #8a3ffc 50%, #0f62fe 100%); /* Blue to Purple gradient */
 	z-index: 0;
+	box-shadow: 0 0 10px rgba(15, 98, 254, 0.3);
+	animation: lineGlow 3s ease-in-out infinite;
+}
+
+@keyframes lineGlow {
+	0%, 100% {
+		box-shadow: 0 0 10px rgba(15, 98, 254, 0.3);
+	}
+	50% {
+		box-shadow: 0 0 20px rgba(15, 98, 254, 0.5);
+	}
 }
 
 .timeline_maincontentbox .timeline-container .timeline-events {
@@ -51,107 +63,179 @@
 	padding-bottom: 0;
 }
 
-/* Event Marker - Elevated Design */
+/* Event Marker - Modern Gradient Design */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event .event-marker {
-	width: 48px;
-	height: 48px;
-	min-width: 48px;
+	width: 56px;
+	height: 56px;
+	min-width: 56px;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #ffffff;
-	border: 3px solid #e0e0e0;
+	background: linear-gradient(135deg, #ffffff 0%, #f4f4f4 100%);
+	border: 4px solid #e0e0e0; /* Gray 20 */
 	position: relative;
 	z-index: 2;
-	transition: all 0.3s cubic-bezier(0.2, 0, 0.38, 0.9);
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(15, 98, 254, 0);
+	animation: markerFloat 3s ease-in-out infinite;
 }
 
-/* Event Marker - Completed State */
+@keyframes markerFloat {
+	0%, 100% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-4px);
+	}
+}
+
+/* Event Marker - Completed State with Green Gradient */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.completed .event-marker {
-	background: #161616; /* Gray 100 - Carbon dark */
-	border-color: #161616;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+	background: linear-gradient(135deg, #24a148 0%, #198038 100%); /* Green gradient */
+	border-color: #24a148;
+	box-shadow: 0 4px 16px rgba(36, 161, 72, 0.4), 0 0 20px rgba(36, 161, 72, 0.2);
+	animation: markerFloat 3s ease-in-out infinite, completedGlow 2s ease-in-out infinite;
 }
 
-/* Event Marker - Current State with Pulse */
+@keyframes completedGlow {
+	0%, 100% {
+		box-shadow: 0 4px 16px rgba(36, 161, 72, 0.4), 0 0 20px rgba(36, 161, 72, 0.2);
+	}
+	50% {
+		box-shadow: 0 4px 20px rgba(36, 161, 72, 0.6), 0 0 30px rgba(36, 161, 72, 0.3);
+	}
+}
+
+/* Event Marker - Current State with Blue-Purple Gradient and Pulse */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.current .event-marker {
-	background: #0f62fe; /* Carbon blue */
+	background: linear-gradient(135deg, #0f62fe 0%, #8a3ffc 100%); /* Blue to Purple gradient */
 	border-color: #0f62fe;
-	border-width: 3px;
-	box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.1), 0 2px 8px rgba(15, 98, 254, 0.2);
-	animation: currentPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	border-width: 4px;
+	box-shadow: 0 0 0 8px rgba(15, 98, 254, 0.15), 0 4px 20px rgba(15, 98, 254, 0.4);
+	animation: currentPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite, markerFloat 3s ease-in-out infinite;
+	transform: scale(1.1);
 }
 
 @keyframes currentPulse {
 	0%, 100% {
-		box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.1), 0 2px 8px rgba(15, 98, 254, 0.2);
+		box-shadow: 0 0 0 8px rgba(15, 98, 254, 0.15), 0 4px 20px rgba(15, 98, 254, 0.4);
 	}
 	50% {
-		box-shadow: 0 0 0 8px rgba(15, 98, 254, 0.06), 0 2px 12px rgba(15, 98, 254, 0.25);
+		box-shadow: 0 0 0 16px rgba(15, 98, 254, 0.08), 0 4px 24px rgba(138, 63, 252, 0.5);
 	}
 }
 
-/* Event Marker - Pending State */
+/* Event Marker - Pending State with Subtle Gradient */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.pending .event-marker {
-	background: #f4f4f4; /* Gray 10 */
+	background: linear-gradient(135deg, #f4f4f4 0%, #e0e0e0 100%); /* Gray 10 to Gray 20 */
 	border-color: #c6c6c6; /* Gray 30 */
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	animation: markerFloat 3s ease-in-out infinite;
 }
 
-/* Event Marker - Error State */
+/* Event Marker - Error State with Red Gradient */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.error .event-marker {
-	background: #da1e28; /* Carbon red - no gradient */
+	background: linear-gradient(135deg, #fa4d56 0%, #da1e28 100%); /* Red gradient */
 	border-color: #da1e28;
-	box-shadow: 0 2px 6px rgba(218, 30, 40, 0.2);
+	box-shadow: 0 4px 16px rgba(218, 30, 40, 0.4), 0 0 20px rgba(218, 30, 40, 0.2);
+	animation: markerFloat 3s ease-in-out infinite, errorPulse 1.5s ease-in-out infinite;
 }
 
-/* Event Marker - Warning State */
+@keyframes errorPulse {
+	0%, 100% {
+		box-shadow: 0 4px 16px rgba(218, 30, 40, 0.4), 0 0 20px rgba(218, 30, 40, 0.2);
+	}
+	50% {
+		box-shadow: 0 4px 20px rgba(218, 30, 40, 0.6), 0 0 30px rgba(218, 30, 40, 0.3);
+	}
+}
+
+/* Event Marker - Warning State with Orange Gradient */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.warning .event-marker {
-	background: #525252; /* Gray 70 - neutral warning */
-	border-color: #525252;
-	box-shadow: 0 2px 6px rgba(82, 82, 82, 0.2);
+	background: linear-gradient(135deg, #ff832b 0%, #f1c21b 100%); /* Orange to Yellow gradient */
+	border-color: #ff832b;
+	box-shadow: 0 4px 16px rgba(255, 131, 43, 0.4), 0 0 20px rgba(255, 131, 43, 0.2);
+	animation: markerFloat 3s ease-in-out infinite;
 }
 
-/* Event Content Container - Carbon Card Style */
+/* Event Content Container - Modern Gradient Card Style */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event .event-content {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
 	margin-left: 1.5rem;
-	padding: 1rem 1.25rem;
-	background: #ffffff;
-	border-radius: 0; /* Carbon uses sharp corners */
-	border: 1px solid #e0e0e0; /* Gray 20 */
-	box-shadow: none; /* Carbon cards are flat */
-	transition: all 0.2s cubic-bezier(0.2, 0, 0.38, 0.9);
+	padding: 1.25rem 1.5rem;
+	background: linear-gradient(135deg, #ffffff 0%, #f4f4f4 100%);
+	border-radius: 12px;
+	border: 2px solid transparent;
+	background-clip: padding-box;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 	position: relative;
 	top: 4px;
+	animation: cardSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cardSlideIn {
+	0% {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
 }
 
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event .event-content::before {
 	content: '';
 	position: absolute;
-	left: -8px;
-	top: 16px;
+	left: -10px;
+	top: 20px;
 	width: 0;
 	height: 0;
-	border-top: 8px solid transparent;
-	border-bottom: 8px solid transparent;
-	border-right: 8px solid #e0e0e0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right: 10px solid #e0e0e0; /* Gray 20 */
+	filter: drop-shadow(-2px 0 2px rgba(0, 0, 0, 0.05));
 }
 
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event .event-content::after {
 	content: '';
 	position: absolute;
-	left: -7px;
-	top: 16px;
+	left: -8px;
+	top: 20px;
 	width: 0;
 	height: 0;
-	border-top: 8px solid transparent;
-	border-bottom: 8px solid transparent;
-	border-right: 8px solid #ffffff;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right: 10px solid #ffffff;
+}
+
+/* Completed Event Content - Green Accent */
+.timeline_maincontentbox .timeline-container .timeline-events .timeline-event.completed .event-content {
+	border-color: rgba(36, 161, 72, 0.3);
+	background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+/* Current Event Content - Blue-Purple Accent */
+.timeline_maincontentbox .timeline-container .timeline-events .timeline-event.current .event-content {
+	border-color: rgba(15, 98, 254, 0.4);
+	background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+	box-shadow: 0 6px 20px rgba(15, 98, 254, 0.15), 0 3px 10px rgba(138, 63, 252, 0.1);
+}
+
+/* Error Event Content - Red Accent */
+.timeline_maincontentbox .timeline-container .timeline-events .timeline-event.error .event-content {
+	border-color: rgba(218, 30, 40, 0.3);
+	background: linear-gradient(135deg, #ffffff 0%, #fff1f1 100%);
+}
+
+/* Warning Event Content - Orange Accent */
+.timeline_maincontentbox .timeline-container .timeline-events .timeline-event.warning .event-content {
+	border-color: rgba(255, 131, 43, 0.3);
+	background: linear-gradient(135deg, #ffffff 0%, #fff8f1 100%);
 }
 
 /* Event Date - Refined Typography (12px = @bpm-font-size-small) */
@@ -211,18 +295,30 @@
 }
 
 .timeline_icon_current {
-	width: 16px;
-	height: 16px;
+	width: 18px;
+	height: 18px;
 	border-radius: 50%;
-	background: #0f62fe;
-	box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.2);
+	background: linear-gradient(135deg, #0f62fe 0%, #8a3ffc 100%);
+	box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.3);
+	animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+	0%, 100% {
+		transform: scale(1);
+		box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.3);
+	}
+	50% {
+		transform: scale(1.1);
+		box-shadow: 0 0 0 6px rgba(138, 63, 252, 0.2);
+	}
 }
 
 .timeline_icon_pending {
 	width: 16px;
 	height: 16px;
 	border-radius: 50%;
-	background: #c6c6c6;
+	background: linear-gradient(135deg, #e0e0e0 0%, #c6c6c6 100%);
 }
 
 .timeline_icon_error {
@@ -243,24 +339,31 @@
 	background-position: center;
 }
 
-/* Clickable Events - Enhanced Interaction */
+/* Clickable Events - Enhanced Gradient Interaction */
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.clickable {
 	cursor: pointer;
 }
 
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.clickable:hover .event-marker {
-	transform: scale(1.05);
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	transform: scale(1.15) rotate(5deg);
+	box-shadow: 0 6px 20px rgba(15, 98, 254, 0.3);
+	animation: none;
 }
 
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.clickable:hover .event-content {
-	border-color: #0f62fe; /* Carbon blue */
-	background: #f4f4f4; /* Gray 10 - subtle hover */
-	transform: translateX(2px);
+	border-color: rgba(15, 98, 254, 0.6);
+	background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+	transform: translateX(8px) translateY(-2px);
+	box-shadow: 0 8px 24px rgba(15, 98, 254, 0.2), 0 4px 12px rgba(138, 63, 252, 0.15);
+}
+
+.timeline_maincontentbox .timeline-container .timeline-events .timeline-event.clickable:active .event-marker {
+	transform: scale(1.05);
 }
 
 .timeline_maincontentbox .timeline-container .timeline-events .timeline-event.clickable:active .event-content {
-	transform: translateX(2px);
+	transform: translateX(4px) translateY(-1px);
+	box-shadow: 0 4px 16px rgba(15, 98, 254, 0.15), 0 2px 8px rgba(138, 63, 252, 0.1);
 }
 
 /* Compact Mode - Tighter Spacing */

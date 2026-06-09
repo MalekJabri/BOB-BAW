@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="120" height="120" fill="#f4f4f4"/>
+  
+  <!-- Widget Container -->
+  <rect x="15" y="15" width="90" height="90" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <!-- Title -->
+  <text x="20" y="30" font-family="IBM Plex Sans, sans-serif" font-size="8" fill="#525252">Select Options</text>
+  
+  <!-- Checkbox 1 - Checked -->
+  <rect x="20" y="40" width="14" height="14" fill="#0f62fe" stroke="#0f62fe" stroke-width="1"/>
+  <path d="M 24 47 L 26.5 49.5 L 30 44" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="38" y="50" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#161616">Option 1</text>
+  
+  <!-- Checkbox 2 - Unchecked -->
+  <rect x="20" y="60" width="14" height="14" fill="transparent" stroke="#8d8d8d" stroke-width="1"/>
+  <text x="38" y="70" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#161616">Option 2</text>
+  
+  <!-- Checkbox 3 - Checked -->
+  <rect x="20" y="80" width="14" height="14" fill="#0f62fe" stroke="#0f62fe" stroke-width="1"/>
+  <path d="M 24 87 L 26.5 89.5 L 30 84" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="38" y="90" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="#161616">Option 3</text>
+</svg>
+
+<!-- Made with Bob -->

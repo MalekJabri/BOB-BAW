@@ -1,0 +1,74 @@
+{
+  "name": "ProcessActivityTimeline",
+  "description": "Timeline widget for displaying BAW process activities with status tracking, assignee information, and duration metrics",
+  "bindingType": {
+    "name": "ProcessActivityData",
+    "isList": true,
+    "type": "ProcessActivityEvent"
+  },
+  "configOptions": [
+    {
+      "name": "processInstanceId",
+      "type": "String",
+      "label": "Process Instance ID",
+      "description": "BAW process instance ID to automatically fetch activity data (e.g., '2072.1072'). Leave empty to use manual data binding.",
+      "default": ""
+    },
+    {
+      "name": "baseUrl",
+      "type": "String",
+      "label": "BAW Base URL",
+      "description": "BAW server base URL for API calls (default: current server)",
+      "default": ""
+    },
+    {
+      "name": "showTimestamps",
+      "type": "Boolean",
+      "label": "Show Timestamps",
+      "description": "Display timestamp information for each activity",
+      "default": true
+    },
+    {
+      "name": "showIcons",
+      "type": "Boolean",
+      "label": "Show Icons",
+      "description": "Display status icons for activities",
+      "default": true
+    },
+    {
+      "name": "showDetails",
+      "type": "Boolean",
+      "label": "Show Details",
+      "description": "Display activity details (assignee, duration, IDs)",
+      "default": true
+    },
+    {
+      "name": "compact",
+      "type": "Boolean",
+      "label": "Compact Mode",
+      "description": "Use compact spacing for timeline activities",
+      "default": false
+    },
+    {
+      "name": "clickable",
+      "type": "Boolean",
+      "label": "Clickable",
+      "description": "Enable click interaction on timeline activities",
+      "default": false
+    },
+    {
+      "name": "activityClicked",
+      "type": "Event",
+      "label": "Activity Clicked",
+      "description": "Event fired when a timeline activity is clicked",
+      "parameterName": "index"
+    }
+  ],
+  "businessObjects": [
+    {
+      "name": "ProcessActivityEvent",
+      "file": "ProcessActivityEvent.json"
+    }
+  ],
+  "changeFunction": true
+}
