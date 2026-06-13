@@ -30,6 +30,8 @@ WIDGET_NAMES = [
     "FileNetBrowser",
     "FileNetImport",
     "FolderTree",
+    "InteractionForm",
+    "InteractionList",
     "MarkdownViewer",
     "MultiCheckbox",
     "MultiDocumentUpload",
@@ -38,6 +40,7 @@ WIDGET_NAMES = [
     "ProcessCircle",
     "ProgressBar",
     "RiskFactor",
+    "SatisfactionDashboard",
     "Stepper",
     "TasksList",
     "Timeline"

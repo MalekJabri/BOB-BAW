@@ -15,14 +15,13 @@
 	padding-left: 40px; /* Space for timeline markers */
 }
 
-/* Central Timeline Line */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-line {
 	position: absolute;
 	left: 20px;
 	top: 0;
 	bottom: 0;
 	width: 2px;
-	background: #e0e0e0; /* Gray 20 - @cds-ui-03 */
+	background: #e0e0e0; /* Gray 20 */
 	z-index: 0;
 }
 
@@ -34,17 +33,15 @@
 	gap: 0;
 }
 
-/* Timeline Activity Item */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity {
 	position: relative;
-	margin-bottom: 48px; /* @cds-spacing-06 equivalent */
+	margin-bottom: 48px;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity:last-child {
 	margin-bottom: 0;
 }
 
-/* Activity Marker - Circular indicator on timeline */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-marker {
 	position: absolute;
 	left: -32px;
@@ -53,24 +50,22 @@
 	height: 24px;
 	border-radius: 50%;
 	background: #0f62fe; /* @bpm-color-primary */
-	border: 3px solid #ffffff;
+	border: 3px solid #ffffff; /* @bpm-body-bg */
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #ffffff;
-	font-size: 12px;
+	color: #ffffff; /* @bpm-body-bg */
+	font-size: 12px; /* @bpm-font-size-small */
 	font-weight: 600; /* @bpm-font-weight-semibold */
 	z-index: 2;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Activity Marker - Completed/Milestone State */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.completed .activity-marker,
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.milestone .activity-marker {
 	background: #198038; /* @bpm-color-success */
 }
 
-/* Activity Marker - Active/Critical State with Pulse */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.active .activity-marker,
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.critical .activity-marker {
 	background: #da1e28; /* @bpm-color-alert */
@@ -86,25 +81,43 @@
 	}
 }
 
-/* Activity Marker - Pending State */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.pending .activity-marker {
-	background: #8d8d8d; /* Gray 50 - @cds-text-03 */
+	background: #8d8d8d; /* Gray 50 */
 }
 
-/* Activity Marker - Failed State */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.failed .activity-marker {
 	background: #da1e28; /* @bpm-color-alert */
 }
 
-/* Activity Marker - Waiting State */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.waiting .activity-marker {
 	background: #f1c21b; /* Warning yellow */
+	color: #161616; /* @bpm-text-color */
 }
 
-/* Activity Content Container */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.task-event .activity-marker {
+	border: 3px solid #0f62fe; /* @bpm-color-primary */
+	box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.1);
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.task-event .activity-content {
+	border-left: 3px solid #0f62fe; /* @bpm-color-primary */
+	padding-left: 16px;
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.process-event .activity-marker {
+	border: 3px solid #8d8d8d; /* Gray 50 */
+	box-shadow: 0 0 0 4px rgba(141, 141, 141, 0.1);
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.process-event .activity-content {
+	border-left: 3px solid #e0e0e0; /* Gray 20 */
+	padding-left: 16px;
+	background: #f4f4f4 !important; /* Gray 10 */
+}
+
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-content {
-	background: #f4f4f4; /* Gray 10 - @cds-ui-01 */
-	padding: 16px; /* @cds-spacing-04 equivalent */
+	background: #ffffff; /* @bpm-body-bg */
+	padding: 16px;
 	border-radius: 4px;
 	border-left: 3px solid #0f62fe; /* @bpm-color-primary */
 }
@@ -123,15 +136,14 @@
 	border-left-color: #8d8d8d; /* Gray 50 */
 }
 
-/* Activity Header */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	margin-bottom: 12px; /* @cds-spacing-03 equivalent */
+	margin-bottom: 12px;
+	gap: 16px;
 }
 
-/* Activity Timestamp */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-timestamp {
 	font-size: 12px; /* @bpm-font-size-small */
 	font-weight: 400; /* @bpm-font-weight-normal */
@@ -139,38 +151,41 @@
 	margin-top: 4px;
 }
 
-/* Activity Status Badge */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-status {
 	font-size: 11px;
 	font-weight: 600; /* @bpm-font-weight-semibold */
-	padding: 4px 12px; /* @cds-spacing-02 @cds-spacing-03 */
+	padding: 4px 12px;
 	border-radius: 4px;
 	white-space: nowrap;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.completed .activity-status,
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.milestone .activity-status {
-	background: #d2f4ea; /* Light green */
-	color: #0e6027; /* Dark green */
+	background: #d2f4ea;
+	color: #0e6027;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.active .activity-status,
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.critical .activity-status {
-	background: #ffd7d9; /* Light red */
-	color: #750e13; /* Dark red */
+	background: #ffd7d9;
+	color: #750e13;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.pending .activity-status {
-	background: #fcf4d6; /* Light yellow */
-	color: #8e6a00; /* Dark yellow */
+	background: #fcf4d6;
+	color: #8e6a00;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.failed .activity-status {
-	background: #ffd7d9; /* Light red */
-	color: #750e13; /* Dark red */
+	background: #ffd7d9;
+	color: #750e13;
 }
 
-/* Activity Name */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.waiting .activity-status {
+	background: #fcf4d6;
+	color: #8e6a00;
+}
+
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-name {
 	font-size: 14px; /* @bpm-font-size-base */
 	font-weight: 600; /* @bpm-font-weight-semibold */
@@ -188,20 +203,25 @@
 	color: #da1e28; /* @bpm-color-alert */
 }
 
-/* Activity Description */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-description {
 	font-size: 14px; /* @bpm-font-size-base */
 	font-weight: 400; /* @bpm-font-weight-normal */
-	color: #525252; /* Gray 70 - @cds-text-02 */
+	color: #525252; /* Gray 70 */
 	line-height: 1.43;
-	margin-top: 12px; /* @cds-spacing-03 */
+	margin-top: 12px;
 }
 
-/* User Info Section */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-meta {
+	font-size: 12px; /* @bpm-font-size-small */
+	color: #525252; /* Gray 70 */
+	margin-top: 12px;
+	line-height: 1.4;
+}
+
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .user-info {
 	display: flex;
 	align-items: center;
-	gap: 8px; /* @cds-spacing-02 */
+	gap: 8px;
 	margin-top: 8px;
 }
 
@@ -209,14 +229,24 @@
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;
-	background: #0f62fe; /* @bpm-color-primary */
-	color: #ffffff;
+	background-color: #0f62fe; /* @bpm-color-primary */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: #ffffff; /* @bpm-body-bg */
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 10px; /* @bpm-font-size-xsmall */
 	font-weight: 600; /* @bpm-font-weight-semibold */
 	flex-shrink: 0;
+	overflow: hidden;
+	border: 1px solid #e0e0e0; /* Gray 20 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .user-avatar.has-image {
+	color: transparent;
+	background-color: #f4f4f4; /* Gray 10 */
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .user-name {
@@ -225,7 +255,6 @@
 	color: #161616; /* @bpm-text-color */
 }
 
-/* Status Icons - Process-specific SVG Style */
 .activity_icon_completed {
 	background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M13%2021.17L6.83%2015l-1.42%201.41L13%2024%2027%2010l-1.41-1.41z%22%2F%3E%3C%2Fsvg%3E");
 	width: 32px;
@@ -239,7 +268,7 @@
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
-	background: #ffffff;
+	background: #ffffff; /* @bpm-body-bg */
 	box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
 }
 
@@ -277,21 +306,19 @@
 	background-position: center;
 }
 
-/* Clickable Activities */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.clickable {
 	cursor: pointer;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity.clickable:hover .activity-content {
-	background: #ffffff;
+	background: #ffffff; /* @bpm-body-bg */
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Drilldown Styles */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .drilldown-toggle {
-	margin-top: 12px; /* @cds-spacing-03 */
+	margin-top: 12px;
 	padding: 6px 12px;
-	background: #ffffff;
+	background: #ffffff; /* @bpm-body-bg */
 	border: 1px solid #e0e0e0; /* Gray 20 */
 	border-radius: 4px;
 	font-size: 12px; /* @bpm-font-size-small */
@@ -308,7 +335,7 @@
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-drilldown {
-	margin-top: 12px; /* @cds-spacing-03 */
+	margin-top: 12px;
 	padding-top: 12px;
 	border-top: 1px solid #e0e0e0; /* Gray 20 */
 }
@@ -316,7 +343,7 @@
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-sub-event {
 	padding: 8px 12px;
 	margin-bottom: 8px;
-	background: #ffffff;
+	background: #ffffff; /* @bpm-body-bg */
 	border-left: 2px solid #e0e0e0; /* Gray 20 */
 	border-radius: 2px;
 }
@@ -341,7 +368,6 @@
 	cursor: default;
 }
 
-/* Comments Section */
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-comments {
 	margin-top: 16px;
 	padding-top: 16px;
@@ -365,12 +391,22 @@
 	height: 32px;
 	border-radius: 50%;
 	background-color: #0f62fe; /* @bpm-color-primary */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 	color: #ffffff; /* @bpm-body-bg */
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 12px; /* @bpm-font-size-small */
 	font-weight: 600; /* @bpm-font-weight-semibold */
+	overflow: hidden;
+	border: 1px solid #e0e0e0; /* Gray 20 */
+}
+
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .timeline-comment .user-avatar.has-image {
+	color: transparent;
+	background-color: #f4f4f4; /* Gray 10 */
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-content {
@@ -396,86 +432,95 @@
 	margin-top: 4px;
 }
 
-/* Comment Input Section */
-.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input-section {
-	margin-top: 12px;
-	padding-top: 12px;
-	border-top: 1px solid #f4f4f4; /* Gray 10 */
-}
-
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input-container {
 	display: flex;
-	gap: 8px;
-	align-items: center;
+	gap: 12px;
+	margin-top: 16px;
+	align-items: flex-start;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input {
 	flex: 1;
-	padding: 8px 12px;
+	min-height: 56px;
+	padding: 10px 12px;
+	border: 1px solid #c6c6c6; /* Gray 30 */
+	border-radius: 4px;
 	font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* @bpm-font-family-sans-serif */
 	font-size: 14px; /* @bpm-font-size-base */
 	color: #161616; /* @bpm-text-color */
 	background: #ffffff; /* @bpm-body-bg */
-	border: 1px solid #8d8d8d; /* Gray 50 */
-	border-radius: 0;
-	outline: none;
-	transition: border-color 0.2s;
+	resize: vertical;
 }
 
 .processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input:focus {
+	outline: 2px solid #0f62fe; /* @bpm-color-primary */
+	outline-offset: 1px;
 	border-color: #0f62fe; /* @bpm-color-primary */
-	border-width: 2px;
-	padding: 7px 11px; /* Adjust padding to maintain size */
 }
 
-.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input::placeholder {
-	color: #8d8d8d; /* Gray 50 */
-}
-
-.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn {
-	padding: 8px 16px;
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-button {
+	padding: 10px 16px;
+	border: none;
+	border-radius: 4px;
+	background: #0f62fe; /* @bpm-color-primary */
+	color: #ffffff; /* @bpm-body-bg */
 	font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* @bpm-font-family-sans-serif */
 	font-size: 14px; /* @bpm-font-size-base */
-	font-weight: 400; /* @bpm-font-weight-normal */
-	color: #ffffff; /* @bpm-body-bg */
-	background: #0f62fe; /* @bpm-color-primary */
-	border: none;
-	border-radius: 0;
+	font-weight: 600; /* @bpm-font-weight-semibold */
 	cursor: pointer;
-	transition: background-color 0.2s;
-	white-space: nowrap;
 }
 
-.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn:hover {
-	background: #0353e9; /* @bpm-color-primary-dark */
-}
-
-.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn:active {
-	background: #0043ce; /* @bpm-link-text-color-hover */
-}
-
-.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-btn:disabled {
-	background: #c6c6c6; /* @bpm-link-text-color-disabled */
+.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-button:disabled {
+	background: #c6c6c6; /* Gray 30 */
 	cursor: not-allowed;
 }
 
-/* Compact Mode */
+.processactivitytimeline_maincontentbox.compact {
+	padding: 1rem 0;
+}
+
 .processactivitytimeline_maincontentbox.compact .timeline-container .timeline-activities .timeline-activity {
-	margin-bottom: 32px; /* @cds-spacing-05 */
+	margin-bottom: 24px;
 }
 
 .processactivitytimeline_maincontentbox.compact .timeline-container .timeline-activities .timeline-activity .activity-content {
-	padding: 12px; /* @cds-spacing-03 */
+	padding: 12px;
 }
 
-/* Responsive Design */
-@media (max-width: 672px) {
+.processactivitytimeline_maincontentbox.compact .timeline-container .timeline-activities .timeline-activity .activity-marker {
+	width: 20px;
+	height: 20px;
+	left: -30px;
+	font-size: 10px;
+}
+
+@media (max-width: 640px) {
 	.processactivitytimeline_maincontentbox .timeline-container {
 		padding-left: 32px;
 	}
-	
-	.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-content {
-		padding: 12px;
+
+	.processactivitytimeline_maincontentbox .timeline-container .timeline-line {
+		left: 15px;
+	}
+
+	.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-marker {
+		left: -25px;
+		width: 20px;
+		height: 20px;
+		font-size: 10px;
+	}
+
+	.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .activity-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-input-container {
+		flex-direction: column;
+	}
+
+	.processactivitytimeline_maincontentbox .timeline-container .timeline-activities .timeline-activity .comment-submit-button {
+		width: 100%;
 	}
 }
 

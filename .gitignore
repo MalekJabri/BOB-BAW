@@ -18,3 +18,5 @@ business-process/*
 templates/Localisation
 widgets/Carousel
 widgets/MultiDocumentUpload
+temp/
+widgets/

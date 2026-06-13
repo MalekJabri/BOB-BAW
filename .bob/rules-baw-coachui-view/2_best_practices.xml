@@ -226,6 +226,67 @@ var timelineData = this.getData().timeline;  // Property 'timeline' doesn't exis
       </examples>
     </convention>
 
+    <convention category="business_objects">
+      <rule>ALWAYS follow the exact business object format defined in 10_business_object_format.xml</rule>
+      <critical_note priority="CRITICAL">
+        <title>Business Object Format Requirements</title>
+        <description>
+          Business object format errors are the most common cause of packaging failures.
+          The format is strictly defined and MUST be followed exactly.
+        </description>
+        <mandatory_requirements>
+          <requirement>Business object JSON MUST use "type" field as identifier, NOT "name"</requirement>
+          <requirement>config.json businessObjects MUST be array of objects with {name, file}, NOT string array</requirement>
+          <requirement>All properties MUST include name, type, required, and description fields</requirement>
+        </mandatory_requirements>
+        <correct_business_object_format>
+          <![CDATA[
+{
+  "type": "BusinessObjectName",
+  "description": "Description here",
+  "properties": [
+    {
+      "name": "propertyName",
+      "type": "String",
+      "required": true,
+      "description": "Property description"
+    }
+  ]
+}
+          ]]>
+        </correct_business_object_format>
+        <correct_config_reference>
+          <![CDATA[
+"businessObjects": [
+  {
+    "name": "BusinessObjectName",
+    "file": "BusinessObjectName.json"
+  }
+]
+          ]]>
+        </correct_config_reference>
+        <validation_before_creation>
+          ALWAYS read an existing working business object file (e.g., SatisfactionData.json)
+          before creating a new one to ensure format consistency.
+        </validation_before_creation>
+        <reference>See 10_business_object_format.xml for complete format specification and examples</reference>
+      </critical_note>
+      <examples>
+        <good>
+          Use "type" field in business object JSON
+          Use object array with {name, file} in config.json
+          Include all four required fields for each property
+          Verify format against working examples before creating
+        </good>
+        <bad>
+          Use "name" field instead of "type" in business object JSON
+          Use string array for businessObjects in config.json
+          Omit required or description fields from properties
+          Create business objects without checking format examples
+        </bad>
+      </examples>
+    </convention>
+
     <convention category="preview_files">
       <rule>ALWAYS integrate advance preview files with BAW's preview system</rule>
       <description>
