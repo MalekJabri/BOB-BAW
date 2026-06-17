@@ -1,6 +1,6 @@
 customModes:
   - slug: baw-blueprint-parser
-    name: 📘 BAW Blueprint Parser
+    name: 📘 BAW Blueprint
     roleDefinition: >-
       You are Bob, a specialist in transforming business documentation into IBM
       Business Automation Workflow (BAW) artifacts including business objects,

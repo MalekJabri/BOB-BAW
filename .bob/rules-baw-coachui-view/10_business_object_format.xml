@@ -1,0 +1,345 @@
+<business_object_format_rules>
+  <overview>
+    This file defines the EXACT format requirements for BAW business object JSON files
+    and their references in config.json. These formats are MANDATORY and non-negotiable
+    for successful packaging and deployment.
+  </overview>
+
+  <critical_requirements>
+    <requirement priority="CRITICAL">
+      <title>Business Object JSON Structure</title>
+      <description>
+        Business object JSON files MUST use the "type" field as the identifier,
+        NOT a "name" field. The structure is strictly defined and cannot vary.
+      </description>
+      <mandatory_format>
+        <![CDATA[
+{
+  "type": "BusinessObjectName",
+  "description": "Description of the business object",
+  "properties": [
+    {
+      "name": "propertyName",
+      "type": "String|Integer|Decimal|Boolean|Date",
+      "required": true|false,
+      "description": "Property description"
+    }
+  ]
+}
+        ]]>
+      </mandatory_format>
+      <field_definitions>
+        <field name="type" required="true">
+          The business object type name (must match the name used in config.json)
+        </field>
+        <field name="description" required="true">
+          Human-readable description of the business object's purpose
+        </field>
+        <field name="properties" required="true">
+          Array of property definitions (can be empty array if no properties)
+        </field>
+      </field_definitions>
+      <property_structure>
+        <field name="name" required="true">Property identifier</field>
+        <field name="type" required="true">
+          Data type: String, Integer, Decimal, Boolean, Date, or another business object type
+        </field>
+        <field name="required" required="true">
+          Boolean indicating if property is mandatory
+        </field>
+        <field name="description" required="true">
+          Human-readable description of the property
+        </field>
+      </property_structure>
+    </requirement>
+
+    <requirement priority="CRITICAL">
+      <title>config.json businessObjects Array Format</title>
+      <description>
+        The businessObjects array in config.json MUST contain objects with
+        "name" and "file" properties, NOT string values.
+      </description>
+      <mandatory_format>
+        <![CDATA[
+"businessObjects": [
+  {
+    "name": "BusinessObjectName",
+    "file": "BusinessObjectName.json"
+  }
+]
+        ]]>
+      </mandatory_format>
+      <field_definitions>
+        <field name="name" required="true">
+          The business object type name (must match "type" in the JSON file)
+        </field>
+        <field name="file" required="true">
+          The filename of the business object JSON file (relative to widget/directory)
+        </field>
+      </field_definitions>
+    </requirement>
+  </critical_requirements>
+
+  <correct_examples>
+    <example name="simple_business_object">
+      <description>Basic business object with string and integer properties</description>
+      <file name="UserData.json">
+        <![CDATA[
+{
+  "type": "UserData",
+  "description": "User profile information",
+  "properties": [
+    {
+      "name": "userId",
+      "type": "String",
+      "required": true,
+      "description": "Unique user identifier"
+    },
+    {
+      "name": "displayName",
+      "type": "String",
+      "required": true,
+      "description": "User's display name"
+    },
+    {
+      "name": "age",
+      "type": "Integer",
+      "required": false,
+      "description": "User's age in years"
+    }
+  ]
+}
+        ]]>
+      </file>
+      <config_reference>
+        <![CDATA[
+"businessObjects": [
+  {
+    "name": "UserData",
+    "file": "UserData.json"
+  }
+]
+        ]]>
+      </config_reference>
+    </example>
+
+    <example name="complex_business_object">
+      <description>Business object with multiple data types including Date and Decimal</description>
+      <file name="SatisfactionData.json">
+        <![CDATA[
+{
+  "type": "SatisfactionData",
+  "description": "Patient satisfaction metrics and analytics",
+  "properties": [
+    {
+      "name": "matricule_patient",
+      "type": "String",
+      "required": true,
+      "description": "Patient matricule (13 digits)"
+    },
+    {
+      "name": "average_satisfaction",
+      "type": "Decimal",
+      "required": true,
+      "description": "Average satisfaction score (1.0-5.0)"
+    },
+    {
+      "name": "total_surveys",
+      "type": "Integer",
+      "required": true,
+      "description": "Total number of surveys sent"
+    },
+    {
+      "name": "lastUpdated",
+      "type": "Date",
+      "required": true,
+      "description": "When data was last updated"
+    },
+    {
+      "name": "satisfactionLevel",
+      "type": "String",
+      "required": true,
+      "description": "Satisfaction level category: excellent, good, fair, poor"
+    }
+  ]
+}
+        ]]>
+      </file>
+      <config_reference>
+        <![CDATA[
+"businessObjects": [
+  {
+    "name": "SatisfactionData",
+    "file": "SatisfactionData.json"
+  }
+]
+        ]]>
+      </config_reference>
+    </example>
+
+    <example name="multiple_business_objects">
+      <description>Widget with multiple business object references</description>
+      <config_reference>
+        <![CDATA[
+"businessObjects": [
+  {
+    "name": "FormData",
+    "file": "FormData.json"
+  },
+  {
+    "name": "ValidationRules",
+    "file": "ValidationRules.json"
+  }
+]
+        ]]>
+      </config_reference>
+    </example>
+  </correct_examples>
+
+  <incorrect_examples>
+    <example name="wrong_business_object_structure">
+      <description>WRONG: Using "name" field instead of "type"</description>
+      <wrong_format>
+        <![CDATA[
+{
+  "name": "UserData",              ❌ WRONG: Should be "type"
+  "type": "businessObject",        ❌ WRONG: This field should not exist
+  "description": "User profile information",
+  "properties": [...]
+}
+        ]]>
+      </wrong_format>
+      <why_wrong>
+        BAW's packaging system expects "type" as the identifier field, not "name".
+        The "type": "businessObject" field is not part of the schema.
+      </why_wrong>
+    </example>
+
+    <example name="wrong_config_reference">
+      <description>WRONG: Using string array instead of object array</description>
+      <wrong_format>
+        <![CDATA[
+"businessObjects": ["UserData", "FormData"]  ❌ WRONG: Must be array of objects
+        ]]>
+      </wrong_format>
+      <why_wrong>
+        The packaging system requires objects with "name" and "file" properties
+        to properly locate and include the business object files.
+      </why_wrong>
+    </example>
+
+    <example name="missing_required_fields">
+      <description>WRONG: Missing required fields in property definition</description>
+      <wrong_format>
+        <![CDATA[
+{
+  "type": "UserData",
+  "properties": [
+    {
+      "name": "userId",
+      "type": "String"
+      ❌ MISSING: "required" field
+      ❌ MISSING: "description" field
+    }
+  ]
+}
+        ]]>
+      </wrong_format>
+      <why_wrong>
+        All four fields (name, type, required, description) are mandatory for each property.
+      </why_wrong>
+    </example>
+  </incorrect_examples>
+
+  <validation_checklist>
+    <check priority="CRITICAL">
+      Business object JSON uses "type" field, NOT "name" field
+    </check>
+    <check priority="CRITICAL">
+      config.json businessObjects is array of objects with {name, file}, NOT string array
+    </check>
+    <check priority="HIGH">
+      Business object "type" value matches "name" in config.json reference
+    </check>
+    <check priority="HIGH">
+      All properties have name, type, required, and description fields
+    </check>
+    <check priority="MEDIUM">
+      Property types are valid BAW types (String, Integer, Decimal, Boolean, Date)
+    </check>
+    <check priority="MEDIUM">
+      File names match the pattern BusinessObjectName.json
+    </check>
+  </validation_checklist>
+
+  <implementation_workflow>
+    <step number="1">
+      <action>Create business object JSON file</action>
+      <details>
+        Use "type" field with business object name
+        Include "description" field
+        Define "properties" array with complete property definitions
+      </details>
+      <validation>
+        Verify structure matches mandatory format exactly
+        Check all required fields are present
+      </validation>
+    </step>
+
+    <step number="2">
+      <action>Reference in config.json</action>
+      <details>
+        Add object to businessObjects array
+        Include both "name" and "file" properties
+        Ensure "name" matches "type" from JSON file
+      </details>
+      <validation>
+        Verify businessObjects is array of objects, not strings
+        Check name/file correspondence
+      </validation>
+    </step>
+
+    <step number="3">
+      <action>Cross-validate</action>
+      <details>
+        Confirm business object type name is consistent across files
+        Verify file exists at specified path
+        Check bindingType in config.json references correct business object
+      </details>
+    </step>
+  </implementation_workflow>
+
+  <reference_widgets>
+    <widget path="widgets/SatisfactionDashboard/">
+      Excellent example of correct business object format
+      - SatisfactionData.json uses "type" field correctly
+      - config.json references it properly with {name, file} object
+    </widget>
+    <widget path="widgets/InteractionForm/">
+      Corrected example after initial format errors
+      - InteractionFormData.json fixed to use "type" instead of "name"
+      - config.json fixed to use object array instead of string array
+    </widget>
+  </reference_widgets>
+
+  <error_prevention>
+    <rule>
+      ALWAYS read an existing business object file from a working widget
+      before creating a new one to ensure format consistency
+    </rule>
+    <rule>
+      NEVER assume the format - always verify against working examples
+      in the repository (SatisfactionData.json, TimelineData.json, etc.)
+    </rule>
+    <rule>
+      When creating config.json, ALWAYS use the object array format
+      for businessObjects, never a string array
+    </rule>
+    <rule>
+      After creating business object files, ALWAYS validate the structure
+      against the mandatory format before proceeding
+    </rule>
+  </error_prevention>
+</business_object_format_rules>
+
+<!-- Made with Bob -->

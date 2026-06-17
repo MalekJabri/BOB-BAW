@@ -48,7 +48,21 @@
         <step>Create or update Layout.html with semantic structure and accessibility attributes</step>
         <step>Create or update InlineCSS.css with scoped styling using Carbon Design System values (see themes/CARBON_THEME_VARIABLES.md). Use hardcoded values with inline comments documenting the corresponding theme variables, NOT LESS variable references</step>
         <step>Create or update inlineJavascript.js with BAW data and option access patterns</step>
-        <step>Create or update config.json and business object files when the widget needs metadata or complex types</step>
+        <step>
+          <action>Create or update config.json and business object files when the widget needs metadata or complex types</action>
+          <critical_format_requirements>
+            BEFORE creating business object files, ALWAYS read 10_business_object_format.xml
+            for MANDATORY format requirements. Business object format errors will cause packaging failures.
+            
+            Key requirements:
+            - Business object JSON MUST use "type" field, NOT "name" field
+            - config.json businessObjects MUST be array of objects with {name, file}, NOT string array
+            - All property definitions MUST include name, type, required, and description fields
+            
+            ALWAYS verify format against working examples (SatisfactionData.json, TimelineData.json)
+            before creating new business objects.
+          </critical_format_requirements>
+        </step>
         <step>Create event handler files in widget/events/ folder ONLY when the widget requires specific BAW events (load, change, view, validate, unload). Not all widgets need event handlers - create only what's necessary for the widget's functionality</step>
         <step>Create or update preview files when the widget should be testable outside the BAW runtime</step>
         <step>Keep documentation aligned with the implemented behavior</step>
@@ -61,6 +75,17 @@
       <steps>
         <step>Check naming consistency across widget folder, preview files, and metadata</step>
         <step>Ensure documentation matches the actual widget inputs, options, and events</step>
+        <step>
+          <action>Validate business object format if business objects were created</action>
+          <validation_checklist>
+            - Business object JSON uses "type" field (NOT "name")
+            - config.json businessObjects is array of objects with {name, file} (NOT string array)
+            - Business object "type" matches "name" in config.json
+            - All properties have name, type, required, and description fields
+            - Property types are valid BAW types (String, Integer, Decimal, Boolean, Date)
+          </validation_checklist>
+          <reference>See 10_business_object_format.xml for complete format requirements</reference>
+        </step>
         <step>Confirm the mode stops at the packaging boundary</step>
       </steps>
     </phase>

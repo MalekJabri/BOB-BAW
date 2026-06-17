@@ -1,0 +1,559 @@
+openapi: 3.0.3
+info:
+  title: Histo-Interactions API
+  description: |
+    REST API for managing historical interactions in a CRM context.
+    
+    This microservice stores and retrieves interaction data between patients and the contact center,
+    including surveys and satisfaction metrics.
+    
+    ## Features
+    - Store interactions (telephone, email, courrier, chat)
+    - Store surveys with satisfaction ratings
+    - Retrieve documents by ID
+    - Calculate average satisfaction scores per patient
+    
+    ## Data Models
+    - **Interaction**: Communication records between patient and contact center
+    - **Survey**: Patient satisfaction surveys with ratings (1-5 scale)
+  version: 1.0.0
+  contact:
+    name: Vincent Raucroix
+    email: vincent.raucroix@be.ibm.com
+  license:
+    name: Proprietary
+    
+servers:
+  - url: https://histo-interactions-interactions.apps.itz-dpvnuw.infra01-lb.lon04.techzone.ibm.com
+    description: Production server
+  - url: http://localhost:3000
+    description: Local development server
+
+tags:
+  - name: Health
+    description: Health check endpoints
+  - name: Documents
+    description: Document storage and retrieval operations
+  - name: Satisfaction
+    description: Satisfaction metrics and analytics
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      description: Returns the health status of the application and MongoDB connection
+      operationId: getHealth
+      responses:
+        '200':
+          description: Application is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: healthy
+                mongodb: connected
+                timestamp: '2026-06-04T07:00:00.000Z'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health/live:
+    get:
+      tags:
+        - Health
+      summary: Liveness probe
+      description: Kubernetes liveness probe endpoint
+      operationId: getLiveness
+      responses:
+        '200':
+          description: Application is alive
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /health/ready:
+    get:
+      tags:
+        - Health
+      summary: Readiness probe
+      description: Kubernetes readiness probe endpoint
+      operationId: getReadiness
+      responses:
+        '200':
+          description: Application is ready
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ready
+                  mongodb:
+                    type: string
+                    example: connected
+
+  /api/v1/documents:
+    post:
+      tags:
+        - Documents
+      summary: Store a new document
+      description: |
+        Creates a new document (interaction or survey) with an auto-generated unique ID.
+        
+        The document type determines the required fields in the data object.
+      operationId: createDocument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/InteractionRequest'
+                - $ref: '#/components/schemas/SurveyRequest'
+            examples:
+              interaction:
+                summary: Interaction example
+                value:
+                  type: interaction
+                  data:
+                    canal: telephone
+                    matricule_patient: '1234567890123'
+                    date_interaction: '2026-06-04T10:00:00Z'
+                    type_demande: Information médicale
+                    resume_interaction: Patient demande des informations sur son traitement
+                    document_URL: https://example.com/doc123.pdf
+                    id_demande: REQ-2026-001
+              survey:
+                summary: Survey example
+                value:
+                  type: survey
+                  data:
+                    survey_uuid: 550e8400-e29b-41d4-a716-446655440000
+                    matricule_patient: '1234567890123'
+                    date_survey: '2026-06-04T11:00:00Z'
+                    status: répondu
+                    satisfaction: 5
+      responses:
+        '201':
+          description: Document created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+    get:
+      tags:
+        - Documents
+      summary: List all documents
+      description: Retrieves all documents with optional filtering and pagination
+      operationId: listDocuments
+      parameters:
+        - name: type
+          in: query
+          description: Filter by document type
+          schema:
+            type: string
+            enum: [interaction, survey]
+        - name: matricule_patient
+          in: query
+          description: Filter by patient matricule
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of documents to return
+          schema:
+            type: integer
+            default: 100
+            minimum: 1
+            maximum: 1000
+        - name: skip
+          in: query
+          description: Number of documents to skip (for pagination)
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/InteractionDocument'
+                        - $ref: '#/components/schemas/SurveyDocument'
+                  count:
+                    type: integer
+                    example: 25
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/documents/{id}:
+    get:
+      tags:
+        - Documents
+      summary: Get document by ID
+      description: Retrieves a specific document by its unique identifier
+      operationId: getDocumentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Document unique identifier
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+          example: '665e8f2a1234567890abcdef'
+      responses:
+        '200':
+          description: Document found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: Document not found
+                statusCode: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/satisfaction/average/{matricule}:
+    get:
+      tags:
+        - Satisfaction
+      summary: Calculate average satisfaction
+      description: |
+        Computes the average satisfaction score for a specific patient based on all their survey responses.
+        
+        Only surveys with a satisfaction value (1-5) are included in the calculation.
+      operationId: getAverageSatisfaction
+      parameters:
+        - name: matricule
+          in: path
+          required: true
+          description: Patient matricule number
+          schema:
+            type: string
+            pattern: '^\d{13}$'
+          example: '1234567890123'
+      responses:
+        '200':
+          description: Average satisfaction calculated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SatisfactionResponse'
+              example:
+                success: true
+                data:
+                  matricule_patient: '1234567890123'
+                  average_satisfaction: 4.5
+                  total_surveys: 10
+                  surveys_with_satisfaction: 8
+        '404':
+          description: No surveys found for this patient
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: No surveys found for patient 1234567890123
+                statusCode: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - mongodb
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          description: Overall application health status
+        mongodb:
+          type: string
+          enum: [connected, disconnected]
+          description: MongoDB connection status
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the health check
+
+    InteractionRequest:
+      type: object
+      required:
+        - type
+        - data
+      properties:
+        type:
+          type: string
+          enum: [interaction]
+        data:
+          type: object
+          required:
+            - canal
+            - matricule_patient
+            - date_interaction
+            - type_demande
+            - resume_interaction
+          properties:
+            canal:
+              type: string
+              enum: [telephone, email, courrier, chat]
+              description: Communication channel used
+            matricule_patient:
+              type: string
+              pattern: '^\d{13}$'
+              description: Patient matricule number (13 digits)
+            date_interaction:
+              type: string
+              format: date-time
+              description: Date and time of the interaction
+            type_demande:
+              type: string
+              description: Type of request or inquiry
+            resume_interaction:
+              type: string
+              description: Summary of the interaction
+            document_URL:
+              type: string
+              format: uri
+              description: Optional URL to related document
+            id_demande:
+              type: string
+              description: Optional request identifier
+
+    SurveyRequest:
+      type: object
+      required:
+        - type
+        - data
+      properties:
+        type:
+          type: string
+          enum: [survey]
+        data:
+          type: object
+          required:
+            - survey_uuid
+            - matricule_patient
+            - date_survey
+            - status
+          properties:
+            survey_uuid:
+              type: string
+              format: uuid
+              description: Unique survey identifier
+            matricule_patient:
+              type: string
+              pattern: '^\d{13}$'
+              description: Patient matricule number (13 digits)
+            date_survey:
+              type: string
+              format: date-time
+              description: Date and time when survey was sent/completed
+            status:
+              type: string
+              enum: [envoyé, répondu, en erreur]
+              description: Survey status
+            satisfaction:
+              type: integer
+              minimum: 1
+              maximum: 5
+              description: Satisfaction rating (1-5 scale)
+
+    InteractionDocument:
+      allOf:
+        - $ref: '#/components/schemas/InteractionRequest'
+        - type: object
+          required:
+            - _id
+            - createdAt
+            - updatedAt
+          properties:
+            _id:
+              type: string
+              pattern: '^[0-9a-fA-F]{24}$'
+              description: MongoDB document ID
+            createdAt:
+              type: string
+              format: date-time
+              description: Document creation timestamp
+            updatedAt:
+              type: string
+              format: date-time
+              description: Document last update timestamp
+
+    SurveyDocument:
+      allOf:
+        - $ref: '#/components/schemas/SurveyRequest'
+        - type: object
+          required:
+            - _id
+            - createdAt
+            - updatedAt
+          properties:
+            _id:
+              type: string
+              pattern: '^[0-9a-fA-F]{24}$'
+              description: MongoDB document ID
+            createdAt:
+              type: string
+              format: date-time
+              description: Document creation timestamp
+            updatedAt:
+              type: string
+              format: date-time
+              description: Document last update timestamp
+
+    DocumentResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          oneOf:
+            - $ref: '#/components/schemas/InteractionDocument'
+            - $ref: '#/components/schemas/SurveyDocument'
+
+    SatisfactionResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required:
+            - matricule_patient
+            - average_satisfaction
+            - total_surveys
+            - surveys_with_satisfaction
+          properties:
+            matricule_patient:
+              type: string
+              description: Patient matricule number
+            average_satisfaction:
+              type: number
+              format: float
+              minimum: 1
+              maximum: 5
+              description: Average satisfaction score (1-5)
+            total_surveys:
+              type: integer
+              description: Total number of surveys for this patient
+            surveys_with_satisfaction:
+              type: integer
+              description: Number of surveys with a satisfaction rating
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - message
+        - statusCode
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          description: Error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+        path:
+          type: string
+          description: Request path that caused the error
+        errors:
+          type: array
+          description: Detailed validation errors
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token authentication (future implementation)
+
+# Security can be applied globally or per operation
+# security:
+#   - BearerAuth: []
+
+# Made with Bob

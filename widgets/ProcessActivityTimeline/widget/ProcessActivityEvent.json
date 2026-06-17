@@ -1,6 +1,5 @@
 {
-  "name": "ProcessActivityEvent",
-  "type": "businessObject",
+  "type": "ProcessActivityEvent",
   "description": "Business object representing a single process activity in the ProcessActivityTimeline widget",
   "properties": [
     {
@@ -13,7 +12,7 @@
       "name": "activityName",
       "type": "String",
       "required": false,
-      "description": "Alternative property for activity name (alias for 'name')"
+      "description": "Alternative property for activity name (alias for name)"
     },
     {
       "name": "description",
@@ -25,19 +24,19 @@
       "name": "startTime",
       "type": "Date",
       "required": false,
-      "description": "Start time of the activity as Date object"
+      "description": "Start time of the activity as a Date object"
     },
     {
       "name": "timestamp",
       "type": "Date",
       "required": false,
-      "description": "Alternative timestamp property (alias for 'startTime')"
+      "description": "Alternative timestamp property (alias for startTime)"
     },
     {
       "name": "endTime",
       "type": "Date",
       "required": false,
-      "description": "End time of the activity as Date object"
+      "description": "End time of the activity as a Date object"
     },
     {
       "name": "status",
@@ -50,6 +49,18 @@
       "type": "String",
       "required": false,
       "description": "User or system assigned to the activity"
+    },
+    {
+      "name": "assigneeAvatarImage",
+      "type": "String",
+      "required": false,
+      "description": "Base64 avatar image or data URI for the assignee profile icon"
+    },
+    {
+      "name": "assigneeAvatarFormat",
+      "type": "String",
+      "required": false,
+      "description": "Image format for the assignee avatar, such as png"
     },
     {
       "name": "duration",
